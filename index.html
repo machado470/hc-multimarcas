@@ -392,14 +392,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- Hero -->
-<section class="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center text-center text-white px-4">
-    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">HC Multimarcas</h1>
-    <p class="text-lg sm:text-xl md:text-2xl mb-8">Moda para toda a família com os melhores preços</p>
-    <div class="flex flex-col sm:flex-row gap-4">
-        <a href="catalogo.html" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-md hover:bg-yellow-300 transition">Ver Catálogo</a>
-        <a href="promocoes.html" class="border border-yellow-400 text-yellow-400 font-semibold px-6 py-3 rounded-md hover:bg-yellow-400 hover:text-gray-900 transition">Promoções</a>
-    </div>
-</section>
+<div id="hero-app">
+    <section
+        class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center text-center text-white px-4"
+        v-motion="{
+            initial: { opacity: 0 },
+            animate: { opacity: 1 },
+            transition: { duration: 0.8, easing: 'ease-in-out' }
+        }"
+    >
+        <h1
+            class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
+            v-motion="{
+                initial: { opacity: 0, y: 50 },
+                animate: { opacity: 1, y: 0 },
+                transition: { delay: 0.2, duration: 0.8, easing: 'ease-out' }
+            }"
+        >
+            HC Multimarcas
+        </h1>
+        <p
+            class="text-lg sm:text-xl md:text-2xl mb-8"
+            v-motion="{
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { delay: 0.4, duration: 0.8, easing: 'ease-out' }
+            }"
+        >
+            Moda para toda a família com os melhores preços
+        </p>
+        <div
+            class="flex flex-col sm:flex-row gap-4"
+            v-motion="{
+                initial: { opacity: 0, scale: 0.95 },
+                animate: { opacity: 1, scale: 1 },
+                transition: { delay: 0.6, duration: 0.8, easing: 'ease-out' }
+            }"
+        >
+            <button
+                onclick="window.location.href='catalogo.html'"
+                class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-md transition transform hover:scale-105 hover:bg-yellow-300"
+            >
+                Ver Catálogo
+            </button>
+            <button
+                onclick="window.location.href='promocoes.html'"
+                class="border border-yellow-400 text-yellow-400 font-semibold px-6 py-3 rounded-md transition transform hover:scale-105 hover:bg-yellow-400 hover:text-gray-900"
+            >
+                Promoções
+            </button>
+        </div>
+    </section>
+</div>
 
 <!-- Promotional Banner -->
 <section class="gradient-bg py-4 text-center animate-slide-down">
@@ -1066,10 +1110,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
 
         // Observe elements for animation
-        document.querySelectorAll('.card-hover, .testimonial-card').forEach(el => {
-            observer.observe(el);
-        });
+    document.querySelectorAll('.card-hover, .testimonial-card').forEach(el => {
+        observer.observe(el);
     });
+    });
+</script>
+
+<script setup>
+import { useMotion } from '@motionone/vue'
+</script>
+
+<script type="module">
+import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+import { MotionPlugin, useMotion } from 'https://unpkg.com/@motionone/vue?module'
+
+createApp({
+    setup() {
+        useMotion()
+    }
+}).use(MotionPlugin).mount('#hero-app')
 </script>
 
 </body>
