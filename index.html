@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>HC Multimarcas - Moda para Toda a Família</title>
+    <meta name="description" content="Loja HC Multimarcas - Moda masculina, feminina, infantil e acessórios com qualidade e preço justo.">
+    <meta name="keywords" content="loja de roupas, moda masculina, moda feminina, moda infantil, acessórios, HC Multimarcas">
+
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome (ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Estilo customizado -->
+
+    <style>
+
+@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+        from { transform: translateY(50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideDown {
+        from { transform: translateY(-50px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes slideLeft {
+        from { transform: translateX(50px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideRight {
+        from { transform: translateX(-50px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes bounceIn {
+        0% { transform: scale(0.3); opacity: 0; }
+        50% { transform: scale(1.05); }
+        70% { transform: scale(0.9); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes scaleIn {
+        from { transform: scale(0.8); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    @keyframes glow {
+        from { box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        to { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+    }
+    
+    .gradient-bg {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+    }
+    
+    .gradient-text {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .card-hover {
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
+    }
+    
+    .hero-banner {
+        background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), 
+                    radial-gradient(circle at 20% 50%, #FFD700 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, #FFA500 0%, transparent 50%),
+                    radial-gradient(circle at 40% 80%, #FF8C00 0%, transparent 50%),
+                    #000000;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23FFD700" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23FFA500" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23FF8C00" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="%23FFD700" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="%23FFA500" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .floating-elements::before,
+    .floating-elements::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 215, 0, 0.1);
+        animation: float 4s ease-in-out infinite;
+    }
+    
+    .floating-elements::before {
+        width: 100px;
+        height: 100px;
+        top: 20%;
+        left: 10%;
+        animation-delay: -2s;
+    }
+    
+    .floating-elements::after {
+        width: 150px;
+        height: 150px;
+        top: 60%;
+        right: 10%;
+        animation-delay: -1s;
+    }
+    
+    .category-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid rgba(255, 215, 0, 0.1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .category-card:hover {
+        border-color: rgba(255, 215, 0, 0.3);
+        box-shadow: 0 20px 40px rgba(255, 215, 0, 0.1);
+    }
+    
+    .product-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .product-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD700, #FFA500, #FF8C00);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        border-color: rgba(255, 215, 0, 0.2);
+    }
+    
+    .testimonial-card {
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border-left: 4px solid #FFD700;
+        transition: all 0.3s ease;
+    }
+    
+    .testimonial-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1);
+    }
+    
+    .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #FFD700, #FFA500);
+        transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    
+    .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD700, #FFA500, #FF8C00);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    }
+    
+    .loading-spinner {
+        border: 3px solid #f3f3f3;
+        border-top: 3px solid #FFD700;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .notification {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #10B981, #059669);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
+        z-index: 9999;
+    }
+    
+    .notification.show {
+        transform: translateX(0);
+    }
+    
+    .price-tag {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .price-tag::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: -10px;
+        transform: translateY(-50%);
+        width: 0;
+        height: 0;
+        border-top: 15px solid transparent;
+        border-bottom: 15px solid transparent;
+        border-right: 10px solid #FFD700;
+    }
+    
+    .parallax-section {
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    
+    @media (max-width: 768px) {
+        .parallax-section {
+            background-attachment: scroll;
+        }
+    }
+
+    </style>
+</head>
+
+<body> 
+
+<!-- Loading Screen -->
+<div id="loading-screen" 
+     class="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex items-center justify-center transition-opacity duration-500 ease-in-out"
+     aria-live="polite">
+    <div class="text-center px-4">
+        <!-- Spinner -->
+        <div class="loading-spinner mx-auto mb-4 w-10 h-10 border-4 border-gray-200 dark:border-gray-700 border-t-yellow-400 rounded-full animate-spin"></div>
+        
+        <!-- Logo / Nome -->
+        <h2 class="text-2xl md:text-3xl font-bold gradient-text">HC Multimarcas</h2>
+        
+        <!-- Mensagem -->
+        <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Carregando...</p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const loader = document.getElementById('loading-screen');
+        loader.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => loader.remove(), 500);
+    }, 1500); // tempo de exibição
+});
+</script>
+
+
+<!-- Navigation -->
+<nav id="navbar" 
+     class="bg-white/95 dark:bg-gray-900 backdrop-blur-md shadow-lg sticky top-0 z-40 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Logo -->
+            <div class="flex items-center">
+                <a href="index.html" 
+                   class="text-2xl font-bold text-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary animate-slide-right">
+                    HC <span class="gradient-text">Multimarcas</span>
+                </a>
+            </div>
+
+            <!-- Menu Desktop -->
+            <div class="hidden md:block">
+                <div class="ml-10 flex items-baseline space-x-4">
+                    <a href="index.html" class="nav-link">Início</a>
+                    <a href="catalogo.html" class="nav-link">Catálogo</a>
+                    <a href="promocoes.html" class="nav-link">Promoções</a>
+                    <a href="sobre.html" class="nav-link">Sobre</a>
+                    <a href="contato.html" class="nav-link">Contato</a>
+                </div>
+            </div>
+
+            <!-- Ações -->
+            <div class="flex items-center space-x-4">
+                <!-- Buscar -->
+                <button id="search-btn" aria-label="Buscar" 
+                        class="text-secondary dark:text-white hover:text-primary transition-colors">
+                    <i class="fas fa-search text-xl"></i>
+                </button>
+
+                <!-- Carrinho -->
+                <button id="cart-btn" aria-label="Abrir carrinho" 
+                        class="relative text-secondary dark:text-white hover:text-primary transition-colors">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                    <span id="cart-count" 
+                          class="absolute -top-2 -right-2 bg-primary text-secondary text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                        0
+                    </span>
+                </button>
+
+                <!-- Menu Mobile -->
+                <button id="mobile-menu-btn" aria-label="Abrir menu" 
+                        class="md:hidden text-secondary dark:text-white hover:text-primary">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Mobile -->
+    <div id="mobile-menu" 
+         class="md:hidden hidden bg-white dark:bg-gray-900 backdrop-blur-md border-t transition-all duration-300 ease-in-out">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="index.html" class="mobile-link">Início</a>
+            <a href="catalogo.html" class="mobile-link">Catálogo</a>
+            <a href="promocoes.html" class="mobile-link">Promoções</a>
+            <a href="sobre.html" class="mobile-link">Sobre</a>
+            <a href="contato.html" class="mobile-link">Contato</a>
+        </div>
+    </div>
+
+    <!-- Barra de Busca -->
+    <div id="search-bar" class="hidden bg-white dark:bg-gray-900 border-t px-4 py-3 transition-all duration-300 ease-in-out">
+        <div class="max-w-7xl mx-auto">
+            <div class="relative">
+                <input type="text" id="search-input" placeholder="Buscar produtos..." 
+                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:text-white">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+.nav-link {
+    @apply text-secondary dark:text-white hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors;
+}
+.mobile-link {
+    @apply block text-secondary dark:text-white hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const searchBtn = document.getElementById('search-btn');
+    const searchBar = document.getElementById('search-bar');
+    const searchInput = document.getElementById('search-input');
+
+    // Toggle menu mobile
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Toggle barra de busca
+    searchBtn.addEventListener('click', () => {
+        searchBar.classList.toggle('hidden');
+        if (!searchBar.classList.contains('hidden')) {
+            searchInput.focus();
+        }
+    });
+});
+</script>
+
+
+<!-- Hero Banner -->
+<section class="hero-banner h-screen flex items-center justify-center text-white relative">
+    <div class="floating-elements"></div>
+    
+    <div class="text-center z-10 max-w-4xl mx-auto px-4">
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 animate-slide-up">
+            HC <span class="gradient-text">Multimarcas</span>
+        </h1>
+        <p class="text-xl md:text-3xl mb-8 animate-slide-up opacity-90" style="animation-delay: 0.2s;">
+            Moda para toda a família com os melhores preços
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-bounce-in" style="animation-delay: 0.4s;">
+            <a href="catalogo.html" class="btn-primary text-secondary px-8 py-4 rounded-full text-lg font-semibold inline-block">
+                <i class="fas fa-shopping-bag mr-2"></i>Ver Catálogo
+            </a>
+            <a href="promocoes.html" class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full text-lg font-semibold inline-block hover:bg-white/30 transition-all">
+                <i class="fas fa-fire mr-2"></i>Promoções
+            </a>
+        </div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <i class="fas fa-chevron-down text-2xl text-white/70"></i>
+    </div>
+</section>
+
+<!-- Promotional Banner -->
+<section class="gradient-bg py-4 text-center animate-slide-down">
+    <div class="max-w-7xl mx-auto px-4">
+        <p class="text-secondary font-semibold">
+            <i class="fas fa-truck mr-2"></i>
+            FRETE GRÁTIS para compras acima de R$ 150,00 
+            <span class="mx-4">|</span>
+            <i class="fas fa-credit-card mr-2"></i>
+            Parcelamos em até 12x sem juros
+        </p>
+    </div>
+</section>
+
+<!-- Categories -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">Nossas Categorias</h2>
+            <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Encontre o que você procura</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="category-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up">
+                <div class="h-56 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <i class="fas fa-male text-7xl text-white z-10 animate-float"></i>
+                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <span class="text-white text-sm font-semibold">150+ itens</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-secondary mb-3">Masculino</h3>
+                    <p class="text-gray-600 mb-4">Roupas e acessórios para homens modernos</p>
+                    <a href="catalogo.html?categoria=masculino" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                        <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
+                    </a>
+                </div>
+            </div>
+            
+            <div class="category-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="h-56 bg-gradient-to-br from-pink-400 via-pink-500 to-pink-600 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <i class="fas fa-female text-7xl text-white z-10 animate-float" style="animation-delay: -1s;"></i>
+                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <span class="text-white text-sm font-semibold">200+ itens</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-secondary mb-3">Feminino</h3>
+                    <p class="text-gray-600 mb-4">Roupas e acessórios para mulheres elegantes</p>
+                    <a href="catalogo.html?categoria=feminino" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                        <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
+                    </a>
+                </div>
+            </div>
+            
+            <div class="category-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="h-56 bg-gradient-to-br from-green-400 via-green-500 to-green-600 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <i class="fas fa-child text-7xl text-white z-10 animate-float" style="animation-delay: -2s;"></i>
+                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <span class="text-white text-sm font-semibold">80+ itens</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-secondary mb-3">Infantil</h3>
+                    <p class="text-gray-600 mb-4">Roupas confortáveis para crianças</p>
+                    <a href="catalogo.html?categoria=infantil" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                        <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
+                    </a>
+                </div>
+            </div>
+            
+            <div class="category-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: 0.3s;">
+                <div class="h-56 bg-gradient-to-br from-purple-400 via-purple-500 to-purple-600 flex items-center justify-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-black/10"></div>
+                    <i class="fas fa-gem text-7xl text-white z-10 animate-float" style="animation-delay: -0.5s;"></i>
+                    <div class="absolute top-4 right-4 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <span class="text-white text-sm font-semibold">120+ itens</span>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-2xl font-bold text-secondary mb-3">Acessórios</h3>
+                    <p class="text-gray-600 mb-4">Bolsas, joias e complementos</p>
+                    <a href="catalogo.html?categoria=acessorios" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                        <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">Produtos em Destaque</h2>
+            <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Os mais vendidos da semana</p>
+        </div>
+        
+        <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Products will be loaded here -->
+        </div>
+        
+        <div class="text-center mt-16">
+            <a href="catalogo.html" class="btn-primary text-secondary px-10 py-4 rounded-full text-lg font-semibold inline-block animate-glow">
+                <i class="fas fa-shopping-bag mr-2"></i>Ver Todos os Produtos
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Special Offers -->
+<section class="py-20 parallax-section" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 1200 600&quot;><rect fill=&quot;%23FFD700&quot; width=&quot;1200&quot; height=&quot;600&quot;/><circle fill=&quot;%23FFA500&quot; cx=&quot;200&quot; cy=&quot;150&quot; r=&quot;80&quot; opacity=&quot;0.3&quot;/><circle fill=&quot;%23FF8C00&quot; cx=&quot;800&quot; cy=&quot;400&quot; r=&quot;120&quot; opacity=&quot;0.2&quot;/></svg>');">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <h2 class="text-5xl font-bold mb-6 animate-slide-up">Ofertas Especiais</h2>
+        <p class="text-2xl mb-8 animate-slide-up" style="animation-delay: 0.1s;">Até 70% de desconto em produtos selecionados</p>
+        <div class="flex flex-col sm:flex-row gap-6 justify-center animate-bounce-in" style="animation-delay: 0.2s;">
+            <a href="promocoes.html" class="bg-white text-secondary px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all">
+                <i class="fas fa-fire mr-2"></i>Ver Promoções
+            </a>
+            <a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber sobre as ofertas especiais!" 
+               class="bg-green-500 text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-green-600 transition-all">
+                <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">O que nossos clientes dizem</h2>
+            <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Mais de 10.000 clientes satisfeitos</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up">
+                <div class="flex items-center mb-6">
+                    <div class="flex text-primary text-xl">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="ml-2 text-gray-600 font-semibold">5.0</span>
+                </div>
+                <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Excelente atendimento e produtos de qualidade excepcional. Sempre encontro o que procuro na HC Multimarcas! Recomendo muito!"</p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-yellow-500 rounded-full flex items-center justify-center text-secondary font-bold text-lg mr-4">
+                        M
+                    </div>
+                    <div>
+                        <p class="font-bold text-secondary text-lg">Maria Silva</p>
+                        <p class="text-gray-500">Cliente há 2 anos • São Paulo</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.1s;">
+                <div class="flex items-center mb-6">
+                    <div class="flex text-primary text-xl">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="ml-2 text-gray-600 font-semibold">5.0</span>
+                </div>
+                <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Preços justos, entrega super rápida e produtos de ótima qualidade. Já comprei várias vezes e sempre fico satisfeito!"</p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        J
+                    </div>
+                    <div>
+                        <p class="font-bold text-secondary text-lg">João Santos</p>
+                        <p class="text-gray-500">Cliente há 1 ano • Rio de Janeiro</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.2s;">
+                <div class="flex items-center mb-6">
+                    <div class="flex text-primary text-xl">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <span class="ml-2 text-gray-600 font-semibold">5.0</span>
+                </div>
+                <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Variedade incrível de produtos e sempre com novidades. O atendimento pelo WhatsApp é excelente. Adoro comprar aqui!"</p>
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                        A
+                    </div>
+                    <div>
+                        <p class="font-bold text-secondary text-lg">Ana Costa</p>
+                        <p class="text-gray-500">Cliente há 3 anos • Belo Horizonte</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Newsletter -->
+<section class="py-16 gradient-bg">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-secondary mb-4 animate-slide-up">Fique por dentro das novidades</h2>
+        <p class="text-lg text-secondary/80 mb-8 animate-slide-up" style="animation-delay: 0.1s;">Receba ofertas exclusivas e lançamentos em primeira mão</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto animate-scale-in" style="animation-delay: 0.2s;">
+            <input type="email" placeholder="Seu melhor e-mail" 
+                   class="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-secondary">
+            <button class="bg-secondary text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition-all">
+                <i class="fas fa-paper-plane mr-2"></i>Inscrever
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-secondary text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+            <div class="animate-slide-up">
+                <h3 class="text-2xl font-bold mb-6">HC <span class="gradient-text">Multimarcas</span></h3>
+                <p class="text-gray-300 mb-6 leading-relaxed">Moda para toda a família com qualidade, estilo e preços acessíveis. Sua satisfação é nossa prioridade.</p>
+                <div class="flex space-x-4">
+                    <a href="https://wa.me/5511999999999" class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all hover:scale-110">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                    </a>
+                    <a href="https://instagram.com/hcmultimarcas" class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-white hover:bg-pink-600 transition-all hover:scale-110">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="https://facebook.com/hcmultimarcas" class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white hover:bg-blue-600 transition-all hover:scale-110">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="animate-slide-up" style="animation-delay: 0.1s;">
+                <h4 class="text-lg font-semibold mb-6">Links Rápidos</h4>
+                <ul class="space-y-3">
+                    <li><a href="index.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-home mr-2"></i>Início</a></li>
+                    <li><a href="catalogo.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-shopping-bag mr-2"></i>Catálogo</a></li>
+                    <li><a href="promocoes.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-fire mr-2"></i>Promoções</a></li>
+                    <li><a href="sobre.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-info-circle mr-2"></i>Sobre</a></li>
+                    <li><a href="contato.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-envelope mr-2"></i>Contato</a></li>
+                </ul>
+            </div>
+            
+            <div class="animate-slide-up" style="animation-delay: 0.2s;">
+                <h4 class="text-lg font-semibold mb-6">Categorias</h4>
+                <ul class="space-y-3">
+                    <li><a href="catalogo.html?categoria=masculino" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-male mr-2"></i>Masculino</a></li>
+                    <li><a href="catalogo.html?categoria=feminino" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-female mr-2"></i>Feminino</a></li>
+                    <li><a href="catalogo.html?categoria=infantil" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-child mr-2"></i>Infantil</a></li>
+                    <li><a href="catalogo.html?categoria=acessorios" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-gem mr-2"></i>Acessórios</a></li>
+                </ul>
+            </div>
+            
+            <div class="animate-slide-up" style="animation-delay: 0.3s;">
+                <h4 class="text-lg font-semibold mb-6">Contato</h4>
+                <ul class="space-y-3 text-gray-300">
+                    <li class="flex items-start"><i class="fas fa-map-marker-alt mr-3 mt-1 text-primary"></i>Rua das Flores, 123<br>Centro - São Paulo/SP</li>
+                    <li class="flex items-center"><i class="fas fa-phone mr-3 text-primary"></i>(11) 99999-9999</li>
+                    <li class="flex items-center"><i class="fas fa-envelope mr-3 text-primary"></i>contato@hcmultimarcas.com</li>
+                    <li class="flex items-center"><i class="fas fa-clock mr-3 text-primary"></i>Seg-Sáb: 9h às 18h</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="border-t border-gray-700 pt-8 text-center animate-fade-in">
+            <p class="text-gray-300">&copy; 2024 HC Multimarcas. Todos os direitos reservados. | Desenvolvido com ❤️</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Cart Modal -->
+<div id="cart-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-96 overflow-hidden shadow-2xl animate-scale-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-secondary">Carrinho de Compras</h3>
+                    <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div id="cart-items" class="space-y-4 max-h-48 overflow-y-auto">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                
+                <div class="border-t pt-6 mt-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <span class="text-lg font-semibold">Total:</span>
+                        <span id="cart-total" class="text-2xl font-bold text-primary">R$ 0,00</span>
+                    </div>
+                    
+                    <button id="whatsapp-cart" class="w-full bg-green-500 text-white py-3 px-6 rounded-full hover:bg-green-600 transition-all font-semibold text-lg">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        Finalizar no WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notification -->
+<div id="notification" class="notification">
+    <i class="fas fa-check-circle mr-2"></i>
+    <span id="notification-text">Produto adicionado ao carrinho!</span>
+</div>
+
+<!-- Back to Top Button -->
+<button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-secondary w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all opacity-0 pointer-events-none animate-bounce">
+    <i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+    // Enhanced products data
+    const productsData = [
+        {
+            id: 1,
+            nome: "Camiseta Premium Masculina",
+            preco: 29.90,
+            precoAntigo: 39.90,
+            categoria: "masculino",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%236366F1;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Camiseta</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text><circle cx='50' cy='50' r='20' fill='white' opacity='0.1'/><circle cx='250' cy='250' r='30' fill='white' opacity='0.1'/></svg>",
+            descricao: "Camiseta premium de algodão 100%, confortável e versátil para o dia a dia.",
+            tamanhos: ["P", "M", "G", "GG"],
+            cores: ["Azul", "Branco", "Preto", "Cinza"],
+            destaque: true,
+            novo: false
+        },
+        {
+            id: 2,
+            nome: "Vestido Floral Elegante",
+            preco: 89.90,
+            precoAntigo: 119.90,
+            categoria: "feminino",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23F472B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Vestido</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Floral</text><circle cx='70' cy='70' r='15' fill='white' opacity='0.2'/><circle cx='230' cy='80' r='10' fill='white' opacity='0.2'/><circle cx='80' cy='220' r='12' fill='white' opacity='0.2'/><circle cx='220' cy='230' r='18' fill='white' opacity='0.2'/></svg>",
+            descricao: "Vestido floral elegante, perfeito para ocasiões especiais e eventos.",
+            tamanhos: ["P", "M", "G", "GG"],
+            cores: ["Rosa", "Azul", "Verde", "Roxo"],
+            destaque: true,
+            novo: true
+        },
+        {
+            id: 3,
+            nome: "Conjunto Infantil Divertido",
+            preco: 45.90,
+            precoAntigo: 59.90,
+            categoria: "infantil",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad3' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310B981;stop-opacity:1' /><stop offset='100%' style='stop-color:%2334D399;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Conjunto</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Infantil</text><polygon points='150,50 170,90 130,90' fill='white' opacity='0.2'/><circle cx='100' cy='200' r='25' fill='white' opacity='0.1'/><rect x='200' y='180' width='40' height='40' fill='white' opacity='0.1'/></svg>",
+            descricao: "Conjunto confortável e divertido para crianças, ideal para brincar.",
+            tamanhos: ["2", "4", "6", "8", "10"],
+            cores: ["Amarelo", "Verde", "Rosa", "Azul"],
+            destaque: true,
+            novo: false
+        },
+        {
+            id: 4,
+            nome: "Bolsa de Couro Premium",
+            preco: 129.90,
+            precoAntigo: 179.90,
+            categoria: "acessorios",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad4' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%238B5CF6;stop-opacity:1' /><stop offset='100%' style='stop-color:%23A78BFA;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Bolsa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text><ellipse cx='150' cy='100' rx='40' ry='20' fill='white' opacity='0.2'/><rect x='120' y='200' width='60' height='30' rx='15' fill='white' opacity='0.2'/></svg>",
+            descricao: "Bolsa de couro sintético premium, elegante e espaçosa para o dia a dia.",
+            tamanhos: ["Único"],
+            cores: ["Preto", "Marrom", "Bege", "Vinho"],
+            destaque: true,
+            novo: true
+        },
+        {
+            id: 5,
+            nome: "Calça Jeans Slim Fit",
+            preco: 79.90,
+            precoAntigo: 99.90,
+            categoria: "masculino",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad5' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%235B21B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad5)' width='300' height='300'/><text x='150' y='130' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Calça Jeans</text><text x='150' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Slim Fit</text><rect x='130' y='180' width='40' height='80' rx='20' fill='white' opacity='0.2'/></svg>",
+            descricao: "Calça jeans masculina slim fit, corte moderno e confortável.",
+            tamanhos: ["38", "40", "42", "44", "46"],
+            cores: ["Azul", "Preto", "Azul Escuro"],
+            destaque: false,
+            novo: false
+        },
+        {
+            id: 6,
+            nome: "Blusa Social Feminina",
+            preco: 49.90,
+            precoAntigo: 69.90,
+            categoria: "feminino",
+            imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad6' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23BE185D;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad6)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Blusa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Social</text><ellipse cx='150' cy='200' rx='50' ry='30' fill='white' opacity='0.2'/></svg>",
+            descricao: "Blusa feminina social elegante, ideal para trabalho e eventos.",
+            tamanhos: ["P", "M", "G", "GG"],
+            cores: ["Branco", "Rosa", "Azul", "Preto"],
+            destaque: false,
+            novo: true
+        }
+    ];
+
+    // Enhanced cart functionality
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCartCount() {
+        const cartCount = document.getElementById('cart-count');
+        const totalItems = cart.reduce((total, item) => total + item.quantidade, 0);
+        cartCount.textContent = totalItems;
+        
+        if (totalItems > 0) {
+            cartCount.classList.add('animate-bounce');
+        } else {
+            cartCount.classList.remove('animate-bounce');
+        }
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        const notificationText = document.getElementById('notification-text');
+        
+        notificationText.textContent = message;
+        notification.classList.add('show');
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    function addToCart(productId, tamanho = 'M', cor = 'Padrão') {
+        const product = productsData.find(p => p.id === productId);
+        if (!product) return;
+
+        const existingItem = cart.find(item => 
+            item.id === productId && item.tamanho === tamanho && item.cor === cor
+        );
+
+        if (existingItem) {
+            existingItem.quantidade += 1;
+        } else {
+            cart.push({
+                id: productId,
+                nome: product.nome,
+                preco: product.preco,
+                imagem: product.imagem,
+                tamanho: tamanho,
+                cor: cor,
+                quantidade: 1
+            });
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        showNotification(`${product.nome} adicionado ao carrinho!`);
+    }
+
+    function removeFromCart(productId, tamanho, cor) {
+        cart = cart.filter(item => 
+            !(item.id === productId && item.tamanho === tamanho && item.cor === cor)
+        );
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+        displayCartItems();
+        showNotification('Produto removido do carrinho!');
+    }
+
+    function displayCartItems() {
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+
+        if (cart.length === 0) {
+            cartItems.innerHTML = `
+                <div class="text-center py-8">
+                    <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500">Carrinho vazio</p>
+                    <p class="text-sm text-gray-400">Adicione produtos para começar</p>
+                </div>
+            `;
+            cartTotal.textContent = 'R$ 0,00';
+            return;
+        }
+
+        let total = 0;
+        cartItems.innerHTML = cart.map(item => {
+            const subtotal = item.preco * item.quantidade;
+            total += subtotal;
+            return `
+                <div class="flex items-center space-x-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
+                    <img src="${item.imagem}" alt="${item.nome}" class="w-16 h-16 object-cover rounded-lg">
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-sm text-secondary">${item.nome}</h4>
+                        <p class="text-xs text-gray-500">${item.tamanho} - ${item.cor}</p>
+                        <div class="flex items-center justify-between mt-1">
+                            <p class="text-sm font-bold text-primary">R$ ${subtotal.toFixed(2)}</p>
+                            <span class="text-xs bg-gray-100 px-2 py-1 rounded">Qtd: ${item.quantidade}</span>
+                        </div>
+                    </div>
+                    <button onclick="removeFromCart(${item.id}, '${item.tamanho}', '${item.cor}')" 
+                            class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all">
+                        <i class="fas fa-trash text-sm"></i>
+                    </button>
+                </div>
+            `;
+        }).join('');
+
+        cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+    }
+
+    function generateWhatsAppMessage() {
+        if (cart.length === 0) return '';
+
+        let message = '🛍️ *Olá! Gostaria de finalizar minha compra:*\n\n';
+        let total = 0;
+
+        cart.forEach(item => {
+            const subtotal = item.preco * item.quantidade;
+            total += subtotal;
+            message += `• *${item.nome}*\n`;
+            message += `  📏 Tamanho: ${item.tamanho} | 🎨 Cor: ${item.cor}\n`;
+            message += `  📦 Quantidade: ${item.quantidade} | 💰 Preço: R$ ${subtotal.toFixed(2)}\n\n`;
+        });
+
+        message += `💳 *Total: R$ ${total.toFixed(2)}*\n\n`;
+        message += '📍 Aguardo informações sobre entrega e formas de pagamento.\n';
+        message += '🙏 Obrigado pela preferência!';
+
+        return encodeURIComponent(message);
+    }
+
+    function loadFeaturedProducts() {
+        const featuredProducts = document.getElementById('featured-products');
+        const featured = productsData.filter(p => p.destaque).slice(0, 4);
+
+        featuredProducts.innerHTML = featured.map((product, index) => `
+            <div class="product-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: ${index * 0.1}s;">
+                <div class="relative">
+                    <img src="${product.imagem}" alt="${product.nome}" class="w-full h-56 object-cover">
+                    ${product.novo ? '<div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">NOVO</div>' : ''}
+                    ${product.precoAntigo ? '<div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">OFERTA</div>' : ''}
+                </div>
+                <div class="p-6">
+                    <h3 class="text-lg font-bold text-secondary mb-3">${product.nome}</h3>
+                    <div class="flex items-center space-x-2 mb-4">
+                        ${product.precoAntigo ? `<span class="text-gray-400 line-through text-sm">R$ ${product.precoAntigo.toFixed(2)}</span>` : ''}
+                        <span class="text-2xl font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button onclick="addToCart(${product.id})" 
+                                class="flex-1 bg-secondary text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-all font-semibold">
+                            <i class="fas fa-shopping-cart mr-2"></i>Carrinho
+                        </button>
+                        <a href="https://wa.me/5511999999999?text=Olá! Tenho interesse no produto: ${encodeURIComponent(product.nome)} - R$ ${product.preco.toFixed(2)}" 
+                           class="flex-1 bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition-all text-center font-semibold">
+                            <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Scroll indicator
+    function updateScrollIndicator() {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        document.getElementById('scroll-indicator').style.width = scrollPercent + '%';
+    }
+
+    // Back to top button
+    function updateBackToTopButton() {
+        const backToTopBtn = document.getElementById('back-to-top');
+        if (window.pageYOffset > 300) {
+            backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
+            backToTopBtn.classList.add('opacity-100');
+        } else {
+            backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
+            backToTopBtn.classList.remove('opacity-100');
+        }
+    }
+
+    // Enhanced event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        // Hide loading screen
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 1500);
+
+        updateCartCount();
+        loadFeaturedProducts();
+
+        // Scroll events
+        window.addEventListener('scroll', () => {
+            updateScrollIndicator();
+            updateBackToTopButton();
+        });
+
+        // Back to top
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Search functionality
+        const searchBtn = document.getElementById('search-btn');
+        const searchBar = document.getElementById('search-bar');
+        const searchInput = document.getElementById('search-input');
+        
+        searchBtn.addEventListener('click', function() {
+            searchBar.classList.toggle('hidden');
+            if (!searchBar.classList.contains('hidden')) {
+                searchInput.focus();
+            }
+        });
+
+        // Cart modal
+        const cartBtn = document.getElementById('cart-btn');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const whatsappCart = document.getElementById('whatsapp-cart');
+
+        cartBtn.addEventListener('click', function() {
+            displayCartItems();
+            cartModal.classList.remove('hidden');
+        });
+
+        closeCart.addEventListener('click', function() {
+            cartModal.classList.add('hidden');
+        });
+
+        cartModal.addEventListener('click', function(e) {
+            if (e.target === cartModal) {
+                cartModal.classList.add('hidden');
+            }
+        });
+
+        whatsappCart.addEventListener('click', function() {
+            const message = generateWhatsAppMessage();
+            if (message) {
+                window.open(`https://wa.me/5511999999999?text=${message}`, '_blank');
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-slide-up');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for animation
+        document.querySelectorAll('.card-hover, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+</body>
+
+</html>
+
