@@ -113,60 +113,6 @@
         box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
     }
     
-    .hero-banner {
-        background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), 
-                    radial-gradient(circle at 20% 50%, #FFD700 0%, transparent 50%),
-                    radial-gradient(circle at 80% 20%, #FFA500 0%, transparent 50%),
-                    radial-gradient(circle at 40% 80%, #FF8C00 0%, transparent 50%),
-                    #000000;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .hero-banner::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23FFD700" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23FFA500" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23FF8C00" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="%23FFD700" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="%23FFA500" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-        animation: float 6s ease-in-out infinite;
-    }
-    
-    .floating-elements {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-    }
-    
-    .floating-elements::before,
-    .floating-elements::after {
-        content: '';
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(255, 215, 0, 0.1);
-        animation: float 4s ease-in-out infinite;
-    }
-    
-    .floating-elements::before {
-        width: 100px;
-        height: 100px;
-        top: 20%;
-        left: 10%;
-        animation-delay: -2s;
-    }
-    
-    .floating-elements::after {
-        width: 150px;
-        height: 150px;
-        top: 60%;
-        right: 10%;
-        animation-delay: -1s;
-    }
     
     .category-card {
         background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
@@ -240,16 +186,6 @@
         width: 100%;
     }
     
-    .scroll-indicator {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0%;
-        height: 3px;
-        background: linear-gradient(90deg, #FFD700, #FFA500, #FF8C00);
-        z-index: 9999;
-        transition: width 0.1s ease;
-    }
     
     .loading-spinner {
         border: 3px solid #f3f3f3;
@@ -455,30 +391,13 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-<!-- Hero Banner -->
-<section class="hero-banner h-screen flex items-center justify-center text-white relative">
-    <div class="floating-elements"></div>
-    
-    <div class="text-center z-10 max-w-4xl mx-auto px-4">
-        <h1 class="text-6xl md:text-8xl font-bold mb-6 animate-slide-up">
-            HC <span class="gradient-text">Multimarcas</span>
-        </h1>
-        <p class="text-xl md:text-3xl mb-8 animate-slide-up opacity-90" style="animation-delay: 0.2s;">
-            Moda para toda a família com os melhores preços
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-bounce-in" style="animation-delay: 0.4s;">
-            <a href="catalogo.html" class="btn-primary text-secondary px-8 py-4 rounded-full text-lg font-semibold inline-block">
-                <i class="fas fa-shopping-bag mr-2"></i>Ver Catálogo
-            </a>
-            <a href="promocoes.html" class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full text-lg font-semibold inline-block hover:bg-white/30 transition-all">
-                <i class="fas fa-fire mr-2"></i>Promoções
-            </a>
-        </div>
-    </div>
-    
-    <!-- Scroll indicator -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <i class="fas fa-chevron-down text-2xl text-white/70"></i>
+<!-- Hero -->
+<section class="h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center text-center text-white px-4">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">HC Multimarcas</h1>
+    <p class="text-lg sm:text-xl md:text-2xl mb-8">Moda para toda a família com os melhores preços</p>
+    <div class="flex flex-col sm:flex-row gap-4">
+        <a href="catalogo.html" class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-md hover:bg-yellow-300 transition">Ver Catálogo</a>
+        <a href="promocoes.html" class="border border-yellow-400 text-yellow-400 font-semibold px-6 py-3 rounded-md hover:bg-yellow-400 hover:text-gray-900 transition">Promoções</a>
     </div>
 </section>
 
@@ -1052,14 +971,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `).join('');
     }
 
-    // Scroll indicator
-    function updateScrollIndicator() {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.body.scrollHeight - window.innerHeight;
-        const scrollPercent = (scrollTop / docHeight) * 100;
-        document.getElementById('scroll-indicator').style.width = scrollPercent + '%';
-    }
-
     // Back to top button
     function updateBackToTopButton() {
         const backToTopBtn = document.getElementById('back-to-top');
@@ -1083,10 +994,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadFeaturedProducts();
 
         // Scroll events
-        window.addEventListener('scroll', () => {
-            updateScrollIndicator();
-            updateBackToTopButton();
-        });
+          window.addEventListener('scroll', () => {
+              updateBackToTopButton();
+          });
 
         // Back to top
         document.getElementById('back-to-top').addEventListener('click', () => {
