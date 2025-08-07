@@ -67,13 +67,24 @@
                         <label for="estado" class="block text-sm font-semibold mb-2">Estado</label>
                         <input id="estado" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="UF">
                     </div>
+        <!-- Campo de distância em km, exibido apenas quando o destino está na mesma cidade da loja -->
+        <div id="distancia-container" class="hidden">
+            <label for="distancia" class="block text-sm font-semibold mb-2">Distância (km da loja)</label>
+            <input id="distancia" type="number" min="0" step="0.1" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="0">
+        </div>
                 </div>
                 <div class="md:col-span-2">
                     <label for="pagamento" class="block text-sm font-semibold mb-2">Forma de Pagamento</label>
                     <select id="pagamento" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
                         <option value="dinheiro">Dinheiro (na entrega)</option>
                         <option value="pix">Pix</option>
-                        <option value="maquineta">Cartão na Maquineta</option>
+                        <!--
+                            O valor da opção do cartão foi alterado de "maquineta" para
+                            "maquina" para refletir a sugestão de texto "Cartão na Máquina".
+                            Assim evitamos o termo informal "maquineta" e mantemos
+                            compatibilidade com o código JavaScript.
+                        -->
+                        <option value="maquina">Cartão na Máquina</option>
                     </select>
                 </div>
                 <!-- Campo de CEP para cálculo de frete -->
@@ -86,7 +97,8 @@
                 </div>
                 <!-- Informação do frete calculado -->
                 <div id="frete-info" class="hidden md:col-span-2 bg-gray-50 border border-gray-200 rounded-lg p-4">
-                    <p class="text-sm text-gray-700">Frete via Sedex: <span id="frete-valor" class="font-bold text-gray-900">R$ 0,00</span></p>
+                    <p class="text-sm text-gray-700">Frete: <span id="frete-valor" class="font-bold text-gray-900">R$ 0,00</span></p>
+                    <p class="text-sm text-gray-700 mt-1">Prazo estimado: <span id="prazo-entrega" class="font-bold text-gray-900">&nbsp;</span></p>
                 </div>
                 <!-- Campo de troco para pagamento em dinheiro -->
                 <div id="troco-container" class="hidden md:col-span-2">
@@ -124,6 +136,22 @@
         </form>
         <p class="text-gray-500 text-sm text-center">Este é um ambiente de demonstração. Nenhuma transação real será processada.</p>
     </main>
+
+    <!-- Botões flutuantes para contato rápido -->
+    <div class="fixed bottom-16 right-6 flex flex-col items-center space-y-3 z-50">
+        <a href="https://wa.me/5511999999999" target="_blank" aria-label="Contato via WhatsApp"
+           class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition transform hover:-translate-y-1">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://instagram.com/hcmultimarcas" target="_blank" aria-label="Instagram da Loja"
+           class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center shadow-lg hover:bg-pink-600 transition transform hover:-translate-y-1">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Rua+das+Flores+123+São+Paulo" target="_blank" aria-label="Ver Localização da Loja"
+           class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition transform hover:-translate-y-1">
+            <i class="fas fa-map-marker-alt"></i>
+        </a>
+    </div>
     <footer class="bg-gray-900 text-gray-400 mt-16 py-8">
         <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
             <div>
@@ -168,6 +196,10 @@
 
     <!-- Script para resumo do pedido, controle de troco e confirmação de pedido -->
     <script>
+    // Configurações da loja: defina a cidade e o estado de origem para cálculo de frete.
+    // Se a compra for para a mesma cidade, será considerada entrega local (taxa menor).
+    const storeCity = 'São Paulo';
+    const storeState = 'SP';
     document.addEventListener('DOMContentLoaded', function () {
       const orderSummary = document.getElementById('order-summary');
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -200,7 +232,7 @@
           trocoContainer.classList.remove('hidden');
           parcelasContainer.classList.add('hidden');
           pixInfoContainer.classList.add('hidden');
-        } else if (value === 'maquineta') {
+        } else if (value === 'maquina') {
           parcelasContainer.classList.remove('hidden');
           trocoContainer.classList.add('hidden');
           pixInfoContainer.classList.add('hidden');
@@ -225,11 +257,44 @@
       if (form) {
         form.addEventListener('submit', function(e) {
           e.preventDefault();
-          successDiv.textContent = 'Pedido realizado com sucesso! Em breve entraremos em contato para confirmar o pagamento e os detalhes da entrega.';
+          // Validação básica dos campos obrigatórios antes de enviar
+          const requiredFields = ['nome','email','cep','rua','numero','bairro','cidade','estado'];
+          for (const field of requiredFields) {
+            const el = document.getElementById(field);
+            if (el && !el.value.trim()) {
+              alert('Por favor, preencha o campo ' + field + '.');
+              el.focus();
+              return;
+            }
+          }
+          // Gera mensagem de pedido para WhatsApp
+          const message = generatePaymentMessage();
+          if (!message) {
+            alert('Ocorreu um erro ao gerar a mensagem de pedido.');
+            return;
+          }
+          // Abre o WhatsApp com a mensagem pré-preenchida (substitua pelo número correto da loja)
+          const phoneNumber = '5511999999999';
+          const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+          window.open(waUrl, '_blank');
+          // Exibe mensagem de sucesso na página
+          successDiv.textContent = 'Pedido enviado com sucesso! Redirecionando para o WhatsApp...';
           successDiv.classList.remove('hidden');
+          // Limpa o carrinho e oculta formulário
           form.classList.add('hidden');
-          // Limpa o carrinho após a conclusão do pedido
           localStorage.removeItem('cart');
+        });
+      }
+
+      // Evento de recalcular frete ao alterar a distância (quando entrega local)
+      const distanciaInput = document.getElementById('distancia');
+      if (distanciaInput) {
+        distanciaInput.addEventListener('input', function() {
+          // Recalcula o frete somente se um CEP válido já foi calculado
+          const cepEl = document.getElementById('cep');
+          if (cepEl && cepEl.value.trim().length >= 8) {
+            calcularFrete();
+          }
         });
       }
     });
@@ -255,55 +320,138 @@
         alert('CEP inválido. Informe 8 dígitos.');
         return;
       }
-      // Cálculo ilustrativo: define valor de frete baseado no primeiro dígito do CEP
-      let shippingCost = 0;
-      const firstDigit = cepClean.charAt(0);
-      switch (firstDigit) {
-        case '0': shippingCost = 14.90; break;
-        case '1': shippingCost = 16.90; break;
-        case '2': shippingCost = 18.90; break;
-        case '3': shippingCost = 20.90; break;
-        case '4': shippingCost = 22.90; break;
-        case '5': shippingCost = 19.90; break;
-        case '6': shippingCost = 24.90; break;
-        case '7': shippingCost = 26.90; break;
-        case '8': shippingCost = 28.90; break;
-        case '9': shippingCost = 29.90; break;
-        default: shippingCost = 25.90; break;
-      }
-      // Mostra o valor do frete
-      freteInfo.classList.remove('hidden');
-      freteValorSpan.textContent = 'R$ ' + shippingCost.toFixed(2).replace('.', ',');
-      // Atualiza o total do pedido somando o frete
-      // Extrai valor atual de total (remove caracteres não numéricos)
-      const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
-      const currentTotal = parseFloat(totalText) || 0;
-      const newTotal = currentTotal + shippingCost;
-      orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
-
       // Busca dados de endereço a partir do CEP usando a API ViaCEP.
       // Sempre exibe os campos de endereço logo após o cálculo para permitir preenchimento manual
       const addressFields = document.getElementById('address-fields');
       if (addressFields) {
-        // Mostra campos imediatamente para que o usuário possa informar dados mesmo se a API falhar
         addressFields.classList.remove('hidden');
-        // Tenta preencher automaticamente usando ViaCEP
-        fetch(`https://viacep.com.br/ws/${cepClean}/json/`)
-          .then(response => response.json())
-          .then(data => {
-            if (data && !data.erro) {
-              document.getElementById('rua').value = data.logradouro || '';
-              document.getElementById('bairro').value = data.bairro || '';
-              document.getElementById('cidade').value = data.localidade || '';
-              document.getElementById('estado').value = data.uf || '';
-            } else {
-              alert('CEP não encontrado. Preencha o endereço manualmente.');
-            }
-          })
-          .catch(() => {
-            // Se houver erro, mantém os campos vazios para preenchimento manual
-          });
       }
+      fetch(`https://viacep.com.br/ws/${cepClean}/json/`)
+        .then(response => response.json())
+        .then(data => {
+          if (data && !data.erro) {
+            // Preenche campos de endereço
+            document.getElementById('rua').value = data.logradouro || '';
+            document.getElementById('bairro').value = data.bairro || '';
+            document.getElementById('cidade').value = data.localidade || '';
+            document.getElementById('estado').value = data.uf || '';
+            // Calcula frete com base na cidade e no estado
+            let shippingCost = 0;
+            let prazo = '';
+            const destCity = (data.localidade || '').toLowerCase();
+            const destState = data.uf || '';
+            const distanciaContainer = document.getElementById('distancia-container');
+            const distanciaInput = document.getElementById('distancia');
+            // Caso o destino esteja na mesma cidade e estado da loja, exibe o campo de distância
+            if (destCity && destState && destCity === storeCity.toLowerCase() && destState === storeState) {
+              if (distanciaContainer) distanciaContainer.classList.remove('hidden');
+              // Lê a distância em quilômetros informada pelo usuário. Se não houver valor, assume 0.
+              let distanciaKm = 0;
+              if (distanciaInput && distanciaInput.value.trim() !== '') {
+                distanciaKm = parseFloat(distanciaInput.value);
+                if (isNaN(distanciaKm) || distanciaKm < 0) distanciaKm = 0;
+              }
+              // Base de frete local: até 5 km paga-se R$ 5,90. Acima de 5 km há um adicional por km.
+              shippingCost = 5.90;
+              if (distanciaKm > 5) {
+                const extraKm = distanciaKm - 5;
+                const adicional = extraKm * 1.50;
+                shippingCost += adicional;
+              }
+              prazo = '1-2 dias úteis';
+            } else {
+              // Esconde campo de distância quando não for entrega local
+              if (distanciaContainer) distanciaContainer.classList.add('hidden');
+              // Dentro do mesmo estado mas cidade diferente
+              if (destState === storeState) {
+                shippingCost = 10.90;
+                prazo = '2-4 dias úteis';
+              } else {
+                // Para outros estados
+                shippingCost = 20.90;
+                prazo = '5-8 dias úteis';
+              }
+            }
+            // Exibe o valor e prazo do frete
+            freteInfo.classList.remove('hidden');
+            freteValorSpan.textContent = 'R$ ' + shippingCost.toFixed(2).replace('.', ',');
+            const prazoEl = document.getElementById('prazo-entrega');
+            if (prazoEl) prazoEl.textContent = prazo;
+            // Atualiza o total do pedido somando o frete
+            const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
+            const currentTotal = parseFloat(totalText) || 0;
+            const newTotal = currentTotal + shippingCost;
+            orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+          } else {
+            alert('CEP não encontrado. Preencha o endereço manualmente.');
+            // Ainda assim, mostra frete ilustrativo genérico
+            freteInfo.classList.remove('hidden');
+            freteValorSpan.textContent = 'R$ 25,90';
+            const prazoEl = document.getElementById('prazo-entrega');
+            if (prazoEl) prazoEl.textContent = '5-8 dias úteis';
+            const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
+            const currentTotal = parseFloat(totalText) || 0;
+            const newTotal = currentTotal + 25.90;
+            orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+          }
+        })
+        .catch(() => {
+          // Em caso de falha na API, mostra frete genérico
+          freteInfo.classList.remove('hidden');
+          freteValorSpan.textContent = 'R$ 25,90';
+          const prazoEl = document.getElementById('prazo-entrega');
+          if (prazoEl) prazoEl.textContent = '5-8 dias úteis';
+          const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
+          const currentTotal = parseFloat(totalText) || 0;
+          const newTotal = currentTotal + 25.90;
+          orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+        });
+    }
+
+    /**
+     * Gera a mensagem de pedido para enviar via WhatsApp.
+     * Inclui nome do cliente, endereço, total, pagamento e lista de produtos.
+     */
+    function generatePaymentMessage() {
+      // Dados do cliente
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const rua = document.getElementById('rua').value.trim();
+      const numero = document.getElementById('numero').value.trim();
+      const bairro = document.getElementById('bairro').value.trim();
+      const cidade = document.getElementById('cidade').value.trim();
+      const estado = document.getElementById('estado').value.trim();
+      const cep = document.getElementById('cep').value.trim();
+      // Pagamento
+      const pagamento = document.getElementById('pagamento').value;
+      let pagamentoTexto = '';
+      if (pagamento === 'dinheiro') {
+        pagamentoTexto = 'Dinheiro (na entrega)';
+        const troco = document.getElementById('troco').value.trim();
+        if (troco) pagamentoTexto += `\nTroco para: R$ ${troco}`;
+      } else if (pagamento === 'maquina') {
+        const parcelas = document.getElementById('parcelas').value;
+        pagamentoTexto = `Cartão (em ${parcelas}x)`;
+      } else if (pagamento === 'pix') {
+        pagamentoTexto = 'Pix';
+      }
+      // Itens do carrinho
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      let itensText = '';
+      cart.forEach(item => {
+        itensText += `\n- ${item.nome} (x${item.quantidade}) – R$ ${item.preco.toFixed(2).replace('.', ',')}`;
+      });
+      const totalText = document.getElementById('order-total').textContent.replace('R$ ', '').trim();
+      // Monta a mensagem
+      const message =
+        `Novo pedido de ${nome}!\n\n` +
+        `Dados do cliente:\n${nome} – ${email}\n` +
+        `Endereço: ${rua}, ${numero} – ${bairro}, ${cidade} - ${estado}, CEP ${cep}\n\n` +
+        `Forma de pagamento: ${pagamentoTexto}\n\n` +
+        `Itens do pedido:${itensText}\n\n` +
+        `Total com frete: R$ ${totalText}\n` +
+        `Muito obrigado!`;
+      return message;
     }
     </script>
 </body>
