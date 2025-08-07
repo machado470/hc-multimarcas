@@ -75,16 +75,9 @@
                 </div>
                 <div class="md:col-span-2">
                     <label for="pagamento" class="block text-sm font-semibold mb-2">Forma de Pagamento</label>
+                    <!-- Unicamente Pix como forma de pagamento -->
                     <select id="pagamento" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                        <option value="dinheiro">Dinheiro (na entrega)</option>
                         <option value="pix">Pix</option>
-                        <!--
-                            O valor da opção do cartão foi alterado de "maquineta" para
-                            "maquina" para refletir a sugestão de texto "Cartão na Máquina".
-                            Assim evitamos o termo informal "maquineta" e mantemos
-                            compatibilidade com o código JavaScript.
-                        -->
-                        <option value="maquina">Cartão na Máquina</option>
                     </select>
                 </div>
                 <!-- Campo de CEP para cálculo de frete -->
@@ -100,21 +93,7 @@
                     <p class="text-sm text-gray-700">Frete: <span id="frete-valor" class="font-bold text-gray-900">R$ 0,00</span></p>
                     <p class="text-sm text-gray-700 mt-1">Prazo estimado: <span id="prazo-entrega" class="font-bold text-gray-900">&nbsp;</span></p>
                 </div>
-                <!-- Campo de troco para pagamento em dinheiro -->
-                <div id="troco-container" class="hidden md:col-span-2">
-                    <label for="troco" class="block text-sm font-semibold mb-2">Troco para</label>
-                    <input id="troco" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Informe o valor para troco (caso precise)">
-                </div>
-                <!-- Opções de parcelamento para pagamento na maquineta -->
-                <div id="parcelas-container" class="hidden md:col-span-2">
-                    <label for="parcelas" class="block text-sm font-semibold mb-2">Parcelamento</label>
-                    <select id="parcelas" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                        <option value="1">À vista</option>
-                        <option value="2">2x sem juros</option>
-                        <option value="3">3x sem juros</option>
-                        <option value="6">6x com juros</option>
-                    </select>
-                </div>
+                <!-- Campos de troco e parcelamento removidos pois a única forma de pagamento é Pix -->
 
                 <!-- Informações para pagamento via Pix -->
                 <div id="pix-info" class="hidden md:col-span-2 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
@@ -215,57 +194,20 @@
       }
 
       const pagamentoSelect = document.getElementById('pagamento');
-      const trocoContainer = document.getElementById('troco-container');
-      const parcelasContainer = document.getElementById('parcelas-container');
+      // Campos removidos (troco e parcelas) não são mais necessários
       const pixInfoContainer = document.getElementById('pix-info');
       const pixShareBtn = document.getElementById('pix-share-btn');
 
+      // A única forma de pagamento é Pix; sempre mostra o QR Code e botão de compartilhamento
       function updatePaymentFields() {
-        const value = pagamentoSelect.value;
-        if (value === 'dinheiro') {
-          trocoContainer.classList.remove('hidden');
-          if (pixShareBtn) pixShareBtn.classList.add('hidden');
-          parcelasContainer.classList.add('hidden');
-          pixInfoContainer.classList.add('hidden');
-        } else if (value === 'maquina') {
-          parcelasContainer.classList.remove('hidden');
-          if (pixShareBtn) pixShareBtn.classList.add('hidden');
-          trocoContainer.classList.add('hidden');
-          pixInfoContainer.classList.add('hidden');
-        } else if (value === 'pix') {
-          // Exibe informações de Pix e oculta campos desnecessários
-          pixInfoContainer.classList.remove('hidden');
-          if (pixShareBtn) pixShareBtn.classList.remove('hidden');
-          trocoContainer.classList.add('hidden');
-          parcelasContainer.classList.add('hidden');
-        } else {
-          trocoContainer.classList.add('hidden');
-          parcelasContainer.classList.add('hidden');
-          pixInfoContainer.classList.add('hidden');
-          if (pixShareBtn) pixShareBtn.classList.add('hidden');
-        }
+        if (pixInfoContainer) pixInfoContainer.classList.remove('hidden');
+        if (pixShareBtn) pixShareBtn.classList.remove('hidden');
       }
 
-      // Função para habilitar ou desabilitar opções de pagamento dependendo do frete (Sedex ou entrega local)
+      // Função simplificada: como a única forma de pagamento é Pix, apenas garante que as informações
+      // de Pix sejam exibidas. O parâmetro isSedex é ignorado, mas mantido para compatibilidade.
       function updatePaymentOptions(isSedex) {
-        const pgSelect = document.getElementById('pagamento');
-        if (!pgSelect) return;
-        const dinheiroOpt = pgSelect.querySelector('option[value="dinheiro"]');
-        // Quando o frete é Sedex (entrega acima de 20km ou outra cidade/estado), não permitimos pagamento em dinheiro
-        if (isSedex) {
-          if (dinheiroOpt) dinheiroOpt.disabled = true;
-          // Se o usuário havia selecionado dinheiro, altere para Pix automaticamente
-          if (pgSelect.value === 'dinheiro') {
-            pgSelect.value = 'pix';
-          }
-        } else {
-          // Para entregas locais, reabilita a opção de dinheiro
-          if (dinheiroOpt) dinheiroOpt.disabled = false;
-        }
-        // Após ajustar as opções, chama updatePaymentFields para esconder ou mostrar campos relevantes
-        if (typeof updatePaymentFields === 'function') {
-          updatePaymentFields();
-        }
+        updatePaymentFields();
       }
       if (pagamentoSelect) {
         pagamentoSelect.addEventListener('change', updatePaymentFields);
@@ -300,12 +242,6 @@
           if (!message) {
             alert('Ocorreu um erro ao gerar a mensagem de pedido.');
             return;
-          }
-          // Se a forma de pagamento for cartão na máquina, redireciona primeiro para o checkout do Mercado Pago
-          if (document.getElementById('pagamento').value === 'maquina') {
-            // Link fictício do Mercado Pago; substitua pelo link de checkout real da sua conta
-            const mpUrl = 'https://www.mercadopago.com.br/';
-            window.open(mpUrl, '_blank');
           }
           // Abre o WhatsApp com a mensagem pré-preenchida (substitua pelo número correto da loja)
           // Número de WhatsApp da loja atualizado para o DDD 48. Certifique-se de manter apenas dígitos.
@@ -487,17 +423,8 @@ try {
       const cep = document.getElementById('cep').value.trim();
       // Pagamento
       const pagamento = document.getElementById('pagamento').value;
-      let pagamentoTexto = '';
-      if (pagamento === 'dinheiro') {
-        pagamentoTexto = 'Dinheiro (na entrega)';
-        const troco = document.getElementById('troco').value.trim();
-        if (troco) pagamentoTexto += `\nTroco para: R$ ${troco}`;
-      } else if (pagamento === 'maquina') {
-        const parcelas = document.getElementById('parcelas').value;
-        pagamentoTexto = `Cartão (em ${parcelas}x)`;
-      } else if (pagamento === 'pix') {
-        pagamentoTexto = 'Pix';
-      }
+      // Como a única forma de pagamento é Pix, definimos o texto fixo
+      const pagamentoTexto = 'Pix';
       // Itens do carrinho
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
       let itensText = '';

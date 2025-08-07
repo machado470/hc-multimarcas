@@ -920,6 +920,22 @@
 <!-- Botão voltar ao topo removido conforme solicitação do cliente -->
 
 <script>
+// Reset likes and comments to start the site fresh. This will remove all likes
+// and comments stored in localStorage each time the page loads. You can remove
+// this block after o site já estiver em uso real.
+(function resetSiteStorage() {
+    try {
+        localStorage.removeItem('likes');
+        localStorage.removeItem('likedProducts');
+        Object.keys(localStorage).forEach(function(key) {
+            if (key && key.startsWith('comments_')) {
+                localStorage.removeItem(key);
+            }
+        });
+    } catch (err) {
+        console.warn('Não foi possível limpar armazenamento local:', err);
+    }
+})();
     // Enhanced products data
     // Usamos let em vez de const para permitir que o array receba mais produtos dinamicamente.
     let productsData = [
@@ -1325,12 +1341,30 @@ if (!product) return;
         const container = document.getElementById('comments-container');
         if (!container) return;
         const comments = JSON.parse(localStorage.getItem('comments_' + productId)) || [];
+        // Recupera o usuário logado para permitir edição/exclusão de comentários
+        let currentUser = null;
+        const userRaw = localStorage.getItem('commentUser');
+        if (userRaw) {
+            try {
+                currentUser = JSON.parse(userRaw);
+            } catch (e) {
+                currentUser = { name: userRaw, email: '' };
+            }
+        }
         if (comments.length) {
-            container.innerHTML = comments.map(c => {
+            container.innerHTML = comments.map((c, idx) => {
                 // Gera estrelas com base na avaliação
                 let stars = '';
                 for (let i = 1; i <= 5; i++) {
                     stars += `<i class="${i <= c.rating ? 'fas' : 'far'} fa-star ${i <= c.rating ? 'text-yellow-400' : 'text-gray-300'} mr-1"></i>`;
+                }
+                // Botões de editar/excluir somente para o autor do comentário
+                let actionsHtml = '';
+                if (currentUser && c.email && currentUser.email === c.email) {
+                    actionsHtml = `<div class="mt-2 flex space-x-2 text-xs">
+                        <button onclick="editComment(${idx})" class="text-blue-500 hover:underline">Editar</button>
+                        <button onclick="deleteComment(${idx})" class="text-red-500 hover:underline">Excluir</button>
+                    </div>`;
                 }
                 return `<div class="border rounded-lg p-3 bg-gray-50 dark:bg-gray-900">
                     <div class="flex items-center mb-1">
@@ -1339,6 +1373,7 @@ if (!product) return;
                     </div>
                     <div class="flex items-center mb-2">${stars}</div>
                     <p class="text-gray-700 dark:text-gray-300 text-sm">${c.comment}</p>
+                    ${actionsHtml}
                 </div>`;
             }).join('');
         } else {
@@ -1380,15 +1415,67 @@ if (!product) return;
         const comments = JSON.parse(localStorage.getItem(key)) || [];
         // Data e hora formatadas para fuso de São Paulo
         const date = new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-        comments.push({ name: user.name, email: user.email, comment, rating, date });
+        // Se estiver editando um comentário existente, atualiza em vez de adicionar
+        if (typeof window.editingCommentIndex === 'number' && window.editingCommentIndex >= 0) {
+            comments[window.editingCommentIndex] = { name: user.name, email: user.email, comment, rating, date };
+            window.editingCommentIndex = undefined;
+            showNotification('Comentário atualizado!');
+        } else {
+            comments.push({ name: user.name, email: user.email, comment, rating, date });
+            showNotification('Comentário adicionado!');
+        }
         localStorage.setItem(key, JSON.stringify(comments));
         textarea.value = '';
         // Reinicia a seleção de avaliação
         window.currentRating = 0;
         updateRatingDisplay();
+        // Restaura o texto do botão de envio para o padrão
+        const submitBtn = document.querySelector('#comment-form button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Enviar Comentário';
         loadCommentsSection(productId);
-        showNotification('Comentário adicionado!');
         // Atualiza depoimentos na seção "O que nossos clientes dizem"
+        loadTestimonials();
+    }
+
+    /**
+     * Preenche o formulário de comentário com os dados existentes para edição.
+     * @param {number} index Índice do comentário a ser editado
+     */
+    function editComment(index) {
+        const select = document.getElementById('product-select');
+        if (!select) return;
+        const productId = parseInt(select.value);
+        const key = 'comments_' + productId;
+        const comments = JSON.parse(localStorage.getItem(key)) || [];
+        const c = comments[index];
+        if (!c) return;
+        // Define o índice em uma variável global para atualização posterior
+        window.editingCommentIndex = index;
+        const textarea = document.getElementById('new-comment-text');
+        if (textarea) textarea.value = c.comment;
+        // Atualiza a avaliação atual
+        window.currentRating = c.rating || 0;
+        updateRatingDisplay();
+        // Destaca visualmente que estamos editando
+        const submitBtn = document.querySelector('#comment-form button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Atualizar Comentário';
+    }
+
+    /**
+     * Exclui um comentário do produto atual.
+     * @param {number} index Índice do comentário a ser removido
+     */
+    function deleteComment(index) {
+        const select = document.getElementById('product-select');
+        if (!select) return;
+        const productId = parseInt(select.value);
+        const key = 'comments_' + productId;
+        let comments = JSON.parse(localStorage.getItem(key)) || [];
+        comments.splice(index, 1);
+        localStorage.setItem(key, JSON.stringify(comments));
+        loadCommentsSection(productId);
+        showNotification('Comentário removido!');
+        // Atualiza depoimentos também
         loadTestimonials();
     }
 
