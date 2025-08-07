@@ -703,6 +703,9 @@
                     <a href="https://instagram.com/hc_multimarcas0" class="w-10 h-10 flex items-center justify-center rounded-full bg-pink-500 text-white hover:bg-pink-600"><i class="fab fa-instagram"></i></a>
                     <a href="https://facebook.com/hcmultimarcas" class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600"><i class="fab fa-facebook"></i></a>
                 </div>
+                <div class="mt-6">
+                    <iframe src="https://www.google.com/maps?q=Rua%20Lauro%20M%C3%BCller%20516%2C%20Tijucas%2C%20SC&output=embed" width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
             </div>
             <form onsubmit="event.preventDefault(); showNotification('Mensagem enviada!'); this.reset();" class="space-y-4 animate-slide-right">
                 <div>
@@ -914,9 +917,7 @@
   manter o mesmo tamanho e sombra. A animação `animate-bounce` foi removida para deixar a
   interação mais discreta.
 -->
-<button id="back-to-top" aria-label="Voltar ao topo" class="fixed bottom-8 right-8 z-50 bg-gray-800 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all opacity-0 pointer-events-none">
-    <i class="fas fa-chevron-up"></i>
-</button>
+<!-- Botão voltar ao topo removido conforme solicitação do cliente -->
 
 <script>
     // Enhanced products data
@@ -939,7 +940,7 @@
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Azul", "Branco", "Preto", "Cinza"],
             destaque: true,
-            novo: false
+            novo: false, quantidade: 10
         },
         {
             id: 2,
@@ -957,7 +958,7 @@
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Rosa", "Azul", "Verde", "Roxo"],
             destaque: true,
-            novo: true
+            novo: true, quantidade: 10
         },
         {
             id: 3,
@@ -975,7 +976,7 @@
             tamanhos: ["2", "4", "6", "8", "10"],
             cores: ["Amarelo", "Verde", "Rosa", "Azul"],
             destaque: true,
-            novo: false
+            novo: false, quantidade: 10
         },
         {
             id: 4,
@@ -993,7 +994,7 @@
             tamanhos: ["Único"],
             cores: ["Preto", "Marrom", "Bege", "Vinho"],
             destaque: true,
-            novo: true
+            novo: true, quantidade: 10
         },
         {
             id: 5,
@@ -1011,7 +1012,7 @@
             tamanhos: ["38", "40", "42", "44", "46"],
             cores: ["Azul", "Preto", "Azul Escuro"],
             destaque: false,
-            novo: false
+            novo: false, quantidade: 10
         },
         {
             id: 6,
@@ -1029,7 +1030,7 @@
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Branco", "Rosa", "Azul", "Preto"],
             destaque: false,
-            novo: true
+            novo: true, quantidade: 10
         }
     ];
 
@@ -1184,7 +1185,8 @@
                     tamanhos: tamanhos,
                     cores: cores,
                     destaque: false,
-                    novo: false
+                    novo: false,
+                    quantidade: 10
                     // likes serão armazenados em localStorage. Quando um novo produto é criado, inicia com 0 likes.
                 });
             });
@@ -1276,7 +1278,13 @@
      */
     function shareProduct(productId) {
         const product = productsData.find(p => p.id === productId);
-        if (!product) return;
+        
+// Verifica estoque disponível
+if (inventory && inventory[productId] !== undefined && inventory[productId] <= 0) {
+    showNotification('Produto esgotado. Não é possível adicionar ao carrinho.');
+    return;
+}
+if (!product) return;
         // Monta um link simples para a página atual com âncora do produto
         const shareUrl = window.location.origin + window.location.pathname + `#produto-${productId}`;
         const shareData = {
@@ -1683,7 +1691,21 @@
     // Variáveis para galeria do produto
     let currentImages = [];
     let currentImageIndex = 0;
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(localStorage.getItem('cart')) || []
+
+// Inventory of products (available stock)
+let inventory = {};
+function initInventory() {
+    let inv = JSON.parse(localStorage.getItem('inventory')) || {};
+    productsData.forEach(p => {
+        if (inv[p.id] === undefined || inv[p.id] === null) {
+            inv[p.id] = p.quantidade || 0;
+        }
+    });
+    localStorage.setItem('inventory', JSON.stringify(inv));
+    inventory = inv;
+}
+;
 
     function updateCartCount() {
         const cartCount = document.getElementById('cart-count');
@@ -1713,7 +1735,13 @@
         const product = productsData.find(p => p.id === productId);
         if (!product) return;
 
-        const existingItem = cart.find(item => 
+        
+// Verifica estoque disponível
+if (inventory && inventory[productId] !== undefined && inventory[productId] <= 0) {
+    showNotification('Produto esgotado. Não é possível adicionar ao carrinho.');
+    return;
+}
+const existingItem = cart.find(item => 
             item.id === productId && item.tamanho === tamanho && item.cor === cor
         );
 
@@ -1733,6 +1761,7 @@
 
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartCount();
+        initInventory();
         showNotification(`${product.nome} adicionado ao carrinho!`);
     }
 
@@ -1818,6 +1847,10 @@
      */
     function showProductDetails(productId) {
         const product = productsData.find(p => p.id === productId);
+
+const qty = (inventory && inventory[product.id] !== undefined) ? inventory[product.id] : (product.quantidade || 0);
+const availabilityHtml = `<p class="text-sm text-gray-600 mb-2"><strong>Disponível:</strong> ${qty} ${qty === 1 ? 'unidade' : 'unidades'}</p>`;
+
         if (!product) return;
         // Atualiza título
         document.getElementById('product-modal-title').textContent = product.nome;
@@ -1856,6 +1889,7 @@
                     ${product.precoAntigo ? `<p class="text-gray-400 line-through text-sm mb-1">R$ ${product.precoAntigo.toFixed(2)}</p>` : ''}
                     <p class="text-2xl font-bold text-primary mb-4">R$ ${product.preco.toFixed(2)}</p>
                     <p class="text-gray-700 mb-4">${product.descricao}</p>
+                    ${availabilityHtml}
                     ${product.tamanhos ? `<p class="text-sm text-gray-600 mb-2"><strong>Tamanhos:</strong> ${product.tamanhos.join(', ')}</p>` : ''}
                     ${product.cores ? `<p class="text-sm text-gray-600 mb-2"><strong>Cores:</strong> ${product.cores.join(', ')}</p>` : ''}
                 </div>
@@ -1866,6 +1900,17 @@
         addBtn.onclick = function() {
             addToCart(product.id);
         };
+        // Atualiza estado do botão conforme estoque
+        if (qty <= 0) {
+            addBtn.disabled = true;
+            addBtn.textContent = 'Esgotado';
+            addBtn.classList.add('opacity-50','cursor-not-allowed');
+        } else {
+            addBtn.disabled = false;
+            addBtn.textContent = 'Adicionar ao Carrinho';
+            addBtn.classList.remove('opacity-50','cursor-not-allowed');
+        }
+
         // Função para atualizar imagem e indicadores
         function updateGallery() {
             const imgEl = document.getElementById('product-modal-image');
@@ -1981,25 +2026,7 @@
         }).join('');
     }
 
-    // Scroll indicator
-    function updateScrollIndicator() {
-        const scrollTop = window.pageYOffset;
-        const docHeight = document.body.scrollHeight - window.innerHeight;
-        const scrollPercent = (scrollTop / docHeight) * 100;
-        document.getElementById('scroll-indicator').style.width = scrollPercent + '%';
-    }
-
-    // Back to top button
-    function updateBackToTopButton() {
-        const backToTopBtn = document.getElementById('back-to-top');
-        if (window.pageYOffset > 300) {
-            backToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
-            backToTopBtn.classList.add('opacity-100');
-        } else {
-            backToTopBtn.classList.add('opacity-0', 'pointer-events-none');
-            backToTopBtn.classList.remove('opacity-100');
-        }
-    }
+    // Funções de scroll e botão "voltar ao topo" removidas. O indicador de rolagem não é mais necessário
 
     // Enhanced event listeners
     document.addEventListener('DOMContentLoaded', function() {
@@ -2014,16 +2041,7 @@
         // Carrega inicialmente os produtos em destaque mais procurados
         loadFeaturedProducts('trending');
 
-        // Scroll events
-        window.addEventListener('scroll', () => {
-            // Progresso de rolagem removido; apenas atualiza botão "voltar ao topo"
-            updateBackToTopButton();
-        });
-
-        // Back to top
-        document.getElementById('back-to-top').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        // Scroll events: removido o botão de voltar ao topo
 
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');

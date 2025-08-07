@@ -124,7 +124,13 @@
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAB8P0///5X2JqYaAAAAA3NCSVQICAjb4U/gAAAG4UlEQVR4nO2dS5LbMAyF3Tdo3v//xoZlnlWjmAGs4+v3bDscCjjapNpLmvG9kkgkQBbJm9nzOvwa/uyWwFbzPcfDYZg6h/TJzc/Ozs9GOGd9wym/+/t2/7x6+0gZrPGEz3ywIAvT5KjcBvABAD79rhChA1hYGPyEd/w6vuz8kwC3mAAw3khC+CXf3Oimk6MaD8HS5MTrLSgUmsIYDbnAfM5/gvGcTKzRFoHpAx4PoK/EVcXqEefpfaJ4sJv8O6h3BOOvAtzAcEUiv20PeQmjRnQdwLbd4qPyEzj6Z5ComYAY6Jcbl6uNV9EM940U6drsiZbs/xxITwIAT9ANXogFfAAy8pjqS7DOiuxr1Dp+1dqlpC0SJfCNWA9F9EM9qgtDqpZ+WdMqAC2pUoFfILAbF2vdTJvc1/+Q4mAt1Z4kaWkBspcs8hYhJJk/ZWtIbLYXvAfzM0V8thUgPXcTdcjtl4uYGYTGVW0GpdnAR9HqsuijYWs8ztLM+zgYgzLcA8AETvRcHaa9iHfEV9VVGFePc133SrKvJHQqM6NP8rRVBVBB9gCs4n0nvkmETmcwZN3WOWexIPpGvjXUyWf9GWIrAfS4mVtH4bfsSwGnkH0rAjLdUBAVryXcAFNsnS5BqPt79+Q7jWIVVgY8l78P0SnAcY74A5X7RD4tPL7eMAWuWEs+e3ueA0w8p3Y4mA25h6+7TTLbPXkp8kR8LN1yvNHgHWvr1pZ99TgBWyVAvYpZtBwLN3Txjd788U3CxjAl3DOqffR3PEo2t5n6XI4Aic1IQyfcGWK7sB+m7tlhlX7JYGlce1Cc6Y7xkOktnMGvxBGcZPrZyvbVvMgtz+M1jhh2IFgFaI2QAVscRTfX4m7gf6wh7q0GsGzABs8LN1sP9y07d6rKXbiKQ4A7wAYWqBfE3jJvbBGmCdVw2VzC9yE6e9W+1SIHsmDl12KhB/Nsl5uX1+6sM3FaRU9EjrLRiwkOiUGkXYGkiPG4w9giKNCiGUeA/aAe9x5Ayoap4phR3aXskGfwRDzEFY9+6hAJ5l80eTtCGcvG5gM20akLZ0jX9deBXgV/I1Ve3/ZjAwRzCj14xThvwYmgVTZvG653XC7wscJ7OmeDXmxH+C7RKmYc/BAJnNczE503fQWkRdStFhJHeHkDOg9n7w474Z7kzFllL2yIc80nqkqdTxPa84M5C9KcrDSoXcGIwc5r13Sgzuq4ufjt1P0svswHsYVYAOXkaw7UxWLzrefyLyZ7t6moPJ4JkspZsowzAyF2HTT95cvp4Q2Ac/DUGnQ0WXc8LroENVWkCwGYh4kvv1cLUOVFdpeClkIGXPrG6tydMo5hbgxAv3yEwKOKZwN7Dcc19s2EQ1XwjHX9VyUHkMP+Hdmh1vtiw3hbapytMZL4CymJF/Ab4yRQO+jF4ljzjLBlVqCWfhFEa9i7mzlkgvbF408EJgPviM0mPw5Pm56ZKgP7vz8JfJp+gdt7aPk0/yGeMHTxINaVZYc7mJNb8Dy3h6KpP8Mg+vcnR71M9zWFFhMP4RnuTlKg6yL0wD8kcPYRGA1bsFUvCbA/ciwtFbpEV1Jl0wEcU8KZkznsh4czSbi+n3pzQyH0Z1qDV9jeH5lIDjL4kSdewaNqDdDxvJRfyuxzoh7izIE8niB/mkXd0B0hDHncN+ok4YrD5UbqSqEs+P/4r9G3X9Uv7IGywsUcytLxoTBHMiFAGDc9srPBXogk/AFAD3+y8GAjbVSSumiyzKAAAAAElFTkSuQmCC" alt="QR Code Pix" class="w-32 h-32">
                     </div>
                     <div class="text-center font-mono text-lg text-gray-900 mb-2">CNPJ 12.345.678/0001-99</div>
-                    <p class="text-xs text-gray-500 text-center">Após a transferência, entraremos em contato para confirmar o pagamento.</p>
+                    
+<p class="text-xs text-gray-500 text-center">Após a transferência, entraremos em contato para confirmar o pagamento.</p>
+<div class="mt-4 text-center">
+    <button id="pix-share-btn" type="button" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 hidden">
+        <i class="fab fa-whatsapp mr-2"></i>Compartilhar Comprovante
+    </button>
+</div>
                 </div>
             </div>
             <div class="mt-8">
@@ -212,31 +218,63 @@
       const trocoContainer = document.getElementById('troco-container');
       const parcelasContainer = document.getElementById('parcelas-container');
       const pixInfoContainer = document.getElementById('pix-info');
+      const pixShareBtn = document.getElementById('pix-share-btn');
 
       function updatePaymentFields() {
         const value = pagamentoSelect.value;
         if (value === 'dinheiro') {
           trocoContainer.classList.remove('hidden');
+          if (pixShareBtn) pixShareBtn.classList.add('hidden');
           parcelasContainer.classList.add('hidden');
           pixInfoContainer.classList.add('hidden');
         } else if (value === 'maquina') {
           parcelasContainer.classList.remove('hidden');
+          if (pixShareBtn) pixShareBtn.classList.add('hidden');
           trocoContainer.classList.add('hidden');
           pixInfoContainer.classList.add('hidden');
         } else if (value === 'pix') {
           // Exibe informações de Pix e oculta campos desnecessários
           pixInfoContainer.classList.remove('hidden');
+          if (pixShareBtn) pixShareBtn.classList.remove('hidden');
           trocoContainer.classList.add('hidden');
           parcelasContainer.classList.add('hidden');
         } else {
           trocoContainer.classList.add('hidden');
           parcelasContainer.classList.add('hidden');
           pixInfoContainer.classList.add('hidden');
+          if (pixShareBtn) pixShareBtn.classList.add('hidden');
+        }
+      }
+
+      // Função para habilitar ou desabilitar opções de pagamento dependendo do frete (Sedex ou entrega local)
+      function updatePaymentOptions(isSedex) {
+        const pgSelect = document.getElementById('pagamento');
+        if (!pgSelect) return;
+        const dinheiroOpt = pgSelect.querySelector('option[value="dinheiro"]');
+        // Quando o frete é Sedex (entrega acima de 20km ou outra cidade/estado), não permitimos pagamento em dinheiro
+        if (isSedex) {
+          if (dinheiroOpt) dinheiroOpt.disabled = true;
+          // Se o usuário havia selecionado dinheiro, altere para Pix automaticamente
+          if (pgSelect.value === 'dinheiro') {
+            pgSelect.value = 'pix';
+            updatePaymentFields();
+          }
+        } else {
+          // Para entregas locais, reabilita a opção de dinheiro
+          if (dinheiroOpt) dinheiroOpt.disabled = false;
         }
       }
       if (pagamentoSelect) {
         pagamentoSelect.addEventListener('change', updatePaymentFields);
         updatePaymentFields();
+      if (pixShareBtn) {
+        pixShareBtn.addEventListener('click', function() {
+          const waMsg = 'Olá, realizei o pagamento via Pix. Segue comprovante de pagamento.';
+          const phoneNumber = '554899143649';
+          const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMsg)}`;
+          window.open(url, '_blank');
+        });
+      }
       }
 
       const form = document.getElementById('payment-form');
@@ -260,6 +298,12 @@
             alert('Ocorreu um erro ao gerar a mensagem de pedido.');
             return;
           }
+          // Se a forma de pagamento for cartão na máquina, redireciona primeiro para o checkout do Mercado Pago
+          if (document.getElementById('pagamento').value === 'maquina') {
+            // Link fictício do Mercado Pago; substitua pelo link de checkout real da sua conta
+            const mpUrl = 'https://www.mercadopago.com.br/';
+            window.open(mpUrl, '_blank');
+          }
           // Abre o WhatsApp com a mensagem pré-preenchida (substitua pelo número correto da loja)
           // Número de WhatsApp da loja atualizado para o DDD 48. Certifique-se de manter apenas dígitos.
           const phoneNumber = '554899143649';
@@ -270,6 +314,19 @@
           successDiv.classList.remove('hidden');
           // Limpa o carrinho e oculta formulário
           form.classList.add('hidden');
+          // Atualiza estoque
+try {
+  const inv = JSON.parse(localStorage.getItem('inventory')) || {};
+  const purchasedCart = JSON.parse(localStorage.getItem('cart')) || [];
+  purchasedCart.forEach(item => {
+    if (inv[item.id] !== undefined) {
+      inv[item.id] = Math.max(0, inv[item.id] - item.quantidade);
+    }
+  });
+  localStorage.setItem('inventory', JSON.stringify(inv));
+} catch (e) {
+  console.error('Erro ao atualizar estoque', e);
+}
           localStorage.removeItem('cart');
         });
       }
@@ -326,40 +383,53 @@
             // Calcula frete com base na cidade e no estado
             let shippingCost = 0;
             let prazo = '';
+            let isSedex = false;
             const destCity = (data.localidade || '').toLowerCase();
             const destState = data.uf || '';
             const distanciaContainer = document.getElementById('distancia-container');
             const distanciaInput = document.getElementById('distancia');
-            // Caso o destino esteja na mesma cidade e estado da loja, exibe o campo de distância
+            let distanciaKm = 0;
+            if (distanciaInput && distanciaInput.value.trim() !== '') {
+              distanciaKm = parseFloat(distanciaInput.value);
+              if (isNaN(distanciaKm) || distanciaKm < 0) distanciaKm = 0;
+            }
             if (destCity && destState && destCity === storeCity.toLowerCase() && destState === storeState) {
-              if (distanciaContainer) distanciaContainer.classList.remove('hidden');
-              // Lê a distância em quilômetros informada pelo usuário. Se não houver valor, assume 0.
-              let distanciaKm = 0;
-              if (distanciaInput && distanciaInput.value.trim() !== '') {
-                distanciaKm = parseFloat(distanciaInput.value);
-                if (isNaN(distanciaKm) || distanciaKm < 0) distanciaKm = 0;
-              }
-              // Base de frete local: até 5 km paga-se R$ 5,90. Acima de 5 km há um adicional por km.
-              shippingCost = 5.90;
-              if (distanciaKm > 5) {
-                const extraKm = distanciaKm - 5;
-                const adicional = extraKm * 1.50;
-                shippingCost += adicional;
-              }
-              prazo = '1-2 dias úteis';
-            } else {
-              // Esconde campo de distância quando não for entrega local
-              if (distanciaContainer) distanciaContainer.classList.add('hidden');
-              // Dentro do mesmo estado mas cidade diferente
-              if (destState === storeState) {
-                shippingCost = 10.90;
-                prazo = '2-4 dias úteis';
-              } else {
-                // Para outros estados
+              // Destino na mesma cidade
+              if (distanciaKm > 20) {
+                // Distâncias superiores a 20 km utilizam Sedex (ou entrega convencional)
                 shippingCost = 20.90;
                 prazo = '5-8 dias úteis';
+                isSedex = true;
+                if (distanciaContainer) distanciaContainer.classList.add('hidden');
+              } else {
+                // Entrega local: base 5 km + adicional por km
+                if (distanciaContainer) distanciaContainer.classList.remove('hidden');
+                shippingCost = 5.90;
+                if (distanciaKm > 5) {
+                  const extraKm = distanciaKm - 5;
+                  const adicional = extraKm * 1.50;
+                  shippingCost += adicional;
+                }
+                prazo = '1-2 dias úteis';
+                isSedex = false;
+              }
+            } else {
+              // Fora da cidade
+              if (distanciaContainer) distanciaContainer.classList.add('hidden');
+              if (destState === storeState) {
+                // Mesmo estado, outra cidade
+                shippingCost = 10.90;
+                prazo = '2-4 dias úteis';
+                isSedex = false;
+              } else {
+                // Outro estado – sempre Sedex
+                shippingCost = 20.90;
+                prazo = '5-8 dias úteis';
+                isSedex = true;
               }
             }
+            // Chama atualização das opções de pagamento conforme frete
+            updatePaymentOptions(isSedex);
             // Exibe o valor e prazo do frete
             freteInfo.classList.remove('hidden');
             freteValorSpan.textContent = 'R$ ' + shippingCost.toFixed(2).replace('.', ',');
@@ -373,6 +443,7 @@
           } else {
             alert('CEP não encontrado. Preencha o endereço manualmente.');
             // Ainda assim, mostra frete ilustrativo genérico
+            updatePaymentOptions(true);
             freteInfo.classList.remove('hidden');
             freteValorSpan.textContent = 'R$ 25,90';
             const prazoEl = document.getElementById('prazo-entrega');
@@ -385,6 +456,7 @@
         })
         .catch(() => {
           // Em caso de falha na API, mostra frete genérico
+          updatePaymentOptions(true);
           freteInfo.classList.remove('hidden');
           freteValorSpan.textContent = 'R$ 25,90';
           const prazoEl = document.getElementById('prazo-entrega');
