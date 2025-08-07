@@ -580,7 +580,7 @@
         <p class="text-2xl mb-8 animate-slide-up" style="animation-delay: 0.1s;">Até 70% de desconto em produtos selecionados</p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center animate-bounce-in" style="animation-delay: 0.2s;">
             <!-- Botões com cores vibrantes para destaque -->
-            <a href="promocoes.html" class="bg-yellow-500 text-gray-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-yellow-600 transition-all">
+            <a href="#ofertas" onclick="document.getElementById('ofertas').scrollIntoView({ behavior: 'smooth' }); return false;" class="bg-yellow-500 text-gray-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-yellow-600 transition-all">
                 <i class="fas fa-fire mr-2"></i>Ver Promoções
             </a>
             <a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber sobre as ofertas especiais!" 
@@ -600,9 +600,9 @@
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up">
+            <div class="testimonial-card bg-white border border-gray-200 p-8 rounded-2xl shadow-lg animate-slide-up">
                 <div class="flex items-center mb-6">
-                    <div class="flex text-primary text-xl">
+                    <div class="flex text-yellow-400 text-xl">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -614,19 +614,19 @@
                 <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Excelente atendimento e produtos de qualidade excepcional. Sempre encontro o que procuro na HC Multimarcas! Recomendo muito!"</p>
                 <div class="flex items-center">
                         <!-- Ajuste de cor de texto para alto contraste -->
-                        <div class="w-12 h-12 bg-gradient-to-br from-primary to-yellow-500 rounded-full flex items-center justify-center text-yellow-700 font-bold text-lg mr-4">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-700 font-bold text-lg mr-4">
                         M
                     </div>
                     <div>
-                        <p class="font-bold text-yellow-700 text-lg">Maria Silva</p>
+                        <p class="font-bold text-gray-900 text-lg">Maria Silva</p>
                         <p class="text-gray-500">Cliente há 2 anos • São Paulo</p>
                     </div>
                 </div>
             </div>
             
-            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.1s;">
+            <div class="testimonial-card bg-white border border-gray-200 p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.1s;">
                 <div class="flex items-center mb-6">
-                    <div class="flex text-primary text-xl">
+                    <div class="flex text-yellow-400 text-xl">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -637,19 +637,19 @@
                 </div>
                 <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Preços justos, entrega super rápida e produtos de ótima qualidade. Já comprei várias vezes e sempre fico satisfeito!"</p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-700 font-bold text-lg mr-4">
                         J
                     </div>
                     <div>
-                        <p class="font-bold text-yellow-700 text-lg">João Santos</p>
+                        <p class="font-bold text-gray-900 text-lg">João Santos</p>
                         <p class="text-gray-500">Cliente há 1 ano • Rio de Janeiro</p>
                     </div>
                 </div>
             </div>
             
-            <div class="testimonial-card p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.2s;">
+            <div class="testimonial-card bg-white border border-gray-200 p-8 rounded-2xl shadow-lg animate-slide-up" style="animation-delay: 0.2s;">
                 <div class="flex items-center mb-6">
-                    <div class="flex text-primary text-xl">
+                    <div class="flex text-yellow-400 text-xl">
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
@@ -660,11 +660,11 @@
                 </div>
                 <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Variedade incrível de produtos e sempre com novidades. O atendimento pelo WhatsApp é excelente. Adoro comprar aqui!"</p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-pink-500 to-pink-600 rounded-full flex items-center justify-center text-white font-bold text-lg mr-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-700 font-bold text-lg mr-4">
                         A
                     </div>
                     <div>
-                        <p class="font-bold text-yellow-700 text-lg">Ana Costa</p>
+                        <p class="font-bold text-gray-900 text-lg">Ana Costa</p>
                         <p class="text-gray-500">Cliente há 3 anos • Belo Horizonte</p>
                     </div>
                 </div>
@@ -684,11 +684,20 @@
             <div class="animate-slide-left">
                 <h3 class="text-3xl font-bold text-gray-900 mb-4">Moda com Propósito</h3>
                 <p class="text-gray-700 mb-6 leading-relaxed">Fundada com a missão de democratizar a moda, a HC Multimarcas oferece peças de qualidade, elegantes e acessíveis para toda a família. Trabalhamos com fornecedores selecionados para garantir conforto e estilo em cada coleção.</p>
-                <ul class="space-y-4">
-                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Produtos selecionados com rigoroso controle de qualidade</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Atendimento personalizado e suporte humanizado</li>
-                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Entrega rápida e segura para todo o Brasil</li>
-                </ul>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-6">
+                    <div class="flex items-start">
+                        <i class="fas fa-check-circle text-yellow-600 text-2xl mr-3 mt-1"></i>
+                        <p class="text-gray-700">Produtos selecionados com rigoroso controle de qualidade</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-user-friends text-yellow-600 text-2xl mr-3 mt-1"></i>
+                        <p class="text-gray-700">Atendimento personalizado e suporte humanizado</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-shipping-fast text-yellow-600 text-2xl mr-3 mt-1"></i>
+                        <p class="text-gray-700">Entrega rápida e segura para todo o Brasil</p>
+                    </div>
+                </div>
             </div>
             <div class="animate-slide-right flex justify-center">
                 <!-- Placeholder image representing about us section -->
@@ -725,15 +734,16 @@
             <div class="space-y-6 animate-slide-left">
                 <p class="text-gray-700 leading-relaxed">Se você tiver dúvidas, sugestões ou precisar de assistência, entre em contato conosco pelos canais abaixo ou envie uma mensagem pelo formulário.</p>
                 <div class="flex items-center space-x-4">
-                    <i class="fas fa-phone-alt text-primary text-xl"></i>
+                    <!-- Usamos fa-phone em vez de fa-phone-alt para garantir compatibilidade com a versão do Font Awesome -->
+                    <i class="fas fa-phone text-yellow-600 text-xl"></i>
                     <span class="text-gray-700">(11) 99999-9999</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <i class="fas fa-envelope text-primary text-xl"></i>
+                    <i class="fas fa-envelope text-yellow-600 text-xl"></i>
                     <span class="text-gray-700">contato@hcmultimarcas.com</span>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                    <i class="fas fa-map-marker-alt text-yellow-600 text-xl"></i>
                     <span class="text-gray-700">Rua das Flores, 123 - São Paulo/SP</span>
                 </div>
                 <div class="flex space-x-3 mt-4">
@@ -790,11 +800,11 @@
                       Em vez de um cinza muito claro sobre o fundo escuro, utilizamos
                       `text-gray-400` e mantém a cor de destaque ao passar o mouse.
                     -->
-                    <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-home mr-2"></i>Início</a></li>
-                    <li><a href="catalogo.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-shopping-bag mr-2"></i>Catálogo</a></li>
-                    <li><a href="promocoes.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-fire mr-2"></i>Promoções</a></li>
-                    <li><a href="sobre.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-info-circle mr-2"></i>Sobre</a></li>
-                    <li><a href="contato.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-envelope mr-2"></i>Contato</a></li>
+                    <li><a href="#inicio" onclick="document.getElementById('inicio').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-home mr-2"></i>Início</a></li>
+                    <li><a href="#categorias" onclick="document.getElementById('categorias').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-shopping-bag mr-2"></i>Catálogo</a></li>
+                    <li><a href="#ofertas" onclick="document.getElementById('ofertas').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-fire mr-2"></i>Promoções</a></li>
+                    <li><a href="#sobre" onclick="document.getElementById('sobre').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-info-circle mr-2"></i>Sobre</a></li>
+                    <li><a href="#contato" onclick="document.getElementById('contato').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-envelope mr-2"></i>Contato</a></li>
                 </ul>
             </div>
             
@@ -802,10 +812,16 @@
                 <h4 class="text-lg font-semibold mb-6 text-primary">Categorias</h4>
                 <ul class="space-y-3">
                     <!-- Cores ajustadas para melhor legibilidade -->
-                    <li><a href="catalogo.html?categoria=masculino" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-male mr-2"></i>Masculino</a></li>
-                    <li><a href="catalogo.html?categoria=feminino" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-female mr-2"></i>Feminino</a></li>
-                    <li><a href="catalogo.html?categoria=infantil" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-child mr-2"></i>Infantil</a></li>
-                    <li><a href="catalogo.html?categoria=acessorios" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-gem mr-2"></i>Acessórios</a></li>
+                    <!--
+                      Links de categoria no rodapé agora utilizam âncoras internas e chamam a função
+                      loadFeaturedProducts() para filtrar os produtos por categoria. Também rolamos
+                      suavemente para a seção de categorias. O return false evita o comportamento
+                      padrão de navegação.
+                    -->
+                    <li><a href="#categorias" onclick="loadFeaturedProducts('masculino'); document.getElementById('categorias').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-male mr-2"></i>Masculino</a></li>
+                    <li><a href="#categorias" onclick="loadFeaturedProducts('feminino'); document.getElementById('categorias').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-female mr-2"></i>Feminino</a></li>
+                    <li><a href="#categorias" onclick="loadFeaturedProducts('infantil'); document.getElementById('categorias').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-child mr-2"></i>Infantil</a></li>
+                    <li><a href="#categorias" onclick="loadFeaturedProducts('acessorios'); document.getElementById('categorias').scrollIntoView({ behavior: 'smooth' }); return false;" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-gem mr-2"></i>Acessórios</a></li>
                 </ul>
             </div>
             
@@ -860,7 +876,7 @@
                 -->
                 <!-- Lista de itens do carrinho. Definimos uma altura máxima e margem inferior para separar
                      a lista da seção de total. O conteúdo pode rolar quando necessário. -->
-                <div id="cart-items" class="space-y-4 overflow-y-auto pr-1 max-h-[50vh] mb-6">
+<div id="cart-items" class="space-y-4 overflow-y-auto pr-1 max-h-[65vh] mb-6">
                     <!-- Cart items will be loaded here -->
                 </div>
                 
