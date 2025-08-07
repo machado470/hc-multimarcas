@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento - HC Multimarcas</title>
+    <meta name="description" content="Página de pagamento da HC Multimarcas. Finalize sua compra com segurança e praticidade.">
+    <link rel="canonical" href="pagamento.html">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <header class="bg-white shadow-md py-4 mb-8">
+        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+            <a href="index.html" class="text-2xl font-bold text-gray-800 flex items-center">
+                HC <span class="text-yellow-600 ml-1">Multimarcas</span>
+            </a>
+            <nav class="space-x-4">
+                <a href="index.html#inicio" class="text-sm text-gray-700 hover:text-yellow-600">Início</a>
+                <a href="index.html#categorias" class="text-sm text-gray-700 hover:text-yellow-600">Categorias</a>
+                <a href="index.html#ofertas" class="text-sm text-gray-700 hover:text-yellow-600">Ofertas</a>
+                <a href="index.html#contato" class="text-sm text-gray-700 hover:text-yellow-600">Contato</a>
+            </nav>
+        </div>
+    </header>
+    <main class="max-w-5xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-yellow-700 mb-6">Finalizar Pagamento</h1>
+        <p class="mb-8 text-gray-600">Preencha os dados abaixo para concluir sua compra.</p>
+        <form class="bg-white shadow-lg rounded-lg p-6 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="nome" class="block text-sm font-semibold mb-2">Nome Completo</label>
+                    <input id="nome" type="text" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Seu nome">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-semibold mb-2">E-mail</label>
+                    <input id="email" type="email" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="exemplo@dominio.com">
+                </div>
+                <div class="md:col-span-2">
+                    <label for="endereco" class="block text-sm font-semibold mb-2">Endereço de Entrega</label>
+                    <input id="endereco" type="text" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Rua, número, bairro, cidade e UF">
+                </div>
+                <div>
+                    <label for="pagamento" class="block text-sm font-semibold mb-2">Forma de Pagamento</label>
+                    <select id="pagamento" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <option value="cartao">Cartão de Crédito</option>
+                        <option value="boleto">Boleto Bancário</option>
+                        <option value="pix">Pix</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="parcelas" class="block text-sm font-semibold mb-2">Parcelamento</label>
+                    <select id="parcelas" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                        <option value="1">À vista</option>
+                        <option value="2">2x sem juros</option>
+                        <option value="3">3x sem juros</option>
+                        <option value="6">6x com juros</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-8">
+                <button type="submit" class="w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-lg hover:bg-yellow-600 transition-all font-semibold text-lg flex items-center justify-center">
+                    <i class="fas fa-lock mr-2"></i>
+                    Confirmar Pagamento
+                </button>
+            </div>
+        </form>
+        <p class="text-gray-500 text-sm text-center">Este é um ambiente de demonstração. Nenhuma transação real será processada.</p>
+    </main>
+    <footer class="bg-gray-900 text-gray-400 mt-16 py-8">
+        <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-yellow-500 font-bold mb-4">HC Multimarcas</h3>
+                <p class="text-sm">Moda para toda a família com qualidade, estilo e preços acessíveis. Sua satisfação é nossa prioridade.</p>
+                <div class="flex space-x-3 mt-4">
+                    <a href="#" class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#" class="w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-yellow-500 font-bold mb-4">Links Rápidos</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html#inicio" class="hover:text-yellow-500">Início</a></li>
+                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Catálogo</a></li>
+                    <li><a href="index.html#ofertas" class="hover:text-yellow-500">Ofertas</a></li>
+                    <li><a href="index.html#contato" class="hover:text-yellow-500">Contato</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-yellow-500 font-bold mb-4">Categorias</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Masculino</a></li>
+                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Feminino</a></li>
+                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Infantil</a></li>
+                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Acessórios</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-yellow-500 font-bold mb-4">Contato</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><i class="fas fa-map-marker-alt mr-2"></i>Rua das Flores, 123 - São Paulo/SP</li>
+                    <li><i class="fas fa-phone mr-2"></i>(11) 99999-9999</li>
+                    <li><i class="fas fa-envelope mr-2"></i>contato@hcmultimarcas.com</li>
+                    <li><i class="fas fa-clock mr-2"></i>Seg-Sáb: 9h às 18h</li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center text-xs text-gray-500 mt-8">© 2024 HC Multimarcas. Todos os direitos reservados.</div>
+    </footer>
+</body>
+</html>

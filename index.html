@@ -8,6 +8,13 @@
     <title>HC Multimarcas - Moda para Toda a Família</title>
     <meta name="description" content="Loja HC Multimarcas - Moda masculina, feminina, infantil e acessórios com qualidade e preço justo.">
     <meta name="keywords" content="loja de roupas, moda masculina, moda feminina, moda infantil, acessórios, HC Multimarcas">
+    <!-- Open Graph & canonical for SEO -->
+    <meta property="og:title" content="HC Multimarcas - Moda para Toda a Família">
+    <meta property="og:description" content="Loja HC Multimarcas - Moda masculina, feminina, infantil e acessórios com qualidade e preço justo.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://machado470.github.io/hc-multimarcas/">
+    <link rel="canonical" href="https://machado470.github.io/hc-multimarcas/">
+    <meta name="theme-color" content="#FFD700">
 
     <!-- TailwindCSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -19,6 +26,11 @@
 
     <style>
 
+    :root {
+        --primary-color: #FFD700;
+        --secondary-color: #FF8C00;
+    }
+/* Navigation link styles */
 @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
@@ -113,6 +125,60 @@
         box-shadow: 0 15px 30px rgba(255, 215, 0, 0.4);
     }
     
+    .hero-banner {
+        background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(0,0,0,0.3)), 
+                    radial-gradient(circle at 20% 50%, #FFD700 0%, transparent 50%),
+                    radial-gradient(circle at 80% 20%, #FFA500 0%, transparent 50%),
+                    radial-gradient(circle at 40% 80%, #FF8C00 0%, transparent 50%),
+                    #000000;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-banner::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23FFD700" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23FFA500" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23FF8C00" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="%23FFD700" opacity="0.1"/><circle cx="90" cy="40" r="0.5" fill="%23FFA500" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-elements {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .floating-elements::before,
+    .floating-elements::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 215, 0, 0.1);
+        animation: float 4s ease-in-out infinite;
+    }
+    
+    .floating-elements::before {
+        width: 100px;
+        height: 100px;
+        top: 20%;
+        left: 10%;
+        animation-delay: -2s;
+    }
+    
+    .floating-elements::after {
+        width: 150px;
+        height: 150px;
+        top: 60%;
+        right: 10%;
+        animation-delay: -1s;
+    }
     
     .category-card {
         background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
@@ -165,13 +231,7 @@
         transform: translateX(5px);
         box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1);
     }
-    
-    .nav-link {
-        position: relative;
-        transition: all 0.3s ease;
-    }
-    
-    .nav-link::after {
+.nav-link::after {
         content: '';
         position: absolute;
         bottom: -5px;
@@ -186,6 +246,16 @@
         width: 100%;
     }
     
+    .scroll-indicator {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 0%;
+        height: 3px;
+        background: linear-gradient(90deg, #FFD700, #FFA500, #FF8C00);
+        z-index: 9999;
+        transition: width 0.1s ease;
+    }
     
     .loading-spinner {
         border: 3px solid #f3f3f3;
@@ -260,26 +330,12 @@
      class="fixed inset-0 bg-white dark:bg-gray-900 z-50 flex items-center justify-center transition-opacity duration-500 ease-in-out"
      aria-live="polite">
     <div class="text-center px-4">
-        <!-- Spinner -->
         <div class="loading-spinner mx-auto mb-4 w-10 h-10 border-4 border-gray-200 dark:border-gray-700 border-t-yellow-400 rounded-full animate-spin"></div>
-        
-        <!-- Logo / Nome -->
         <h2 class="text-2xl md:text-3xl font-bold gradient-text">HC Multimarcas</h2>
-        
-        <!-- Mensagem -->
         <p class="text-gray-600 dark:text-gray-300 text-sm md:text-base">Carregando...</p>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const loader = document.getElementById('loading-screen');
-        loader.classList.add('opacity-0', 'pointer-events-none');
-        setTimeout(() => loader.remove(), 500);
-    }, 1500); // tempo de exibição
-});
-</script>
 
 
 <!-- Navigation -->
@@ -287,47 +343,42 @@ document.addEventListener('DOMContentLoaded', () => {
      class="bg-white/95 dark:bg-gray-900 backdrop-blur-md shadow-lg sticky top-0 z-40 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-
             <!-- Logo -->
             <div class="flex items-center">
                 <a href="index.html" 
-                   class="text-2xl font-bold text-secondary dark:text-white focus:outline-none focus:ring-2 focus:ring-primary animate-slide-right">
+                   class="text-2xl font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-yellow-500">
                     HC <span class="gradient-text">Multimarcas</span>
                 </a>
             </div>
-
             <!-- Menu Desktop -->
             <div class="hidden md:block">
                 <div class="ml-10 flex items-baseline space-x-4">
-                    <a href="index.html" class="nav-link">Início</a>
-                    <a href="catalogo.html" class="nav-link">Catálogo</a>
-                    <a href="promocoes.html" class="nav-link">Promoções</a>
-                    <a href="sobre.html" class="nav-link">Sobre</a>
-                    <a href="contato.html" class="nav-link">Contato</a>
+                    <a href="#inicio" class="px-3 py-2 rounded-md text-sm font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Início</a>
+                    <a href="#categorias" class="px-3 py-2 rounded-md text-sm font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Catálogo</a>
+                    <a href="#ofertas" class="px-3 py-2 rounded-md text-sm font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Promoções</a>
+                    <a href="#sobre" class="px-3 py-2 rounded-md text-sm font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Sobre</a>
+                    <a href="#contato" class="px-3 py-2 rounded-md text-sm font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Contato</a>
                 </div>
             </div>
-
             <!-- Ações -->
             <div class="flex items-center space-x-4">
                 <!-- Buscar -->
                 <button id="search-btn" aria-label="Buscar" 
-                        class="text-secondary dark:text-white hover:text-primary transition-colors">
+                        class="text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">
                     <i class="fas fa-search text-xl"></i>
                 </button>
-
                 <!-- Carrinho -->
                 <button id="cart-btn" aria-label="Abrir carrinho" 
-                        class="relative text-secondary dark:text-white hover:text-primary transition-colors">
+                        class="relative text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">
                     <i class="fas fa-shopping-cart text-xl"></i>
                     <span id="cart-count" 
-                          class="absolute -top-2 -right-2 bg-primary text-secondary text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                          class="absolute -top-2 -right-2 bg-yellow-400 text-gray-800 text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                         0
                     </span>
                 </button>
-
                 <!-- Menu Mobile -->
                 <button id="mobile-menu-btn" aria-label="Abrir menu" 
-                        class="md:hidden text-secondary dark:text-white hover:text-primary">
+                        class="md:hidden text-gray-800 dark:text-white hover:text-yellow-600">
                     <i class="fas fa-bars text-xl"></i>
                 </button>
             </div>
@@ -338,117 +389,67 @@ document.addEventListener('DOMContentLoaded', () => {
     <div id="mobile-menu" 
          class="md:hidden hidden bg-white dark:bg-gray-900 backdrop-blur-md border-t transition-all duration-300 ease-in-out">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a href="index.html" class="mobile-link">Início</a>
-            <a href="catalogo.html" class="mobile-link">Catálogo</a>
-            <a href="promocoes.html" class="mobile-link">Promoções</a>
-            <a href="sobre.html" class="mobile-link">Sobre</a>
-            <a href="contato.html" class="mobile-link">Contato</a>
+            <a href="#inicio" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Início</a>
+            <a href="#categorias" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Catálogo</a>
+            <a href="#ofertas" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Promoções</a>
+            <a href="#sobre" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Sobre</a>
+            <a href="#contato" class="block px-3 py-2 rounded-md text-base font-medium text-gray-800 dark:text-white hover:text-yellow-600 transition-colors">Contato</a>
         </div>
     </div>
 
     <!-- Barra de Busca -->
-    <div id="search-bar" class="hidden bg-white dark:bg-gray-900 border-t px-4 py-3 transition-all duration-300 ease-in-out">
+    <!--
+      A barra de busca original estava posicionada como um elemento normal dentro da navegação.
+      Isso fazia com que, ao ser exibida, ela empurrasse os elementos do menu para baixo e
+      impedisse a interação com os ícones de busca e carrinho (eles ficavam "cobertos").
+      Para corrigir isso, a barra de busca foi convertida em um elemento fixo (`fixed`) logo
+      abaixo do menu de navegação. Assim ela aparece sobre o conteúdo sem alterar o fluxo
+      da página e desaparece quando o usuário a fecha. Foi adicionada sombra para se
+      destacar do conteúdo.
+    -->
+    <div id="search-bar" class="hidden fixed left-0 right-0 top-16 z-40 bg-white dark:bg-gray-900 border-t px-4 py-3 shadow-md transition-all duration-300 ease-in-out">
         <div class="max-w-7xl mx-auto">
             <div class="relative">
                 <input type="text" id="search-input" placeholder="Buscar produtos..." 
-                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-800 dark:text-white">
+                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent dark:bg-gray-800 dark:text-white">
                 <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             </div>
         </div>
     </div>
 </nav>
 
-<style>
-.nav-link {
-    @apply text-secondary dark:text-white hover:text-primary px-3 py-2 rounded-md text-sm font-medium transition-colors;
-}
-.mobile-link {
-    @apply block text-secondary dark:text-white hover:text-primary px-3 py-2 rounded-md text-base font-medium transition-colors;
-}
-</style>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const searchBtn = document.getElementById('search-btn');
-    const searchBar = document.getElementById('search-bar');
-    const searchInput = document.getElementById('search-input');
-
-    // Toggle menu mobile
-    mobileMenuBtn.addEventListener('click', () => {
-        mobileMenu.classList.toggle('hidden');
-    });
-
-    // Toggle barra de busca
-    searchBtn.addEventListener('click', () => {
-        searchBar.classList.toggle('hidden');
-        if (!searchBar.classList.contains('hidden')) {
-            searchInput.focus();
-        }
-    });
-});
-</script>
-
-
-<!-- Hero -->
-<div id="hero-app">
-    <section
-        class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex flex-col items-center justify-center text-center text-white px-4"
-        v-motion="{
-            initial: { opacity: 0 },
-            animate: { opacity: 1 },
-            transition: { duration: 0.8, easing: 'ease-in-out' }
-        }"
-    >
-        <h1
-            class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4"
-            v-motion="{
-                initial: { opacity: 0, y: 50 },
-                animate: { opacity: 1, y: 0 },
-                transition: { delay: 0.2, duration: 0.8, easing: 'ease-out' }
-            }"
-        >
-            HC Multimarcas
+<!-- Hero Banner -->
+<section id="inicio" class="hero-banner h-screen flex items-center justify-center text-white relative">
+    <div class="floating-elements"></div>
+    
+    <div class="text-center z-10 max-w-4xl mx-auto px-4">
+        <h1 class="text-6xl md:text-8xl font-bold mb-6 animate-slide-up">
+            HC <span class="gradient-text">Multimarcas</span>
         </h1>
-        <p
-            class="text-lg sm:text-xl md:text-2xl mb-8"
-            v-motion="{
-                initial: { opacity: 0, y: 20 },
-                animate: { opacity: 1, y: 0 },
-                transition: { delay: 0.4, duration: 0.8, easing: 'ease-out' }
-            }"
-        >
+        <p class="text-xl md:text-3xl mb-8 animate-slide-up opacity-90" style="animation-delay: 0.2s;">
             Moda para toda a família com os melhores preços
         </p>
-        <div
-            class="flex flex-col sm:flex-row gap-4"
-            v-motion="{
-                initial: { opacity: 0, scale: 0.95 },
-                animate: { opacity: 1, scale: 1 },
-                transition: { delay: 0.6, duration: 0.8, easing: 'ease-out' }
-            }"
-        >
-            <button
-                onclick="window.location.href='catalogo.html'"
-                class="bg-yellow-400 text-gray-900 font-semibold px-6 py-3 rounded-md transition transform hover:scale-105 hover:bg-yellow-300"
-            >
-                Ver Catálogo
-            </button>
-            <button
-                onclick="window.location.href='promocoes.html'"
-                class="border border-yellow-400 text-yellow-400 font-semibold px-6 py-3 rounded-md transition transform hover:scale-105 hover:bg-yellow-400 hover:text-gray-900"
-            >
-                Promoções
-            </button>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center animate-bounce-in" style="animation-delay: 0.4s;">
+            <!-- Os botões abaixo foram ajustados para usar âncoras internas em vez de páginas inexistentes (catalogo.html, promocoes.html). Ao clicar, a página rola suavemente para a seção correspondente. -->
+            <a href="#categorias" onclick="document.getElementById('categorias').scrollIntoView({behavior:'smooth'}); return false;" class="btn-primary text-gray-900 px-8 py-4 rounded-full text-lg font-semibold inline-block">
+                <i class="fas fa-shopping-bag mr-2"></i>Ver Catálogo
+            </a>
+            <a href="#ofertas" onclick="document.getElementById('ofertas').scrollIntoView({behavior:'smooth'}); return false;" class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-full text-lg font-semibold inline-block hover:bg-white/30 transition-all">
+                <i class="fas fa-fire mr-2"></i>Promoções
+            </a>
         </div>
-    </section>
-</div>
+    </div>
+    
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <i class="fas fa-chevron-down text-2xl text-white/70"></i>
+    </div>
+</section>
 
 <!-- Promotional Banner -->
 <section class="gradient-bg py-4 text-center animate-slide-down">
     <div class="max-w-7xl mx-auto px-4">
-        <p class="text-secondary font-semibold">
+        <p class="text-gray-900 dark:text-white font-semibold">
             <i class="fas fa-truck mr-2"></i>
             FRETE GRÁTIS para compras acima de R$ 150,00 
             <span class="mx-4">|</span>
@@ -459,10 +460,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- Categories -->
-<section class="py-20 bg-gradient-to-br from-gray-50 to-white">
+<section id="categorias" class="py-20 bg-gradient-to-br from-gray-50 to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">Nossas Categorias</h2>
+            <h2 class="text-4xl font-bold text-yellow-700 mb-4 animate-slide-up">Nossas Categorias</h2>
             <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Encontre o que você procura</p>
         </div>
         
@@ -476,9 +477,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-2xl font-bold text-secondary mb-3">Masculino</h3>
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Masculino</h3>
                     <p class="text-gray-600 mb-4">Roupas e acessórios para homens modernos</p>
-                    <a href="catalogo.html?categoria=masculino" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                    <!-- O botão de categoria chama a função de filtro diretamente para evitar falhas no listener -->
+                    <a href="#featured-products"
+                       data-category="masculino"
+                       onclick="loadFeaturedProducts('masculino'); document.getElementById('featured-products').scrollIntoView({behavior:'smooth'}); return false;"
+                       class="btn-primary text-gray-900 px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
                         <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
                     </a>
                 </div>
@@ -493,9 +498,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-2xl font-bold text-secondary mb-3">Feminino</h3>
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Feminino</h3>
                     <p class="text-gray-600 mb-4">Roupas e acessórios para mulheres elegantes</p>
-                    <a href="catalogo.html?categoria=feminino" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                    <a href="#featured-products"
+                       data-category="feminino"
+                       onclick="loadFeaturedProducts('feminino'); document.getElementById('featured-products').scrollIntoView({behavior:'smooth'}); return false;"
+                       class="btn-primary text-gray-900 px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
                         <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
                     </a>
                 </div>
@@ -510,9 +518,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-2xl font-bold text-secondary mb-3">Infantil</h3>
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Infantil</h3>
                     <p class="text-gray-600 mb-4">Roupas confortáveis para crianças</p>
-                    <a href="catalogo.html?categoria=infantil" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                    <a href="#featured-products"
+                       data-category="infantil"
+                       onclick="loadFeaturedProducts('infantil'); document.getElementById('featured-products').scrollIntoView({behavior:'smooth'}); return false;"
+                       class="btn-primary text-gray-900 px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
                         <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
                     </a>
                 </div>
@@ -527,9 +538,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
                 <div class="p-6">
-                    <h3 class="text-2xl font-bold text-secondary mb-3">Acessórios</h3>
+                    <h3 class="text-2xl font-bold text-yellow-700 mb-3">Acessórios</h3>
                     <p class="text-gray-600 mb-4">Bolsas, joias e complementos</p>
-                    <a href="catalogo.html?categoria=acessorios" class="btn-primary text-secondary px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
+                    <a href="#featured-products"
+                       data-category="acessorios"
+                       onclick="loadFeaturedProducts('acessorios'); document.getElementById('featured-products').scrollIntoView({behavior:'smooth'}); return false;"
+                       class="btn-primary text-gray-900 px-6 py-3 rounded-full text-sm font-semibold inline-block w-full text-center">
                         <i class="fas fa-arrow-right mr-2"></i>Ver Produtos
                     </a>
                 </div>
@@ -542,7 +556,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <section class="py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">Produtos em Destaque</h2>
+            <h2 class="text-4xl font-bold text-yellow-700 mb-4 animate-slide-up">Produtos em Destaque</h2>
             <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Os mais vendidos da semana</p>
         </div>
         
@@ -551,7 +565,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         
         <div class="text-center mt-16">
-            <a href="catalogo.html" class="btn-primary text-secondary px-10 py-4 rounded-full text-lg font-semibold inline-block animate-glow">
+            <!-- Botão para exibir todos os produtos na seção de destaques -->
+            <a href="#featured-products" onclick="/* Restaura a lista completa de produtos */ loadFeaturedProducts(null); document.getElementById('featured-products').scrollIntoView({behavior:'smooth'}); return false;" class="btn-primary text-gray-900 px-10 py-4 rounded-full text-lg font-semibold inline-block animate-glow">
                 <i class="fas fa-shopping-bag mr-2"></i>Ver Todos os Produtos
             </a>
         </div>
@@ -559,12 +574,13 @@ document.addEventListener('DOMContentLoaded', () => {
 </section>
 
 <!-- Special Offers -->
-<section class="py-20 parallax-section" style="background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 1200 600&quot;><rect fill=&quot;%23FFD700&quot; width=&quot;1200&quot; height=&quot;600&quot;/><circle fill=&quot;%23FFA500&quot; cx=&quot;200&quot; cy=&quot;150&quot; r=&quot;80&quot; opacity=&quot;0.3&quot;/><circle fill=&quot;%23FF8C00&quot; cx=&quot;800&quot; cy=&quot;400&quot; r=&quot;120&quot; opacity=&quot;0.2&quot;/></svg>');">
+<section id="ofertas" class="py-20 parallax-section" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('data:image/svg+xml,<svg xmlns=&quot;http://www.w3.org/2000/svg&quot; viewBox=&quot;0 0 1200 600&quot;><rect fill=&quot;%23FFD700&quot; width=&quot;1200&quot; height=&quot;600&quot;/><circle fill=&quot;%23FFA500&quot; cx=&quot;200&quot; cy=&quot;150&quot; r=&quot;80&quot; opacity=&quot;0.3&quot;/><circle fill=&quot;%23FF8C00&quot; cx=&quot;800&quot; cy=&quot;400&quot; r=&quot;120&quot; opacity=&quot;0.2&quot;/></svg>');">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
         <h2 class="text-5xl font-bold mb-6 animate-slide-up">Ofertas Especiais</h2>
         <p class="text-2xl mb-8 animate-slide-up" style="animation-delay: 0.1s;">Até 70% de desconto em produtos selecionados</p>
         <div class="flex flex-col sm:flex-row gap-6 justify-center animate-bounce-in" style="animation-delay: 0.2s;">
-            <a href="promocoes.html" class="bg-white text-secondary px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition-all">
+            <!-- Botões com cores vibrantes para destaque -->
+            <a href="promocoes.html" class="bg-yellow-500 text-gray-900 px-8 py-4 rounded-full text-lg font-bold hover:bg-yellow-600 transition-all">
                 <i class="fas fa-fire mr-2"></i>Ver Promoções
             </a>
             <a href="https://wa.me/5511999999999?text=Olá! Gostaria de saber sobre as ofertas especiais!" 
@@ -579,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <section class="py-20 bg-gradient-to-br from-gray-50 to-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-secondary mb-4 animate-slide-up">O que nossos clientes dizem</h2>
+            <h2 class="text-4xl font-bold text-yellow-700 mb-4 animate-slide-up">O que nossos clientes dizem</h2>
             <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Mais de 10.000 clientes satisfeitos</p>
         </div>
         
@@ -597,11 +613,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <p class="text-gray-700 mb-6 text-lg leading-relaxed">"Excelente atendimento e produtos de qualidade excepcional. Sempre encontro o que procuro na HC Multimarcas! Recomendo muito!"</p>
                 <div class="flex items-center">
-                    <div class="w-12 h-12 bg-gradient-to-br from-primary to-yellow-500 rounded-full flex items-center justify-center text-secondary font-bold text-lg mr-4">
+                        <!-- Ajuste de cor de texto para alto contraste -->
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary to-yellow-500 rounded-full flex items-center justify-center text-yellow-700 font-bold text-lg mr-4">
                         M
                     </div>
                     <div>
-                        <p class="font-bold text-secondary text-lg">Maria Silva</p>
+                        <p class="font-bold text-yellow-700 text-lg">Maria Silva</p>
                         <p class="text-gray-500">Cliente há 2 anos • São Paulo</p>
                     </div>
                 </div>
@@ -624,7 +641,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         J
                     </div>
                     <div>
-                        <p class="font-bold text-secondary text-lg">João Santos</p>
+                        <p class="font-bold text-yellow-700 text-lg">João Santos</p>
                         <p class="text-gray-500">Cliente há 1 ano • Rio de Janeiro</p>
                     </div>
                 </div>
@@ -647,7 +664,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         A
                     </div>
                     <div>
-                        <p class="font-bold text-secondary text-lg">Ana Costa</p>
+                        <p class="font-bold text-yellow-700 text-lg">Ana Costa</p>
                         <p class="text-gray-500">Cliente há 3 anos • Belo Horizonte</p>
                     </div>
                 </div>
@@ -656,28 +673,101 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 </section>
 
+<!-- About Section -->
+<section id="sobre" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-yellow-700 mb-4 animate-slide-up">Sobre a HC Multimarcas</h2>
+            <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay:0.1s;">Conheça nossa história e valores</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="animate-slide-left">
+                <h3 class="text-3xl font-bold text-gray-900 mb-4">Moda com Propósito</h3>
+                <p class="text-gray-700 mb-6 leading-relaxed">Fundada com a missão de democratizar a moda, a HC Multimarcas oferece peças de qualidade, elegantes e acessíveis para toda a família. Trabalhamos com fornecedores selecionados para garantir conforto e estilo em cada coleção.</p>
+                <ul class="space-y-4">
+                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Produtos selecionados com rigoroso controle de qualidade</li>
+                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Atendimento personalizado e suporte humanizado</li>
+                    <li class="flex items-start"><i class="fas fa-check-circle text-primary mr-3 mt-1"></i>Entrega rápida e segura para todo o Brasil</li>
+                </ul>
+            </div>
+            <div class="animate-slide-right flex justify-center">
+                <!-- Placeholder image representing about us section -->
+                <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='500' height='300'><rect width='500' height='300' fill='%23f3f4f6'/><circle cx='250' cy='150' r='80' fill='%23FFD700' opacity='0.2'/><circle cx='180' cy='110' r='50' fill='%23FFA500' opacity='0.2'/><circle cx='320' cy='190' r='60' fill='%23FF8C00' opacity='0.2'/></svg>" alt="Sobre nós" class="w-full h-auto rounded-2xl shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Newsletter -->
 <section class="py-16 gradient-bg">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h2 class="text-3xl font-bold text-secondary mb-4 animate-slide-up">Fique por dentro das novidades</h2>
-        <p class="text-lg text-secondary/80 mb-8 animate-slide-up" style="animation-delay: 0.1s;">Receba ofertas exclusivas e lançamentos em primeira mão</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-4 animate-slide-up">Fique por dentro das novidades</h2>
+        <p class="text-lg text-gray-700 mb-8 animate-slide-up" style="animation-delay: 0.1s;">Receba ofertas exclusivas e lançamentos em primeira mão</p>
         
         <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto animate-scale-in" style="animation-delay: 0.2s;">
             <input type="email" placeholder="Seu melhor e-mail" 
-                   class="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-secondary">
-            <button class="bg-secondary text-white px-8 py-3 rounded-full font-semibold hover:bg-gray-800 transition-all">
+                   class="flex-1 px-6 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+            <button class="bg-yellow-500 text-gray-900 px-8 py-3 rounded-full font-semibold hover:bg-yellow-600 transition-all">
                 <i class="fas fa-paper-plane mr-2"></i>Inscrever
             </button>
         </div>
     </div>
 </section>
 
+<!-- Contact Section -->
+<section id="contato" class="py-20 bg-gradient-to-b from-white to-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-yellow-700 mb-4 animate-slide-up">Entre em Contato</h2>
+            <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay:0.1s;">Estamos aqui para te ajudar</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div class="space-y-6 animate-slide-left">
+                <p class="text-gray-700 leading-relaxed">Se você tiver dúvidas, sugestões ou precisar de assistência, entre em contato conosco pelos canais abaixo ou envie uma mensagem pelo formulário.</p>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-phone-alt text-primary text-xl"></i>
+                    <span class="text-gray-700">(11) 99999-9999</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-envelope text-primary text-xl"></i>
+                    <span class="text-gray-700">contato@hcmultimarcas.com</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-map-marker-alt text-primary text-xl"></i>
+                    <span class="text-gray-700">Rua das Flores, 123 - São Paulo/SP</span>
+                </div>
+                <div class="flex space-x-3 mt-4">
+                    <a href="https://wa.me/5511999999999" class="w-10 h-10 flex items-center justify-center rounded-full bg-green-500 text-white hover:bg-green-600"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://instagram.com/hcmultimarcas" class="w-10 h-10 flex items-center justify-center rounded-full bg-pink-500 text-white hover:bg-pink-600"><i class="fab fa-instagram"></i></a>
+                    <a href="https://facebook.com/hcmultimarcas" class="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-600"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+            <form onsubmit="event.preventDefault(); showNotification('Mensagem enviada!'); this.reset();" class="space-y-4 animate-slide-right">
+                <div>
+                    <label for="name" class="block text-gray-700 font-medium mb-1">Nome</label>
+                    <input type="text" id="name" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 font-medium mb-1">E-mail</label>
+                    <input type="email" id="email" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                </div>
+                <div>
+                    <label for="message" class="block text-gray-700 font-medium mb-1">Mensagem</label>
+                    <textarea id="message" rows="4" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-full font-semibold hover:bg-yellow-600 transition-all">Enviar Mensagem</button>
+            </form>
+        </div>
+    </div>
+</section>
+
 <!-- Footer -->
-<footer class="bg-secondary text-white py-16">
+<footer class="bg-gray-900 text-white py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div class="animate-slide-up">
-                <h3 class="text-2xl font-bold mb-6">HC <span class="gradient-text">Multimarcas</span></h3>
+                <!-- Branding usa gradiente e cores de destaque -->
+                <h3 class="text-2xl font-bold mb-6 text-primary">HC <span class="gradient-text">Multimarcas</span></h3>
                 <p class="text-gray-300 mb-6 leading-relaxed">Moda para toda a família com qualidade, estilo e preços acessíveis. Sua satisfação é nossa prioridade.</p>
                 <div class="flex space-x-4">
                     <a href="https://wa.me/5511999999999" class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all hover:scale-110">
@@ -693,29 +783,36 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             
             <div class="animate-slide-up" style="animation-delay: 0.1s;">
-                <h4 class="text-lg font-semibold mb-6">Links Rápidos</h4>
+                <h4 class="text-lg font-semibold mb-6 text-primary">Links Rápidos</h4>
                 <ul class="space-y-3">
-                    <li><a href="index.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-home mr-2"></i>Início</a></li>
-                    <li><a href="catalogo.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-shopping-bag mr-2"></i>Catálogo</a></li>
-                    <li><a href="promocoes.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-fire mr-2"></i>Promoções</a></li>
-                    <li><a href="sobre.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-info-circle mr-2"></i>Sobre</a></li>
-                    <li><a href="contato.html" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-envelope mr-2"></i>Contato</a></li>
+                    <!--
+                      As cores dos links foram ajustadas para melhorar o contraste no rodapé.
+                      Em vez de um cinza muito claro sobre o fundo escuro, utilizamos
+                      `text-gray-400` e mantém a cor de destaque ao passar o mouse.
+                    -->
+                    <li><a href="index.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-home mr-2"></i>Início</a></li>
+                    <li><a href="catalogo.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-shopping-bag mr-2"></i>Catálogo</a></li>
+                    <li><a href="promocoes.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-fire mr-2"></i>Promoções</a></li>
+                    <li><a href="sobre.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-info-circle mr-2"></i>Sobre</a></li>
+                    <li><a href="contato.html" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-envelope mr-2"></i>Contato</a></li>
                 </ul>
             </div>
             
             <div class="animate-slide-up" style="animation-delay: 0.2s;">
-                <h4 class="text-lg font-semibold mb-6">Categorias</h4>
+                <h4 class="text-lg font-semibold mb-6 text-primary">Categorias</h4>
                 <ul class="space-y-3">
-                    <li><a href="catalogo.html?categoria=masculino" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-male mr-2"></i>Masculino</a></li>
-                    <li><a href="catalogo.html?categoria=feminino" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-female mr-2"></i>Feminino</a></li>
-                    <li><a href="catalogo.html?categoria=infantil" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-child mr-2"></i>Infantil</a></li>
-                    <li><a href="catalogo.html?categoria=acessorios" class="text-gray-300 hover:text-primary transition-colors flex items-center"><i class="fas fa-gem mr-2"></i>Acessórios</a></li>
+                    <!-- Cores ajustadas para melhor legibilidade -->
+                    <li><a href="catalogo.html?categoria=masculino" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-male mr-2"></i>Masculino</a></li>
+                    <li><a href="catalogo.html?categoria=feminino" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-female mr-2"></i>Feminino</a></li>
+                    <li><a href="catalogo.html?categoria=infantil" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-child mr-2"></i>Infantil</a></li>
+                    <li><a href="catalogo.html?categoria=acessorios" class="text-gray-400 hover:text-primary transition-colors flex items-center"><i class="fas fa-gem mr-2"></i>Acessórios</a></li>
                 </ul>
             </div>
             
             <div class="animate-slide-up" style="animation-delay: 0.3s;">
-                <h4 class="text-lg font-semibold mb-6">Contato</h4>
-                <ul class="space-y-3 text-gray-300">
+                <h4 class="text-lg font-semibold mb-6 text-primary">Contato</h4>
+                <!-- Lista de contatos com cor mais clara para melhor contraste -->
+                <ul class="space-y-3 text-gray-400">
                     <li class="flex items-start"><i class="fas fa-map-marker-alt mr-3 mt-1 text-primary"></i>Rua das Flores, 123<br>Centro - São Paulo/SP</li>
                     <li class="flex items-center"><i class="fas fa-phone mr-3 text-primary"></i>(11) 99999-9999</li>
                     <li class="flex items-center"><i class="fas fa-envelope mr-3 text-primary"></i>contato@hcmultimarcas.com</li>
@@ -733,16 +830,37 @@ document.addEventListener('DOMContentLoaded', () => {
 <!-- Cart Modal -->
 <div id="cart-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
     <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-2xl max-w-md w-full max-h-96 overflow-hidden shadow-2xl animate-scale-in">
+        <!--
+          Estruturamos o modal do carrinho em uma coluna flexível para que o cabeçalho,
+          a lista de produtos e a seção de total ocupem corretamente o espaço
+          disponível. A lista de produtos usa flex-1 e overflow-y-auto, permitindo
+          rolagem sem esconder o botão de finalizar.
+        -->
+        <!-- Removido overflow-hidden do contêiner do carrinho para que a seção de finalização fique visível quando muitos itens forem adicionados. O max-h controla a altura total e o conteúdo interno gerencia seu próprio overflow. -->
+        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] shadow-2xl animate-scale-in flex flex-col">
+            <!-- Estrutura interna do carrinho: removemos h-full e flex-1 para que a lista de itens tenha altura limitada
+                 com rolagem e a seção de total e botões fique sempre visível abaixo. -->
             <div class="p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-secondary">Carrinho de Compras</h3>
+                    <!-- Título do carrinho com cor adaptada -->
+                    <h3 class="text-xl font-bold text-yellow-700">Carrinho de Compras</h3>
                     <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 
-                <div id="cart-items" class="space-y-4 max-h-48 overflow-y-auto">
+                <!-- Aumentamos a altura máxima da lista de itens para permitir mais produtos visíveis sem cortar o conteúdo -->
+                <!--
+                  Ajustamos a altura máxima da lista de itens do carrinho para ocupar uma
+                  área maior da tela. Em alguns casos, quando muitos produtos eram
+                  adicionados, a lista ficava muito pequena e não permitia rolar todo o
+                  conteúdo, dando a impressão de que produtos estavam faltando. Com o
+                  max-h aumentado para 65vh e overflow automático, todo o conteúdo ficará
+                  visível, com scroll interno se necessário.
+                -->
+                <!-- Lista de itens do carrinho. Definimos uma altura máxima e margem inferior para separar
+                     a lista da seção de total. O conteúdo pode rolar quando necessário. -->
+                <div id="cart-items" class="space-y-4 overflow-y-auto pr-1 max-h-[50vh] mb-6">
                     <!-- Cart items will be loaded here -->
                 </div>
                 
@@ -755,6 +873,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button id="whatsapp-cart" class="w-full bg-green-500 text-white py-3 px-6 rounded-full hover:bg-green-600 transition-all font-semibold text-lg">
                         <i class="fab fa-whatsapp mr-2"></i>
                         Finalizar no WhatsApp
+                    </button>
+                    <!--
+                      Caso você deseje um fluxo de pagamento próprio em vez de finalizar pelo
+                      WhatsApp, adicionamos um segundo botão que direciona para uma página de
+                      checkout. Crie um arquivo `pagamento.html` com o formulário de
+                      pagamento desejado e vincule-o ao backend de pagamentos de sua escolha.
+                    -->
+                    <a href="pagamento.html" class="mt-4 block w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-full hover:bg-yellow-600 transition-all font-semibold text-lg text-center">
+                        <i class="fas fa-credit-card mr-2"></i>
+                        Pagar Agora
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Details Modal -->
+<div id="product-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <!-- Aumenta a largura máxima do modal em telas maiores para acomodar melhor a galeria de imagens e as informações lado a lado -->
+        <div class="bg-white rounded-2xl max-w-4xl w-full overflow-hidden shadow-2xl">
+            <div class="p-6 flex flex-col h-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 id="product-modal-title" class="text-xl font-bold text-yellow-700">Produto</h3>
+                    <button id="close-product-modal" class="text-gray-500 hover:text-gray-700 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="product-modal-body" class="space-y-4 overflow-y-auto pr-1 flex-1">
+                    <!-- Detalhes do produto serão inseridos aqui -->
+                </div>
+                <div class="pt-6 mt-6 border-t">
+                    <button id="product-add-to-cart" class="w-full bg-gray-800 text-white py-3 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold">
+                        <i class="fas fa-shopping-cart mr-2"></i>Adicionar ao Carrinho
                     </button>
                 </div>
             </div>
@@ -769,7 +922,15 @@ document.addEventListener('DOMContentLoaded', () => {
 </div>
 
 <!-- Back to Top Button -->
-<button id="back-to-top" class="fixed bottom-8 right-8 bg-primary text-secondary w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all opacity-0 pointer-events-none animate-bounce">
+<!--
+  O botão de voltar ao topo usava classes personalizadas (`bg-primary` e `text-secondary`) que
+  não estão definidas neste arquivo. Isso fazia com que o botão aparecesse sem contraste,
+  ficando praticamente invisível. Para resolver o problema, o botão agora utiliza cores
+  utilitárias do Tailwind (`bg-yellow-500` para o fundo e `text-white` para o ícone), além de
+  manter o mesmo tamanho e sombra. A animação `animate-bounce` foi removida para deixar a
+  interação mais discreta.
+-->
+<button id="back-to-top" aria-label="Voltar ao topo" class="fixed bottom-8 right-8 z-50 bg-gray-800 text-white w-12 h-12 rounded-full shadow-lg hover:shadow-xl transition-all opacity-0 pointer-events-none">
     <i class="fas fa-chevron-up"></i>
 </button>
 
@@ -783,6 +944,12 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 39.90,
             categoria: "masculino",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%236366F1;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Camiseta</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text><circle cx='50' cy='50' r='20' fill='white' opacity='0.1'/><circle cx='250' cy='250' r='30' fill='white' opacity='0.1'/></svg>",
+            // galeria de imagens do produto (usamos a mesma imagem por padrão; para adicionar novas imagens, inclua mais URLs neste array)
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad1a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%236366F1;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1a)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Camiseta</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad1b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%236366F1;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1b)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Costas</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad1c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%236366F1;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1c)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Etiqueta</text></svg>"
+            ],
             descricao: "Camiseta premium de algodão 100%, confortável e versátil para o dia a dia.",
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Azul", "Branco", "Preto", "Cinza"],
@@ -796,6 +963,11 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 119.90,
             categoria: "feminino",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23F472B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Vestido</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Floral</text><circle cx='70' cy='70' r='15' fill='white' opacity='0.2'/><circle cx='230' cy='80' r='10' fill='white' opacity='0.2'/><circle cx='80' cy='220' r='12' fill='white' opacity='0.2'/><circle cx='220' cy='230' r='18' fill='white' opacity='0.2'/></svg>",
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad2a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23F472B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2a)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Vestido</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Floral</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad2b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23F472B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2b)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Saia</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad2c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23F472B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2c)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Costas</text></svg>"
+            ],
             descricao: "Vestido floral elegante, perfeito para ocasiões especiais e eventos.",
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Rosa", "Azul", "Verde", "Roxo"],
@@ -809,6 +981,11 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 59.90,
             categoria: "infantil",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad3' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310B981;stop-opacity:1' /><stop offset='100%' style='stop-color:%2334D399;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Conjunto</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Infantil</text><polygon points='150,50 170,90 130,90' fill='white' opacity='0.2'/><circle cx='100' cy='200' r='25' fill='white' opacity='0.1'/><rect x='200' y='180' width='40' height='40' fill='white' opacity='0.1'/></svg>",
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad3a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310B981;stop-opacity:1' /><stop offset='100%' style='stop-color:%2334D399;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3a)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Conjunto</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Infantil</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad3b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310B981;stop-opacity:1' /><stop offset='100%' style='stop-color:%2334D399;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3b)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Shorts</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad3c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310B981;stop-opacity:1' /><stop offset='100%' style='stop-color:%2334D399;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3c)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Cores</text></svg>"
+            ],
             descricao: "Conjunto confortável e divertido para crianças, ideal para brincar.",
             tamanhos: ["2", "4", "6", "8", "10"],
             cores: ["Amarelo", "Verde", "Rosa", "Azul"],
@@ -822,6 +999,11 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 179.90,
             categoria: "acessorios",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad4' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%238B5CF6;stop-opacity:1' /><stop offset='100%' style='stop-color:%23A78BFA;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Bolsa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text><ellipse cx='150' cy='100' rx='40' ry='20' fill='white' opacity='0.2'/><rect x='120' y='200' width='60' height='30' rx='15' fill='white' opacity='0.2'/></svg>",
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad4a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%238B5CF6;stop-opacity:1' /><stop offset='100%' style='stop-color:%23A78BFA;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4a)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Bolsa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Premium</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad4b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%238B5CF6;stop-opacity:1' /><stop offset='100%' style='stop-color:%23A78BFA;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4b)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Interior</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad4c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%238B5CF6;stop-opacity:1' /><stop offset='100%' style='stop-color:%23A78BFA;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4c)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Fecho</text></svg>"
+            ],
             descricao: "Bolsa de couro sintético premium, elegante e espaçosa para o dia a dia.",
             tamanhos: ["Único"],
             cores: ["Preto", "Marrom", "Bege", "Vinho"],
@@ -835,6 +1017,11 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 99.90,
             categoria: "masculino",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad5' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%235B21B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad5)' width='300' height='300'/><text x='150' y='130' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Calça Jeans</text><text x='150' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Slim Fit</text><rect x='130' y='180' width='40' height='80' rx='20' fill='white' opacity='0.2'/></svg>",
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad5a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%235B21B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad5a)' width='300' height='300'/><text x='150' y='130' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Calça Jeans</text><text x='150' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Slim Fit</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad5b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%235B21B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad5b)' width='300' height='300'/><text x='150' y='130' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Cintura</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad5c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%234F46E5;stop-opacity:1' /><stop offset='100%' style='stop-color:%235B21B6;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad5c)' width='300' height='300'/><text x='150' y='130' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='150' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Costura</text></svg>"
+            ],
             descricao: "Calça jeans masculina slim fit, corte moderno e confortável.",
             tamanhos: ["38", "40", "42", "44", "46"],
             cores: ["Azul", "Preto", "Azul Escuro"],
@@ -848,6 +1035,11 @@ document.addEventListener('DOMContentLoaded', () => {
             precoAntigo: 69.90,
             categoria: "feminino",
             imagem: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad6' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23BE185D;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad6)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Blusa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Social</text><ellipse cx='150' cy='200' rx='50' ry='30' fill='white' opacity='0.2'/></svg>",
+            imagens: [
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad6a' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23BE185D;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad6a)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Blusa</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Social</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad6b' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23BE185D;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad6b)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Gola</text></svg>",
+                "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'><defs><linearGradient id='grad6c' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%23EC4899;stop-opacity:1' /><stop offset='100%' style='stop-color:%23BE185D;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad6c)' width='300' height='300'/><text x='150' y='140' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Detalhe</text><text x='150' y='160' text-anchor='middle' dy='.3em' fill='white' font-size='16' font-weight='bold'>Punho</text></svg>"
+            ],
             descricao: "Blusa feminina social elegante, ideal para trabalho e eventos.",
             tamanhos: ["P", "M", "G", "GG"],
             cores: ["Branco", "Rosa", "Azul", "Preto"],
@@ -857,6 +1049,10 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // Enhanced cart functionality
+
+    // Variáveis para galeria do produto
+    let currentImages = [];
+    let currentImageIndex = 0;
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     function updateCartCount() {
@@ -944,7 +1140,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="flex items-center space-x-4 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
                     <img src="${item.imagem}" alt="${item.nome}" class="w-16 h-16 object-cover rounded-lg">
                     <div class="flex-1">
-                        <h4 class="font-semibold text-sm text-secondary">${item.nome}</h4>
+                        <h4 class="font-semibold text-sm text-yellow-700">${item.nome}</h4>
                         <p class="text-xs text-gray-500">${item.tamanho} - ${item.cor}</p>
                         <div class="flex items-center justify-between mt-1">
                             <p class="text-sm font-bold text-primary">R$ ${subtotal.toFixed(2)}</p>
@@ -983,36 +1179,156 @@ document.addEventListener('DOMContentLoaded', () => {
         return encodeURIComponent(message);
     }
 
-    function loadFeaturedProducts() {
-        const featuredProducts = document.getElementById('featured-products');
-        const featured = productsData.filter(p => p.destaque).slice(0, 4);
+    /**
+     * Mostra o modal de detalhes de um produto.
+     * Carrega as informações no corpo do modal e configura o botão para
+     * adicionar ao carrinho. Se o produto não existir, a função retorna
+     * silenciosamente.
+     * @param {number} productId ID do produto a ser exibido
+     */
+    function showProductDetails(productId) {
+        const product = productsData.find(p => p.id === productId);
+        if (!product) return;
+        // Atualiza título
+        document.getElementById('product-modal-title').textContent = product.nome;
+        // Define a galeria de imagens: usa array de imagens ou imagem única
+        currentImages = (product.imagens && product.imagens.length) ? product.imagens : [product.imagem];
+        currentImageIndex = 0;
+        // Monta galeria de imagens com controles
+        let galleryHtml = `<img id="product-modal-image" src="${currentImages[0]}" alt="${product.nome}" class="w-full h-64 object-cover rounded-lg">`;
+        if (currentImages.length > 1) {
+            galleryHtml += `
+            <div class="flex items-center justify-between mt-3">
+                <button id="prev-img" class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 focus:outline-none"><i class="fas fa-chevron-left"></i></button>
+                <div id="img-dots" class="flex-1 flex justify-center space-x-2">
+                    ${currentImages.map((_, idx) => `<span class="dot w-3 h-3 rounded-full ${idx === 0 ? 'bg-yellow-500' : 'bg-gray-300'}"></span>`).join('')}
+                </div>
+                <button id="next-img" class="bg-gray-200 hover:bg-gray-300 text-gray-600 rounded-full p-2 focus:outline-none"><i class="fas fa-chevron-right"></i></button>
+            </div>`;
+        }
+        // Prepara corpo do modal com galeria, preço, descrição, tamanhos e cores.
+        // A estrutura usa flex para colocar a imagem à esquerda e as informações à direita em telas médias ou maiores.
+        const body = document.getElementById('product-modal-body');
+        body.innerHTML = `
+            <!--
+              A disposição abaixo utiliza flexbox para colocar a galeria de imagens e as informações
+              lado a lado mesmo em telas pequenas. O comportamento padrão do Tailwind seria
+              empilhar os elementos em colunas e só alinhar em linha a partir de md (768px).
+              No entanto, como muitos dispositivos móveis já possuem uma largura considerável,
+              antecipamos o layout horizontal a partir do breakpoint `sm` (640px) usando
+              sm:flex-row. Em telas extremamente estreitas (até 639px), os elementos ainda se
+              empilham verticalmente para evitar cortes.
+            -->
+            <div class="flex flex-col sm:flex-row gap-6">
+                <div class="w-full sm:w-1/2">${galleryHtml}</div>
+                <div class="w-full sm:w-1/2">
+                    ${product.precoAntigo ? `<p class="text-gray-400 line-through text-sm mb-1">R$ ${product.precoAntigo.toFixed(2)}</p>` : ''}
+                    <p class="text-2xl font-bold text-primary mb-4">R$ ${product.preco.toFixed(2)}</p>
+                    <p class="text-gray-700 mb-4">${product.descricao}</p>
+                    ${product.tamanhos ? `<p class="text-sm text-gray-600 mb-2"><strong>Tamanhos:</strong> ${product.tamanhos.join(', ')}</p>` : ''}
+                    ${product.cores ? `<p class="text-sm text-gray-600 mb-2"><strong>Cores:</strong> ${product.cores.join(', ')}</p>` : ''}
+                </div>
+            </div>
+        `;
+        // Configura botão de adicionar ao carrinho para adicionar este produto
+        const addBtn = document.getElementById('product-add-to-cart');
+        addBtn.onclick = function() {
+            addToCart(product.id);
+        };
+        // Função para atualizar imagem e indicadores
+        function updateGallery() {
+            const imgEl = document.getElementById('product-modal-image');
+            if (imgEl) {
+                imgEl.src = currentImages[currentImageIndex];
+            }
+            const dotsContainer = document.getElementById('img-dots');
+            if (dotsContainer) {
+                const dots = dotsContainer.querySelectorAll('.dot');
+                dots.forEach((dot, idx) => {
+                    if (idx === currentImageIndex) {
+                        dot.classList.remove('bg-gray-300');
+                        dot.classList.add('bg-yellow-500');
+                    } else {
+                        dot.classList.remove('bg-yellow-500');
+                        dot.classList.add('bg-gray-300');
+                    }
+                });
+            }
+        }
+        // Adiciona eventos aos controles se houver mais de uma imagem
+        setTimeout(() => {
+            const prevBtn = document.getElementById('prev-img');
+            const nextBtn = document.getElementById('next-img');
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    currentImageIndex = (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+                    updateGallery();
+                });
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    currentImageIndex = (currentImageIndex + 1) % currentImages.length;
+                    updateGallery();
+                });
+            }
+        }, 50);
+        // Exibe o modal
+        document.getElementById('product-modal').classList.remove('hidden');
+    }
 
-        featuredProducts.innerHTML = featured.map((product, index) => `
+    /**
+     * Carrega e renderiza os produtos em destaque ou filtrados por categoria.
+     * @param {string|null} category Categoria para filtrar (ex.: 'masculino'). Se null, exibe produtos em destaque.
+     */
+    function loadFeaturedProducts(category = null) {
+        const container = document.getElementById('featured-products');
+        let products;
+        if (category) {
+            // Mostra todos os produtos da categoria selecionada
+            products = productsData.filter(p => p.categoria === category);
+        } else {
+            // Exibe todos os produtos; você pode limitar a visualização ajustando este array
+            products = productsData;
+        }
+        // Renderiza os cards de produto
+        container.innerHTML = products.map((product, index) => {
+            // Usa a primeira imagem da galeria se existir, caso contrário usa a imagem padrão
+            const imgSrc = (product.imagens && product.imagens.length ? product.imagens[0] : product.imagem);
+            return `
             <div class="product-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: ${index * 0.1}s;">
                 <div class="relative">
-                    <img src="${product.imagem}" alt="${product.nome}" class="w-full h-56 object-cover">
+                    <img src="${imgSrc}" alt="${product.nome}" loading="lazy" class="w-full h-56 object-cover">
                     ${product.novo ? '<div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">NOVO</div>' : ''}
                     ${product.precoAntigo ? '<div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">OFERTA</div>' : ''}
                 </div>
                 <div class="p-6">
-                    <h3 class="text-lg font-bold text-secondary mb-3">${product.nome}</h3>
+                    <h3 class="text-lg font-bold text-yellow-700 mb-3">${product.nome}</h3>
                     <div class="flex items-center space-x-2 mb-4">
                         ${product.precoAntigo ? `<span class="text-gray-400 line-through text-sm">R$ ${product.precoAntigo.toFixed(2)}</span>` : ''}
                         <span class="text-2xl font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
                     </div>
                     <div class="flex space-x-2">
                         <button onclick="addToCart(${product.id})" 
-                                class="flex-1 bg-secondary text-white py-3 px-4 rounded-lg hover:bg-gray-800 transition-all font-semibold">
+                                class="flex-1 bg-gray-800 text-white py-3 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold">
                             <i class="fas fa-shopping-cart mr-2"></i>Carrinho
                         </button>
-                        <a href="https://wa.me/5511999999999?text=Olá! Tenho interesse no produto: ${encodeURIComponent(product.nome)} - R$ ${product.preco.toFixed(2)}" 
-                           class="flex-1 bg-green-500 text-white py-3 px-4 rounded-lg hover:bg-green-600 transition-all text-center font-semibold">
-                            <i class="fab fa-whatsapp mr-2"></i>WhatsApp
-                        </a>
+                        <button onclick="showProductDetails(${product.id})" 
+                                class="flex-1 bg-yellow-500 text-gray-900 py-3 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold">
+                            <i class="fas fa-info-circle mr-2"></i>Detalhes
+                        </button>
                     </div>
                 </div>
             </div>
-        `).join('');
+            `;
+        }).join('');
+    }
+
+    // Scroll indicator
+    function updateScrollIndicator() {
+        const scrollTop = window.pageYOffset;
+        const docHeight = document.body.scrollHeight - window.innerHeight;
+        const scrollPercent = (scrollTop / docHeight) * 100;
+        document.getElementById('scroll-indicator').style.width = scrollPercent + '%';
     }
 
     // Back to top button
@@ -1031,16 +1347,19 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('DOMContentLoaded', function() {
         // Hide loading screen
         setTimeout(() => {
-            document.getElementById('loading-screen').style.display = 'none';
-        }, 1500);
+        const loader = document.getElementById('loading-screen');
+        loader.classList.add('opacity-0','pointer-events-none');
+        setTimeout(() => loader.remove(), 500);
+    }, 1500);
 
         updateCartCount();
         loadFeaturedProducts();
 
         // Scroll events
-          window.addEventListener('scroll', () => {
-              updateBackToTopButton();
-          });
+        window.addEventListener('scroll', () => {
+            updateScrollIndicator();
+            updateBackToTopButton();
+        });
 
         // Back to top
         document.getElementById('back-to-top').addEventListener('click', () => {
@@ -1053,6 +1372,16 @@ document.addEventListener('DOMContentLoaded', () => {
         
         mobileMenuBtn.addEventListener('click', function() {
             mobileMenu.classList.toggle('hidden');
+        });
+
+        // Fecha o menu mobile ao clicar em qualquer item de navegação. Isso garante que,
+        // após o usuário selecionar uma seção, o menu recolha automaticamente sem
+        // cobrir o conteúdo. Selecionamos todos os links dentro do menu mobile e
+        // registramos um listener para adicionar a classe `hidden` novamente.
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
         });
 
         // Search functionality
@@ -1095,6 +1424,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // Product details modal toggle
+        const productModal = document.getElementById('product-modal');
+        const closeProductModalBtn = document.getElementById('close-product-modal');
+        if (closeProductModalBtn) {
+            closeProductModalBtn.addEventListener('click', function() {
+                productModal.classList.add('hidden');
+            });
+        }
+        // Fecha o modal de produto ao clicar fora da caixa de conteúdo
+        if (productModal) {
+            productModal.addEventListener('click', function(e) {
+                if (e.target === productModal) {
+                    productModal.classList.add('hidden');
+                }
+            });
+        }
+
         // Intersection Observer for animations
         const observerOptions = {
             threshold: 0.1,
@@ -1110,25 +1456,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }, observerOptions);
 
         // Observe elements for animation
-    document.querySelectorAll('.card-hover, .testimonial-card').forEach(el => {
-        observer.observe(el);
+        document.querySelectorAll('.card-hover, .testimonial-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Filtro de categorias: quando clicado em "Ver Produtos" em uma categoria
+        document.querySelectorAll('[data-category]').forEach(btn => {
+            btn.addEventListener('click', function(event) {
+                event.preventDefault();
+                const category = btn.getAttribute('data-category');
+                loadFeaturedProducts(category);
+            });
+        });
+        // O botão "Ver Todos os Produtos" chama loadFeaturedProducts() diretamente pelo atributo onclick no HTML
     });
-    });
-</script>
-
-<script setup>
-import { useMotion } from '@motionone/vue'
-</script>
-
-<script type="module">
-import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
-import { MotionPlugin, useMotion } from 'https://unpkg.com/@motionone/vue?module'
-
-createApp({
-    setup() {
-        useMotion()
-    }
-}).use(MotionPlugin).mount('#hero-app')
 </script>
 
 </body>
