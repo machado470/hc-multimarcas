@@ -754,7 +754,7 @@
                     </div>
                 </div>
                 <textarea id="new-comment-text" placeholder="Seu comentário" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 dark:bg-gray-700 dark:text-white"></textarea>
-                <button type="submit" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold"><i class="fas fa-comment-dots mr-2"></i>Enviar Comentário</button>
+                <button type="submit" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold"><i class="fas fa-comment-dots mr-2"></i>Enviar Comentário</button>
             </form>
         </div>
     </div>
@@ -893,7 +893,7 @@
                     <!-- Detalhes do produto serão inseridos aqui -->
                 </div>
                 <div class="pt-6 mt-6 border-t">
-                    <button id="product-add-to-cart" class="w-full bg-gray-800 text-white py-3 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold">
+                    <button id="product-add-to-cart" class="w-full bg-yellow-500 text-gray-900 py-3 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold">
                         <i class="fas fa-shopping-cart mr-2"></i>Adicionar ao Carrinho
                     </button>
                 </div>
@@ -1494,7 +1494,7 @@ if (!product) return;
                         </div>
                     </div>
                     <div class="mt-4 flex flex-col md:flex-row items-center md:items-stretch space-y-2 md:space-y-0 md:space-x-2">
-                        <button onclick="addToCart(${product.id})" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold flex items-center justify-center">
+<button onclick="addToCart(${product.id})" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-shopping-cart mr-2"></i>Carrinho
                         </button>
                         <button onclick="showProductDetails(${product.id})" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
@@ -1735,12 +1735,15 @@ function initInventory() {
         const product = productsData.find(p => p.id === productId);
         if (!product) return;
 
-        
-// Verifica estoque disponível
-if (inventory && inventory[productId] !== undefined && inventory[productId] <= 0) {
-    showNotification('Produto esgotado. Não é possível adicionar ao carrinho.');
-    return;
-}
+        // Verifica se há estoque disponível considerando itens já no carrinho
+        const totalQty = (inventory && inventory[productId] !== undefined)
+            ? inventory[productId]
+            : (product.quantidade || 0);
+        const cartQty = cart.filter(item => item.id === productId).reduce((sum, it) => sum + it.quantidade, 0);
+        if (totalQty - cartQty <= 0) {
+            showNotification('Produto esgotado. Não é possível adicionar ao carrinho.');
+            return;
+        }
 const existingItem = cart.find(item => 
             item.id === productId && item.tamanho === tamanho && item.cor === cor
         );
@@ -1848,8 +1851,13 @@ const existingItem = cart.find(item =>
     function showProductDetails(productId) {
         const product = productsData.find(p => p.id === productId);
 
-const qty = (inventory && inventory[product.id] !== undefined) ? inventory[product.id] : (product.quantidade || 0);
-const availabilityHtml = `<p class="text-sm text-gray-600 mb-2"><strong>Disponível:</strong> ${qty} ${qty === 1 ? 'unidade' : 'unidades'}</p>`;
+        // Calcula a quantidade disponível subtraindo o que já está reservado no carrinho
+        const cartQty = cart.filter(item => item.id === product.id).reduce((sum, it) => sum + it.quantidade, 0);
+        const totalQty = (inventory && inventory[product.id] !== undefined)
+            ? inventory[product.id]
+            : (product.quantidade || 0);
+        const qty = Math.max(0, totalQty - cartQty);
+        const availabilityHtml = `<p class="text-sm text-gray-600 mb-2"><strong>Disponível:</strong> ${qty} ${qty === 1 ? 'unidade' : 'unidades'}</p>`;
 
         if (!product) return;
         // Atualiza título
@@ -1897,10 +1905,13 @@ const availabilityHtml = `<p class="text-sm text-gray-600 mb-2"><strong>Disponí
         `;
         // Configura botão de adicionar ao carrinho para adicionar este produto
         const addBtn = document.getElementById('product-add-to-cart');
+        // Ajusta a classe do botão para manter padrão de cores unificado
+        addBtn.classList.remove('bg-gray-800','text-white','hover:bg-gray-900');
+        addBtn.classList.add('bg-yellow-500','text-gray-900','hover:bg-yellow-600');
         addBtn.onclick = function() {
             addToCart(product.id);
         };
-        // Atualiza estado do botão conforme estoque
+        // Atualiza estado do botão conforme estoque disponível
         if (qty <= 0) {
             addBtn.disabled = true;
             addBtn.textContent = 'Esgotado';
@@ -2013,7 +2024,7 @@ const availabilityHtml = `<p class="text-sm text-gray-600 mb-2"><strong>Disponí
                         </div>
                     </div>
                     <div class="mt-4 flex flex-col md:flex-row items-center md:items-stretch space-y-2 md:space-y-0 md:space-x-2">
-                        <button onclick="addToCart(${product.id})" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold flex items-center justify-center">
+                        <button onclick="addToCart(${product.id})" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-shopping-cart mr-2"></i>Carrinho
                         </button>
                         <button onclick="showProductDetails(${product.id})" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">

@@ -257,11 +257,14 @@
           // Se o usuário havia selecionado dinheiro, altere para Pix automaticamente
           if (pgSelect.value === 'dinheiro') {
             pgSelect.value = 'pix';
-            updatePaymentFields();
           }
         } else {
           // Para entregas locais, reabilita a opção de dinheiro
           if (dinheiroOpt) dinheiroOpt.disabled = false;
+        }
+        // Após ajustar as opções, chama updatePaymentFields para esconder ou mostrar campos relevantes
+        if (typeof updatePaymentFields === 'function') {
+          updatePaymentFields();
         }
       }
       if (pagamentoSelect) {
