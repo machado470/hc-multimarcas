@@ -139,7 +139,7 @@
 
     <!-- Botões flutuantes para contato rápido -->
     <div class="fixed bottom-16 right-6 flex flex-col items-center space-y-3 z-50">
-        <a href="https://wa.me/5511999999999" target="_blank" aria-label="Contato via WhatsApp"
+        <a href="https://wa.me/554899143649" target="_blank" aria-label="Contato via WhatsApp"
            class="w-12 h-12 rounded-full bg-green-500 text-white flex items-center justify-center shadow-lg hover:bg-green-600 transition transform hover:-translate-y-1">
             <i class="fab fa-whatsapp"></i>
         </a>
@@ -147,7 +147,7 @@
            class="w-12 h-12 rounded-full bg-pink-500 text-white flex items-center justify-center shadow-lg hover:bg-pink-600 transition transform hover:-translate-y-1">
             <i class="fab fa-instagram"></i>
         </a>
-        <a href="https://www.google.com/maps/search/?api=1&query=Rua+das+Flores+123+São+Paulo" target="_blank" aria-label="Ver Localização da Loja"
+        <a href="https://www.google.com/maps/search/?api=1&query=Rua+Lauro+Muller+516+Tijucas+SC" target="_blank" aria-label="Ver Localização da Loja"
            class="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition transform hover:-translate-y-1">
             <i class="fas fa-map-marker-alt"></i>
         </a>
@@ -184,8 +184,8 @@
             <div>
                 <h3 class="text-yellow-500 font-bold mb-4">Contato</h3>
                 <ul class="space-y-2 text-sm">
-                    <li><i class="fas fa-map-marker-alt mr-2"></i>Rua das Flores, 123 - São Paulo/SP</li>
-                    <li><i class="fas fa-phone mr-2"></i>(11) 99999-9999</li>
+                    <li><i class="fas fa-map-marker-alt mr-2"></i>Rua Lauro Müller, 516 - Tijucas/SC</li>
+                    <li><i class="fas fa-phone mr-2"></i>(48) 9914-3649</li>
                     <li><i class="fas fa-envelope mr-2"></i>contato@hcmultimarcas.com</li>
                     <li><i class="fas fa-clock mr-2"></i>Seg-Sáb: 9h às 18h</li>
                 </ul>
@@ -198,8 +198,9 @@
     <script>
     // Configurações da loja: defina a cidade e o estado de origem para cálculo de frete.
     // Se a compra for para a mesma cidade, será considerada entrega local (taxa menor).
-    const storeCity = 'São Paulo';
-    const storeState = 'SP';
+    // Define a cidade e o estado da loja com base no novo endereço informado pelo usuário.
+    const storeCity = 'Tijucas';
+    const storeState = 'SC';
     document.addEventListener('DOMContentLoaded', function () {
       const orderSummary = document.getElementById('order-summary');
       const cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -274,7 +275,8 @@
             return;
           }
           // Abre o WhatsApp com a mensagem pré-preenchida (substitua pelo número correto da loja)
-          const phoneNumber = '5511999999999';
+          // Número de WhatsApp da loja atualizado para o DDD 48. Certifique-se de manter apenas dígitos.
+          const phoneNumber = '554899143649';
           const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
           window.open(waUrl, '_blank');
           // Exibe mensagem de sucesso na página
