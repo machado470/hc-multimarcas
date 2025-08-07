@@ -45,9 +45,28 @@
                     <label for="email" class="block text-sm font-semibold mb-2">E-mail</label>
                     <input id="email" type="email" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="exemplo@dominio.com">
                 </div>
-                <div class="md:col-span-2">
-                    <label for="endereco" class="block text-sm font-semibold mb-2">Endereço de Entrega</label>
-                    <input id="endereco" type="text" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Rua, número, bairro, cidade e UF">
+                <!-- Campos de endereço detalhados (serão preenchidos via CEP) -->
+                <div id="address-fields" class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
+                    <div>
+                        <label for="rua" class="block text-sm font-semibold mb-2">Rua</label>
+                        <input id="rua" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Logradouro">
+                    </div>
+                    <div>
+                        <label for="numero" class="block text-sm font-semibold mb-2">Número</label>
+                        <input id="numero" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Número">
+                    </div>
+                    <div>
+                        <label for="bairro" class="block text-sm font-semibold mb-2">Bairro</label>
+                        <input id="bairro" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Bairro">
+                    </div>
+                    <div>
+                        <label for="cidade" class="block text-sm font-semibold mb-2">Cidade</label>
+                        <input id="cidade" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Cidade">
+                    </div>
+                    <div>
+                        <label for="estado" class="block text-sm font-semibold mb-2">Estado</label>
+                        <input id="estado" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="UF">
+                    </div>
                 </div>
                 <div class="md:col-span-2">
                     <label for="pagamento" class="block text-sm font-semibold mb-2">Forma de Pagamento</label>
@@ -261,6 +280,30 @@
       const currentTotal = parseFloat(totalText) || 0;
       const newTotal = currentTotal + shippingCost;
       orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+
+      // Busca dados de endereço a partir do CEP usando a API ViaCEP.
+      // Sempre exibe os campos de endereço logo após o cálculo para permitir preenchimento manual
+      const addressFields = document.getElementById('address-fields');
+      if (addressFields) {
+        // Mostra campos imediatamente para que o usuário possa informar dados mesmo se a API falhar
+        addressFields.classList.remove('hidden');
+        // Tenta preencher automaticamente usando ViaCEP
+        fetch(`https://viacep.com.br/ws/${cepClean}/json/`)
+          .then(response => response.json())
+          .then(data => {
+            if (data && !data.erro) {
+              document.getElementById('rua').value = data.logradouro || '';
+              document.getElementById('bairro').value = data.bairro || '';
+              document.getElementById('cidade').value = data.localidade || '';
+              document.getElementById('estado').value = data.uf || '';
+            } else {
+              alert('CEP não encontrado. Preencha o endereço manualmente.');
+            }
+          })
+          .catch(() => {
+            // Se houver erro, mantém os campos vazios para preenchimento manual
+          });
+      }
     }
     </script>
 </body>
