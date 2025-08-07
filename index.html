@@ -192,11 +192,19 @@
     }
     
     .product-card {
+        /*
+         * Tarjeta de produto com visual leve e moderno. Removemos o
+         * overflow: hidden para que o conteúdo interno (como botões) não
+         * seja cortado quando exibido em layout horizontal. O cartão
+         * possui um gradiente suave com borda sutil e transição para
+         * animação de hover.
+         */
         background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
         border: 1px solid rgba(0, 0, 0, 0.05);
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
-        overflow: hidden;
+        /* permitir que o conteúdo se expanda além do contêiner */
+        overflow: visible;
     }
     
     .product-card::before {
@@ -273,7 +281,8 @@
     
     .notification {
         position: fixed;
-        top: 20px;
+        /* posicionado mais abaixo para não sobrepor os ícones do topo */
+        top: 80px;
         right: 20px;
         background: linear-gradient(135deg, #10B981, #059669);
         color: white;
@@ -283,6 +292,8 @@
         transform: translateX(400px);
         transition: transform 0.3s ease;
         z-index: 9999;
+        /* impede que a notificação bloqueie cliques em elementos abaixo */
+        pointer-events: none;
     }
     
     .notification.show {
@@ -847,59 +858,43 @@
 <div id="cart-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
     <div class="flex items-center justify-center min-h-screen p-4">
         <!--
-          Estruturamos o modal do carrinho em uma coluna flexível para que o cabeçalho,
-          a lista de produtos e a seção de total ocupem corretamente o espaço
-          disponível. A lista de produtos usa flex-1 e overflow-y-auto, permitindo
-          rolagem sem esconder o botão de finalizar.
+          Estruturamos o modal do carrinho em duas colunas em telas maiores: a
+          listagem de produtos fica à esquerda e a seção de total e finalização
+          fica à direita. Em telas menores, o layout se adapta empilhando
+          verticalmente para preservar a usabilidade.
         -->
-        <!-- Removido overflow-hidden do contêiner do carrinho para que a seção de finalização fique visível quando muitos itens forem adicionados. O max-h controla a altura total e o conteúdo interno gerencia seu próprio overflow. -->
-        <div class="bg-white rounded-2xl max-w-md w-full max-h-[90vh] shadow-2xl animate-scale-in flex flex-col">
-            <!-- Estrutura interna do carrinho: removemos h-full e flex-1 para que a lista de itens tenha altura limitada
-                 com rolagem e a seção de total e botões fique sempre visível abaixo. -->
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <!-- Título do carrinho com cor adaptada -->
-                    <h3 class="text-xl font-bold text-yellow-700">Carrinho de Compras</h3>
-                    <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-2xl">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] shadow-2xl animate-scale-in flex flex-col">
+            <!-- Cabeçalho do carrinho -->
+            <div class="p-6 flex justify-between items-center border-b">
+                <h3 class="text-xl font-bold text-yellow-700">Carrinho de Compras</h3>
+                <button id="close-cart" class="text-gray-500 hover:text-gray-700 text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <!-- Conteúdo do carrinho: lista de itens e total/finalização -->
+            <div class="p-6 flex-1 flex flex-col md:flex-row md:space-x-6 overflow-hidden">
+                <!-- Lista de itens com rolagem -->
+                <div id="cart-items" class="space-y-4 overflow-y-auto pr-2 max-h-[65vh] flex-1">
+                    <!-- Itens serão inseridos aqui -->
                 </div>
-                
-                <!-- Aumentamos a altura máxima da lista de itens para permitir mais produtos visíveis sem cortar o conteúdo -->
-                <!--
-                  Ajustamos a altura máxima da lista de itens do carrinho para ocupar uma
-                  área maior da tela. Em alguns casos, quando muitos produtos eram
-                  adicionados, a lista ficava muito pequena e não permitia rolar todo o
-                  conteúdo, dando a impressão de que produtos estavam faltando. Com o
-                  max-h aumentado para 65vh e overflow automático, todo o conteúdo ficará
-                  visível, com scroll interno se necessário.
-                -->
-                <!-- Lista de itens do carrinho. Definimos uma altura máxima e margem inferior para separar
-                     a lista da seção de total. O conteúdo pode rolar quando necessário. -->
-<div id="cart-items" class="space-y-4 overflow-y-auto pr-1 max-h-[65vh] mb-6">
-                    <!-- Cart items will be loaded here -->
-                </div>
-                
-                <div class="border-t pt-6 mt-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <span class="text-lg font-semibold">Total:</span>
-                        <span id="cart-total" class="text-2xl font-bold text-primary">R$ 0,00</span>
+                <!-- Seção de total e botões -->
+                <div class="mt-6 md:mt-0 md:w-80 flex-shrink-0 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-6">
+                            <span class="text-lg font-semibold">Total:</span>
+                            <span id="cart-total" class="text-2xl font-bold text-primary">R$ 0,00</span>
+                        </div>
                     </div>
-                    
-                    <button id="whatsapp-cart" class="w-full bg-green-500 text-white py-3 px-6 rounded-full hover:bg-green-600 transition-all font-semibold text-lg">
-                        <i class="fab fa-whatsapp mr-2"></i>
-                        Finalizar no WhatsApp
-                    </button>
-                    <!--
-                      Caso você deseje um fluxo de pagamento próprio em vez de finalizar pelo
-                      WhatsApp, adicionamos um segundo botão que direciona para uma página de
-                      checkout. Crie um arquivo `pagamento.html` com o formulário de
-                      pagamento desejado e vincule-o ao backend de pagamentos de sua escolha.
-                    -->
-                    <a href="pagamento.html" class="mt-4 block w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-full hover:bg-yellow-600 transition-all font-semibold text-lg text-center">
-                        <i class="fas fa-credit-card mr-2"></i>
-                        Pagar Agora
-                    </a>
+                    <div class="mt-auto">
+                        <button id="whatsapp-cart" class="w-full bg-green-500 text-white py-3 px-6 rounded-full hover:bg-green-600 transition-all font-semibold text-lg">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            Finalizar no WhatsApp
+                        </button>
+                        <a href="pagamento.html" class="mt-4 block w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-full hover:bg-yellow-600 transition-all font-semibold text-lg text-center">
+                            <i class="fas fa-credit-card mr-2"></i>
+                            Pagar Agora
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -952,7 +947,8 @@
 
 <script>
     // Enhanced products data
-    const productsData = [
+    // Usamos let em vez de const para permitir que o array receba mais produtos dinamicamente.
+    let productsData = [
         {
             id: 1,
             nome: "Camiseta Premium Masculina",
@@ -1063,6 +1059,163 @@
             novo: true
         }
     ];
+
+    /*
+     * Para oferecer um catálogo mais amplo conforme solicitado, adicionamos
+     * dinamicamente diversos produtos extras para cada categoria. Em vez de
+     * escrever dezenas de objetos manualmente, definimos listas de nomes e
+     * geramos os produtos via JavaScript. Cada produto recebe uma cor de
+     * categoria em seu ícone, tamanhos e cores genéricas e preços variados
+     * baseados no índice. Isso mantém o código enxuto e facilita futuras
+     * adições.
+     */
+    (function() {
+        const extraNames = {
+            masculino: [
+                "Camisa Casual Masculina",
+                "Camisa Polo Masculina",
+                "Jaqueta Jeans Masculina",
+                "Jaqueta Moletom Masculina",
+                "Calça Social Masculina",
+                "Suéter Masculino",
+                "Terno Masculino",
+                "Bermuda Masculina",
+                "Jaqueta Corta-Vento Masculina",
+                "Camiseta Regata Masculina",
+                "Camiseta Básica Masculina",
+                "Short de Moletom Masculino",
+                "Camisa Manga Longa Masculina",
+                "Camisa de Time Masculina",
+                "Jaqueta de Couro Masculina",
+                "Moletom com Capuz Masculino",
+                "Calça Jogger Masculina",
+                "Camisa Social Slim Masculina"
+            ,
+                // adições extras para completar cerca de 20 itens por categoria
+                "Camisa Henley Masculina",
+                "Camiseta Oversized Masculina"
+            ],
+            feminino: [
+                "Blusa Casual Feminina",
+                "Saia Jeans Feminina",
+                "Vestido Casual Feminino",
+                "Calça Legging Feminina",
+                "Jaqueta Jeans Feminina",
+                "Saia Plissada Feminina",
+                "Macacão Feminino",
+                "Vestido Midi Feminino",
+                "Vestido Longo Feminino",
+                "Blusa de Tricô Feminina",
+                "Blazer Feminino",
+                "Calça Flare Feminina",
+                "Saia de Couro Feminina",
+                "Vestido de Festa Feminino",
+                "Conjunto Feminino",
+                "Top Cropped Feminino",
+                "Vestido Tubinho Feminino",
+                "Camiseta Feminina"
+            ,
+                // adições extras para completar cerca de 20 itens por categoria
+                "Macacão Pantacourt Feminino",
+                "Saída de Praia Feminina"
+            ],
+            infantil: [
+                "Macacão Infantil",
+                "Vestido Infantil",
+                "Camiseta Infantil",
+                "Calça Infantil",
+                "Shorts Infantil",
+                "Saia Infantil",
+                "Jaqueta Infantil",
+                "Moletom Infantil",
+                "Casaco Infantil",
+                "Blusa Infantil",
+                "Body Infantil",
+                "Pijama Infantil",
+                "Conjunto Verão Infantil",
+                "Vestido de Festa Infantil",
+                "Camiseta Personagens Infantil",
+                "Calça Jogger Infantil",
+                "Legging Infantil",
+                "Colete Infantil",
+                "Conjunto Escolar Infantil"
+            ,
+                // adições extras para completar cerca de 20 itens por categoria
+                "Camisa Polo Infantil",
+                "Jardineira Infantil"
+            ],
+            acessorios: [
+                "Relógio de Pulso",
+                "Óculos de Sol",
+                "Pulseira Fashion",
+                "Brinco Feminino",
+                "Colar Masculino",
+                "Boné Estiloso",
+                "Chapéu de Palha",
+                "Mochila Casual",
+                "Carteira Masculina",
+                "Cinto de Couro",
+                "Meias Divertidas",
+                "Gravata Clássica",
+                "Lenço de Seda",
+                "Anel Elegante",
+                "Echarpe Feminina",
+                "Tiara Infantil",
+                "Bolsa Tote",
+                "Luvas de Inverno",
+                "Chaveiro Criativo"
+            ,
+                // adições extras para completar cerca de 20 itens por categoria
+                "Bolsa Clutch",
+                "Óculos Infantil"
+            ]
+        };
+        const colorMap = {
+            masculino: '%234F46E5',
+            feminino: '%23EC4899',
+            infantil: '%2310B981',
+            acessorios: '%238B5CF6'
+        };
+        // Função para gerar preço variado
+        function computePrice(idx) {
+            return (39.90 + (idx * 7) % 50).toFixed(2);
+        }
+        Object.keys(extraNames).forEach(cat => {
+            extraNames[cat].forEach((nome, idx) => {
+                const color = colorMap[cat];
+                const img = `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='${color}'/></svg>`;
+                const precoStr = computePrice(idx);
+                const preco = parseFloat(precoStr);
+                const precoAntigo = parseFloat((preco + 20).toFixed(2));
+                let tamanhos;
+                let cores;
+                if (cat === 'infantil') {
+                    tamanhos = ["2","4","6","8","10"];
+                    cores = ["Amarelo","Verde","Rosa","Azul"];
+                } else if (cat === 'acessorios') {
+                    tamanhos = ["Único"];
+                    cores = ["Preto","Marrom","Dourado","Prata"];
+                } else {
+                    tamanhos = ["P","M","G","GG"];
+                    cores = ["Branco","Preto","Cinza","Azul"];
+                }
+                productsData.push({
+                    id: productsData.length + 1,
+                    nome: nome,
+                    preco: preco,
+                    precoAntigo: precoAntigo,
+                    categoria: cat,
+                    imagem: img,
+                    imagens: [img],
+                    descricao: `${nome} de alta qualidade, parte da nossa coleção.`,
+                    tamanhos: tamanhos,
+                    cores: cores,
+                    destaque: false,
+                    novo: false
+                });
+            });
+        });
+    })();
 
     // Enhanced cart functionality
 
@@ -1317,19 +1470,23 @@
                     ${product.novo ? '<div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">NOVO</div>' : ''}
                     ${product.precoAntigo ? '<div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">OFERTA</div>' : ''}
                 </div>
-                <div class="p-6">
-                    <h3 class="text-lg font-bold text-yellow-700 mb-3">${product.nome}</h3>
-                    <div class="flex items-center space-x-2 mb-4">
-                        ${product.precoAntigo ? `<span class="text-gray-400 line-through text-sm">R$ ${product.precoAntigo.toFixed(2)}</span>` : ''}
-                        <span class="text-2xl font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
+                <div class="p-6 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
+                    <!-- Informações do produto -->
+                    <div class="md:flex-1">
+                        <h3 class="text-lg font-bold text-yellow-700 mb-2">${product.nome}</h3>
+                        <div class="flex items-center space-x-2">
+                            ${product.precoAntigo ? `<span class="text-gray-400 line-through text-sm">R$ ${product.precoAntigo.toFixed(2)}</span>` : ''}
+                            <span class="text-xl font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
+                        </div>
                     </div>
-                    <div class="flex space-x-2">
+                    <!-- Botões de ação empilhados -->
+                    <div class="flex flex-col space-y-2 md:ml-4 md:w-40">
                         <button onclick="addToCart(${product.id})" 
-                                class="flex-1 bg-gray-800 text-white py-3 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold">
+                                class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-shopping-cart mr-2"></i>Carrinho
                         </button>
                         <button onclick="showProductDetails(${product.id})" 
-                                class="flex-1 bg-yellow-500 text-gray-900 py-3 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold">
+                                class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-info-circle mr-2"></i>Detalhes
                         </button>
                     </div>
