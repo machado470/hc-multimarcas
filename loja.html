@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<!--
+  Este arquivo HTML implementa uma pequena loja de roupas com funcionalidades completas.
+  Funcionalidades principais:
+  1. Busca de produtos em tempo real com filtro pelo nome.
+  2. Adição de produtos ao carrinho e exibição do resumo com total.
+  3. Formulário de endereço que consulta o CEP na API ViaCEP para preencher rua, bairro, cidade e estado.
+     Caso o CEP não seja encontrado, uma mensagem amigável é exibida ao usuário.
+  4. Seleção de forma de pagamento com três opções: Dinheiro na entrega, Pix e Cartão na Máquina.
+     Ao escolher Pix, o QR Code (apenas uma imagem simulada) e a chave Pix são exibidos juntamente com um botão
+     para copiar a chave. Uma notificação confirma a cópia.
+  5. Cálculo simples de frete baseado no estado retornado pela consulta do CEP. São definidos valores
+     fixos de frete e prazo estimado de entrega por estado como exemplo.
+  6. Envio do pedido via WhatsApp: ao finalizar o pedido, uma mensagem pré-preenchida contendo o nome,
+     lista de produtos, endereço completo, forma de pagamento e total é enviada para um número de WhatsApp.
+     O número deve ser substituído pelo número real da loja.
+  7. Alertas visuais utilizando um sistema de toast para mensagens de sucesso e erro.
+  8. Layout responsivo para dispositivos móveis. O grid de produtos se adapta ao tamanho da tela.
+-->
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Loja de Roupas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Importa o Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Reset e base */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+    header {
+      background: #333;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 1rem;
+    }
+    /* Busca de produtos */
+    .search {
+      margin: 1rem 0;
+      display: flex;
+    }
+    .search input {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
+    }
+    .search button {
+      padding: 0.5rem 1rem;
+      border: none;
+      background: #f0c23d;
+      color: #333;
+      border-radius: 0 4px 4px 0;
+      cursor: pointer;
+    }
+    /* Grid de produtos */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .product {
+      background: #fff;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .product img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+    .product h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    .product p {
+      margin: 0.25rem 0;
+    }
+    .product button {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .product button:hover {
+      background: #45a049;
+    }
+    /* Resumo do carrinho */
+    .summary {
+      margin-top: 2rem;
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #eee;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    /* Formulário de endereço e pagamento */
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    form .full {
+      grid-column: span 2;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    /* Botão para copiar chave Pix */
+    button.copy-btn {
+      margin-top: 0.5rem;
+      display: inline-block;
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    /* Seção Pix (inicialmente oculta) */
+    #pix-section {
+      display: none;
+      padding: 1rem;
+      border: 1px solid #eee;
+      background: #fdf6e3;
+      border-radius: 8px;
+      margin-top: 1rem;
+    }
+    /* Toast para mensagens */
+    .toast {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: #333;
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.5s;
+      z-index: 1000;
+    }
+    .toast.show {
+      opacity: 1;
+    }
+    @media (max-width: 600px) {
+      form {
+        grid-template-columns: 1fr;
+      }
+      .product h3 {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Loja de Roupas</h1>
+  </header>
+  <div class="container">
+    <!-- Barra de busca de produtos -->
+    <div class="search">
+      <input id="search-input" type="text" placeholder="Buscar produto..." oninput="searchProducts()">
+      <button onclick="searchProducts()">Buscar</button>
+    </div>
+    <!-- Lista dinâmica de produtos -->
+    <div id="product-list" class="products"></div>
+    <!-- Resumo do carrinho -->
+    <div id="cart-summary" class="summary">
+      <h2>Carrinho</h2>
+      <div id="cart-items"></div>
+      <p><strong>Total: R$ <span id="cart-total">0,00</span></strong></p>
+    </div>
+    <!-- Formulário de dados pessoais, endereço e pagamento -->
+    <form id="order-form" onsubmit="event.preventDefault(); finalizarPedido();">
+      <div class="full">
+        <h2>Dados do Cliente</h2>
+      </div>
+      <div class="full">
+        <label for="nome">Nome Completo *</label>
+        <input id="nome" required>
+      </div>
+      <div class="full">
+        <label for="email">E-mail *</label>
+        <input id="email" type="email" required>
+      </div>
+      <div class="full">
+        <h2>Endereço</h2>
+      </div>
+      <div class="full">
+        <label for="cep">CEP *</label>
+        <input id="cep" placeholder="01001-000" required>
+      </div>
+      <div>
+        <label for="rua">Rua *</label>
+        <input id="rua" required>
+      </div>
+      <div>
+        <label for="numero">Número *</label>
+        <input id="numero" required>
+      </div>
+      <div>
+        <label for="bairro">Bairro *</label>
+        <input id="bairro" required>
+      </div>
+      <div>
+        <label for="cidade">Cidade *</label>
+        <input id="cidade" required>
+      </div>
+      <div>
+        <label for="estado">Estado *</label>
+        <input id="estado" required>
+      </div>
+      <div>
+        <button type="button" onclick="calcularFrete()">Calcular Frete</button>
+      </div>
+      <!-- Informação do frete calculado -->
+      <div class="full" id="frete-info" style="display:none;">
+        <p>Frete: R$ <span id="frete-valor">0,00</span> - Prazo: <span id="frete-prazo">0</span> dias</p>
+      </div>
+      <div class="full">
+        <h2>Pagamento</h2>
+      </div>
+      <div class="full">
+        <label for="pagamento">Forma de Pagamento *</label>
+        <select id="pagamento" required onchange="updatePaymentFields()">
+          <option value="">Selecione</option>
+          <option value="dinheiro">Dinheiro na entrega</option>
+          <option value="pix">Pix</option>
+          <option value="cartao">Cartão na Máquina</option>
+        </select>
+      </div>
+      <!-- Seção Pix com QR e chave -->
+      <div class="full" id="pix-section">
+        <p><strong>QR Code:</strong></p>
+        <!-- Imagem de QR Code fictícia: substitua pela imagem real se desejar -->
+        <img id="pix-qr" src="https://via.placeholder.com/200" alt="QR Code Pix">
+        <p>Chave Pix: <span id="pix-key">12345678900</span></p>
+        <button type="button" class="copy-btn" onclick="copyPixKey()">Copiar Chave Pix</button>
+      </div>
+      <div class="full">
+        <button type="submit" style="margin-top:1rem; background:#f0c23d; color:#333; padding:0.75rem 1rem; border:none; border-radius:4px; cursor:pointer;">Finalizar Pedido</button>
+      </div>
+    </form>
+  </div>
+  <!-- Toast para mensagens -->
+  <div id="toast" class="toast"></div>
+  <script>
+    // Lista de produtos de exemplo. Cada produto possui id, nome e preço.
+    const products = [
+      { id: 1, nome: 'Camisa Polo Masculina', preco: 59.90 },
+      { id: 2, nome: 'Vestido Floral', preco: 89.90 },
+      { id: 3, nome: 'Calça Jeans', preco: 79.90 },
+      { id: 4, nome: 'Blusa Social Feminina', preco: 69.90 },
+      { id: 5, nome: 'Camiseta Básica', preco: 29.90 },
+      { id: 6, nome: 'Saia Midi', preco: 49.90 }
+    ];
+
+    // Carrinho de compras (array de objetos {id, nome, preco, qty})
+    let cart = [];
+
+    // Renderiza os produtos na página
+    function renderProducts(list) {
+      const container = document.getElementById('product-list');
+      container.innerHTML = '';
+      if (list.length === 0) {
+        container.innerHTML = '<p>Produto não encontrado.</p>';
+        return;
+      }
+      list.forEach(prod => {
+        const card = document.createElement('div');
+        card.className = 'product';
+        // Exibe imagem placeholder usando o nome do produto codificado na URL
+        card.innerHTML = `
+          <img src="https://via.placeholder.com/200?text=${encodeURIComponent(prod.nome)}" alt="${prod.nome}">
+          <h3>${prod.nome}</h3>
+          <p>R$ ${prod.preco.toFixed(2).replace('.', ',')}</p>
+          <button onclick="addToCart(${prod.id})">Adicionar</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Filtra produtos conforme pesquisa em tempo real
+    function searchProducts() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      const filtered = products.filter(p => p.nome.toLowerCase().includes(query));
+      renderProducts(filtered);
+    }
+
+    // Adiciona um produto ao carrinho
+    function addToCart(id) {
+      const prod = products.find(p => p.id === id);
+      if (!prod) return;
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ ...prod, qty: 1 });
+      }
+      updateCart();
+      showToast('Produto adicionado ao carrinho.');
+    }
+
+    // Atualiza o resumo do carrinho exibindo itens e total
+    function updateCart() {
+      const itemsContainer = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      itemsContainer.innerHTML = '';
+      let total = 0;
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p>Carrinho vazio.</p>';
+      } else {
+        cart.forEach(item => {
+          const row = document.createElement('div');
+          row.style.display = 'flex';
+          row.style.justifyContent = 'space-between';
+          row.style.marginBottom = '0.5rem';
+          total += item.preco * item.qty;
+          row.innerHTML = `${item.nome} (x${item.qty}) - R$ ${(item.preco * item.qty).toFixed(2).replace('.', ',')}`;
+          itemsContainer.appendChild(row);
+        });
+      }
+      totalEl.textContent = total.toFixed(2).replace('.', ',');
+    }
+
+    // Consulta o CEP usando a API ViaCEP e preenche os campos de endereço
+    function calcularFrete() {
+      const cep = document.getElementById('cep').value.replace(/[^0-9]/g, '');
+      if (!cep || cep.length !== 8) {
+        showToast('Informe um CEP válido.');
+        return;
+      }
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(resp => resp.json())
+        .then(data => {
+          if (data.erro) {
+            showToast('CEP não encontrado.');
+            return;
+          }
+          // Preenchimento dos campos de endereço
+          document.getElementById('rua').value = data.logradouro || '';
+          document.getElementById('bairro').value = data.bairro || '';
+          document.getElementById('cidade').value = data.localidade || '';
+          document.getElementById('estado').value = data.uf || '';
+          // Calcula frete e prazo conforme o estado (valores fictícios)
+          const custos = { 'SP': 10, 'RJ': 15, 'MG': 15, 'ES': 15 };
+          const prazos = { 'SP': 2, 'RJ': 3, 'MG': 3, 'ES': 3 };
+          const uf = data.uf;
+          const valor = custos[uf] !== undefined ? custos[uf] : 25;
+          const prazo = prazos[uf] !== undefined ? prazos[uf] : 5;
+          document.getElementById('frete-valor').textContent = valor.toFixed(2).replace('.', ',');
+          document.getElementById('frete-prazo').textContent = prazo;
+          document.getElementById('frete-info').style.display = 'block';
+          showToast('Frete calculado.');
+        })
+        .catch(() => {
+          showToast('Erro ao consultar CEP.');
+        });
+    }
+
+    // Exibe ou oculta a seção Pix conforme seleção de forma de pagamento
+    function updatePaymentFields() {
+      const payment = document.getElementById('pagamento').value;
+      const pixSection = document.getElementById('pix-section');
+      if (payment === 'pix') {
+        pixSection.style.display = 'block';
+      } else {
+        pixSection.style.display = 'none';
+      }
+    }
+
+    // Copia a chave Pix para a área de transferência
+    function copyPixKey() {
+      const key = document.getElementById('pix-key').textContent;
+      navigator.clipboard.writeText(key).then(() => {
+        showToast('Chave copiada!');
+      });
+    }
+
+    // Finaliza o pedido validando campos obrigatórios e abrindo o WhatsApp
+    function finalizarPedido() {
+      if (cart.length === 0) {
+        showToast('Seu carrinho está vazio.');
+        return;
+      }
+      const nome = document.getElementById('nome').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const rua = document.getElementById('rua').value.trim();
+      const numero = document.getElementById('numero').value.trim();
+      const bairro = document.getElementById('bairro').value.trim();
+      const cidade = document.getElementById('cidade').value.trim();
+      const estado = document.getElementById('estado').value.trim();
+      const pagamento = document.getElementById('pagamento').value;
+      // Verifica se todos os campos obrigatórios foram preenchidos
+      if (!nome || !email || !rua || !numero || !bairro || !cidade || !estado || !pagamento) {
+        showToast('Preencha todos os campos obrigatórios.');
+        return;
+      }
+      // Monta a mensagem do pedido
+      let mensagem = `Olá! Meu nome é ${nome}. Quero fazer um pedido:\n\nProdutos:\n`;
+      let total = 0;
+      cart.forEach(item => {
+        mensagem += `- ${item.nome} (x${item.qty}) - R$ ${(item.preco * item.qty).toFixed(2).replace('.', ',')}\n`;
+        total += item.preco * item.qty;
+      });
+      mensagem += `\nEndereço:\n${rua}, ${numero} - ${bairro} - ${cidade}/${estado}\n`;
+      mensagem += `\nForma de pagamento: ${pagamento}\n`;
+      mensagem += `\nValor total: R$ ${total.toFixed(2).replace('.', ',')}\n`;
+      mensagem += '\nObrigado!';
+      // Número de WhatsApp da loja (substitua pelo seu número com DDI e DDD)
+      const numeroWhatsApp = '5511999999999';
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+      // Abre o WhatsApp em nova aba
+      window.open(url, '_blank');
+      showToast('Pedido enviado via WhatsApp!');
+    }
+
+    // Exibe um toast de notificação com a mensagem fornecida
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Inicializa a página renderizando os produtos e o carrinho vazio
+    renderProducts(products);
+    updateCart();
+  </script>
+</body>
+</html>
