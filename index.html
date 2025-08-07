@@ -478,7 +478,8 @@
             <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Encontre o que você procura</p>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- Ajuste de colunas: em telas pequenas mostra 2 colunas para melhor distribuição -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <div class="category-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up">
                 <div class="h-56 bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center relative overflow-hidden">
                     <div class="absolute inset-0 bg-black/10"></div>
@@ -571,7 +572,7 @@
             <p class="text-xl text-gray-600 animate-slide-up" style="animation-delay: 0.1s;">Os mais vendidos da semana</p>
         </div>
         
-        <div id="featured-products" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+<div id="featured-products" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             <!-- Products will be loaded here -->
         </div>
         
@@ -1212,10 +1213,92 @@
                     cores: cores,
                     destaque: false,
                     novo: false
+                    // likes serão armazenados em localStorage. Quando um novo produto é criado, inicia com 0 likes.
                 });
             });
         });
     })();
+
+    // ===============================
+    // Funções de likes e categoria atual
+    // Mantemos o controle da categoria atualmente exibida para atualizar a lista quando o usuário curtir um item.
+    let currentCategory = 'trending';
+
+    /**
+     * Obtém o objeto de likes do localStorage. Caso não exista, retorna objeto vazio.
+     * @returns {Object} Objeto com contagem de likes por ID de produto.
+     */
+    function getLikes() {
+        try {
+            return JSON.parse(localStorage.getItem('productLikes')) || {};
+        } catch (e) {
+            return {};
+        }
+    }
+
+    /**
+     * Salva o objeto de likes no localStorage.
+     * @param {Object} likes Objeto de likes a ser salvo.
+     */
+    function setLikes(likes) {
+        localStorage.setItem('productLikes', JSON.stringify(likes));
+    }
+
+    /**
+     * Incrementa o número de likes de um produto e atualiza a visualização.
+     * Ao curtir um produto, a lista de produtos em destaque é recarregada se a categoria atual for "trending".
+     * @param {number} productId ID do produto curtido.
+     */
+    function toggleLike(productId) {
+        const likes = getLikes();
+        likes[productId] = (likes[productId] || 0) + 1;
+        setLikes(likes);
+        const countEl = document.getElementById('likes-' + productId);
+        if (countEl) {
+            countEl.textContent = likes[productId];
+        }
+        showNotification('Obrigado pelo seu feedback!');
+        // Se estivermos na lista de produtos em destaque, recarregue para refletir a nova ordem
+        if (currentCategory === 'trending') {
+            loadFeaturedProducts('trending');
+        }
+    }
+
+    /**
+     * Carrega comentários de um produto e renderiza na modal de detalhes.
+     * @param {number} productId ID do produto.
+     */
+    function loadComments(productId) {
+        const commentsEl = document.getElementById('comments-list');
+        if (!commentsEl) return;
+        const stored = JSON.parse(localStorage.getItem('comments_' + productId)) || [];
+        commentsEl.innerHTML = stored.map(c => {
+            return `<div class="border rounded-lg p-3 bg-gray-50"><p class="font-semibold text-gray-800 mb-1">${c.name}</p><p class="text-gray-700 text-sm">${c.comment}</p></div>`;
+        }).join('') || '<p class="text-gray-500 text-sm">Seja o primeiro a comentar.</p>';
+    }
+
+    /**
+     * Adiciona um novo comentário ao produto e atualiza a lista.
+     * @param {number} productId ID do produto.
+     */
+    function addComment(productId) {
+        const nameInput = document.getElementById('comment-name');
+        const textInput = document.getElementById('comment-text');
+        const name = nameInput.value.trim();
+        const comment = textInput.value.trim();
+        if (!name || !comment) {
+            showNotification('Preencha seu nome e comentário.');
+            return;
+        }
+        const key = 'comments_' + productId;
+        const comments = JSON.parse(localStorage.getItem(key)) || [];
+        comments.push({ name, comment });
+        localStorage.setItem(key, JSON.stringify(comments));
+        nameInput.value = '';
+        textInput.value = '';
+        loadComments(productId);
+        showNotification('Comentário adicionado!');
+    }
 
     // Enhanced cart functionality
 
@@ -1398,6 +1481,17 @@
                     ${product.cores ? `<p class="text-sm text-gray-600 mb-2"><strong>Cores:</strong> ${product.cores.join(', ')}</p>` : ''}
                 </div>
             </div>
+            <div class="mt-6">
+                <h4 class="text-lg font-bold text-gray-900 mb-2">Comentários</h4>
+                <div id="comments-list" class="space-y-3 mb-4"></div>
+                <div class="space-y-3">
+                    <input id="comment-name" type="text" placeholder="Seu nome" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-yellow-500">
+                    <textarea id="comment-text" placeholder="Seu comentário" class="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                    <button type="button" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold" onclick="addComment(${product.id})">
+                        <i class="fas fa-comment-dots mr-2"></i>Enviar Comentário
+                    </button>
+                </div>
+            </div>
         `;
         // Configura botão de adicionar ao carrinho para adicionar este produto
         const addBtn = document.getElementById('product-add-to-cart');
@@ -1443,6 +1537,9 @@
         }, 50);
         // Exibe o modal
         document.getElementById('product-modal').classList.remove('hidden');
+
+        // Carrega comentários para este produto
+        loadComments(product.id);
     }
 
     /**
@@ -1451,42 +1548,61 @@
      */
     function loadFeaturedProducts(category = null) {
         const container = document.getElementById('featured-products');
+        // se nenhum parâmetro for fornecido, considere como lista de produtos mais procurados (trending)
+        if (category === null) {
+            category = 'trending';
+        }
+        currentCategory = category;
         let products;
-        if (category) {
-            // Mostra todos os produtos da categoria selecionada
+        // Obtém contagem de likes para ordenar produtos populares
+        const likesData = getLikes();
+        if (category === 'trending') {
+            // ordena produtos pela quantidade de likes (maior primeiro) e seleciona os mais procurados
+            products = [...productsData].sort((a, b) => {
+                const la = likesData[a.id] || 0;
+                const lb = likesData[b.id] || 0;
+                if (la === lb) {
+                    return a.id - b.id;
+                }
+                return lb - la;
+            }).slice(0, 8);
+        } else if (category) {
+            // Filtra produtos por categoria
             products = productsData.filter(p => p.categoria === category);
         } else {
-            // Exibe todos os produtos; você pode limitar a visualização ajustando este array
+            // fallback: mostra todos os produtos
             products = productsData;
         }
         // Renderiza os cards de produto
         container.innerHTML = products.map((product, index) => {
-            // Usa a primeira imagem da galeria se existir, caso contrário usa a imagem padrão
             const imgSrc = (product.imagens && product.imagens.length ? product.imagens[0] : product.imagem);
+            const likesCount = likesData[product.id] || 0;
             return `
-            <div class="product-card rounded-2xl shadow-lg overflow-hidden card-hover animate-slide-up" style="animation-delay: ${index * 0.1}s;">
+            <div class="product-card rounded-2xl shadow-lg card-hover animate-slide-up" style="animation-delay: ${index * 0.05}s;">
                 <div class="relative">
-                    <img src="${imgSrc}" alt="${product.nome}" loading="lazy" class="w-full h-56 object-cover">
+                    <img src="${imgSrc}" alt="${product.nome}" loading="lazy" class="w-full h-56 object-cover rounded-t-2xl">
                     ${product.novo ? '<div class="absolute top-3 left-3 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-bold">NOVO</div>' : ''}
                     ${product.precoAntigo ? '<div class="absolute top-3 right-3 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">OFERTA</div>' : ''}
                 </div>
-                <div class="p-6 flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
-                    <!-- Informações do produto -->
-                    <div class="md:flex-1">
-                        <h3 class="text-lg font-bold text-yellow-700 mb-2">${product.nome}</h3>
-                        <div class="flex items-center space-x-2">
+                <div class="p-4 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-yellow-700 mb-1 truncate" title="${product.nome}">${product.nome}</h3>
+                        <div class="flex items-center space-x-2 mb-2">
                             ${product.precoAntigo ? `<span class="text-gray-400 line-through text-sm">R$ ${product.precoAntigo.toFixed(2)}</span>` : ''}
-                            <span class="text-xl font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
+                            <span class="text-lg font-bold text-primary">R$ ${product.preco.toFixed(2)}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button onclick="toggleLike(${product.id})" class="focus:outline-none">
+                                <i class="fas fa-heart ${likesCount > 0 ? 'text-red-500' : 'text-gray-400'}"></i>
+                            </button>
+                            <span id="likes-${product.id}" class="text-sm text-gray-600">${likesCount}</span>
                         </div>
                     </div>
-                    <!-- Botões de ação empilhados -->
-                    <div class="flex flex-col space-y-2 md:ml-4 md:w-40">
-                        <button onclick="addToCart(${product.id})" 
-                                class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold flex items-center justify-center">
+                    <div class="mt-4 flex flex-col md:flex-row items-center md:items-stretch space-y-2 md:space-y-0 md:space-x-2">
+                        <button onclick="addToCart(${product.id})" class="bg-gray-800 text-white py-2 px-4 rounded-lg hover:bg-gray-900 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-shopping-cart mr-2"></i>Carrinho
                         </button>
-                        <button onclick="showProductDetails(${product.id})" 
-                                class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
+                        <button onclick="showProductDetails(${product.id})" class="bg-yellow-500 text-gray-900 py-2 px-4 rounded-lg hover:bg-yellow-600 transition-all font-semibold flex items-center justify-center">
                             <i class="fas fa-info-circle mr-2"></i>Detalhes
                         </button>
                     </div>
@@ -1526,7 +1642,8 @@
     }, 1500);
 
         updateCartCount();
-        loadFeaturedProducts();
+        // Carrega inicialmente os produtos em destaque mais procurados
+        loadFeaturedProducts('trending');
 
         // Scroll events
         window.addEventListener('scroll', () => {

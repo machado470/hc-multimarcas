@@ -57,6 +57,18 @@
                         <option value="maquineta">Cartão na Maquineta</option>
                     </select>
                 </div>
+                <!-- Campo de CEP para cálculo de frete -->
+                <div class="md:col-span-2">
+                    <label for="cep" class="block text-sm font-semibold mb-2">CEP</label>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <input id="cep" type="text" required class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Digite seu CEP (ex.: 01001-000)">
+                        <button type="button" onclick="calcularFrete()" class="bg-yellow-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all font-semibold">Calcular Frete</button>
+                    </div>
+                </div>
+                <!-- Informação do frete calculado -->
+                <div id="frete-info" class="hidden md:col-span-2 bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p class="text-sm text-gray-700">Frete via Sedex: <span id="frete-valor" class="font-bold text-gray-900">R$ 0,00</span></p>
+                </div>
                 <!-- Campo de troco para pagamento em dinheiro -->
                 <div id="troco-container" class="hidden md:col-span-2">
                     <label for="troco" class="block text-sm font-semibold mb-2">Troco para</label>
@@ -150,7 +162,7 @@
           summaryHtml += `<li class="flex justify-between py-2"><span>${item.nome} (x${item.quantidade})</span><span>R$ ${itemTotal.toFixed(2).replace('.', ',')}</span></li>`;
         });
         summaryHtml += '</ul>';
-        summaryHtml += `<div class="flex justify-between font-bold text-lg pt-4"><span>Total</span><span>R$ ${total.toFixed(2).replace('.', ',')}</span></div>`;
+        summaryHtml += `<div class="flex justify-between font-bold text-lg pt-4"><span>Total</span><span id="order-total">R$ ${total.toFixed(2).replace('.', ',')}</span></div>`;
       } else {
         summaryHtml += '<p class="text-gray-600">Seu carrinho está vazio.</p>';
       }
@@ -202,6 +214,54 @@
         });
       }
     });
+
+    /**
+     * Calcula o valor do frete com base no CEP informado. Este cálculo é apenas ilustrativo e não utiliza uma API real.
+     * Após o cálculo, exibe o valor do frete e atualiza o total do pedido.
+     */
+    function calcularFrete() {
+      const cepInput = document.getElementById('cep');
+      const freteInfo = document.getElementById('frete-info');
+      const freteValorSpan = document.getElementById('frete-valor');
+      const orderTotalEl = document.getElementById('order-total');
+      if (!cepInput || !freteInfo || !freteValorSpan || !orderTotalEl) return;
+      const cep = cepInput.value.trim();
+      if (!cep) {
+        alert('Informe seu CEP para calcular o frete.');
+        return;
+      }
+      // Validação simples de CEP (8 dígitos com ou sem hífen)
+      const cepClean = cep.replace(/[^0-9]/g, '');
+      if (cepClean.length !== 8) {
+        alert('CEP inválido. Informe 8 dígitos.');
+        return;
+      }
+      // Cálculo ilustrativo: define valor de frete baseado no primeiro dígito do CEP
+      let shippingCost = 0;
+      const firstDigit = cepClean.charAt(0);
+      switch (firstDigit) {
+        case '0': shippingCost = 14.90; break;
+        case '1': shippingCost = 16.90; break;
+        case '2': shippingCost = 18.90; break;
+        case '3': shippingCost = 20.90; break;
+        case '4': shippingCost = 22.90; break;
+        case '5': shippingCost = 19.90; break;
+        case '6': shippingCost = 24.90; break;
+        case '7': shippingCost = 26.90; break;
+        case '8': shippingCost = 28.90; break;
+        case '9': shippingCost = 29.90; break;
+        default: shippingCost = 25.90; break;
+      }
+      // Mostra o valor do frete
+      freteInfo.classList.remove('hidden');
+      freteValorSpan.textContent = 'R$ ' + shippingCost.toFixed(2).replace('.', ',');
+      // Atualiza o total do pedido somando o frete
+      // Extrai valor atual de total (remove caracteres não numéricos)
+      const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
+      const currentTotal = parseFloat(totalText) || 0;
+      const newTotal = currentTotal + shippingCost;
+      orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+    }
     </script>
 </body>
 </html>
