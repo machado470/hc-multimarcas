@@ -1,0 +1,8 @@
+{
+  "name": "hc-multimarcas",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "mercadopago": "^2.0.11"
+  }
+}

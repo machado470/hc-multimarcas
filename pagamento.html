@@ -1,448 +1,212 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagamento - HC Multimarcas</title>
-    <meta name="description" content="Página de pagamento da HC Multimarcas. Finalize sua compra com segurança e praticidade.">
-    <link rel="canonical" href="pagamento.html">
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pagamento - HC Multimarcas</title>
+  <meta name="description" content="Finalize sua compra com Pix ou Cartão.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root{ --y:#FFD700; --o:#FFA500; }
+    .btn-primary{ background: linear-gradient(135deg, var(--y), var(--o)); color:#111; border-radius: 14px; font-weight:600; padding:.875rem 1.25rem; display:inline-flex; gap:.5rem; align-items:center }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
-    <header class="bg-white shadow-md py-4 mb-8">
-        <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
-            <a href="index.html" class="text-2xl font-bold text-gray-800 flex items-center">
-                HC <span class="text-yellow-600 ml-1">Multimarcas</span>
-            </a>
-            <nav class="space-x-4">
-                <a href="index.html#inicio" class="text-sm text-gray-700 hover:text-yellow-600">Início</a>
-                <a href="index.html#categorias" class="text-sm text-gray-700 hover:text-yellow-600">Categorias</a>
-                <a href="index.html#ofertas" class="text-sm text-gray-700 hover:text-yellow-600">Ofertas</a>
-                <a href="index.html#contato" class="text-sm text-gray-700 hover:text-yellow-600">Contato</a>
-            </nav>
+  <header class="bg-white border-b">
+    <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="index.html" class="text-2xl font-extrabold">HC <span style="background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Multimarcas</span></a>
+      <nav class="hidden md:flex items-center gap-4 text-sm">
+        <a href="index.html#inicio" class="hover:text-yellow-600">Início</a>
+        <a href="index.html#categorias" class="hover:text-yellow-600">Catálogo</a>
+        <a href="index.html#ofertas" class="hover:text-yellow-600">Promoções</a>
+        <a href="index.html#contato" class="hover:text-yellow-600">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-yellow-700 mb-2">Finalizar Pagamento</h1>
+    <p class="text-gray-600 mb-6">Confira seu pedido e preencha os dados abaixo.</p>
+
+    <section class="bg-white rounded-2xl shadow p-6 mb-8">
+      <h2 class="text-xl font-semibold mb-4">Resumo do Pedido</h2>
+      <div id="order-summary" class="space-y-2 text-sm"></div>
+      <div class="flex items-center justify-between font-bold text-lg border-t pt-3 mt-3">
+        <span>Total</span><span id="order-total">R$ 0,00</span>
+      </div>
+    </section>
+
+    <form id="payment-form" class="bg-white rounded-2xl shadow p-6 space-y-4">
+      <div class="grid md:grid-cols-2 gap-4">
+        <input id="nome" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500" placeholder="Nome completo" required>
+        <input id="email" type="email" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500" placeholder="Email" required>
+        <input id="endereco" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500 md:col-span-2" placeholder="Endereço completo" required>
+        <div class="grid grid-cols-2 gap-3 md:col-span-2">
+          <input id="cidade" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500" placeholder="Cidade" required>
+          <input id="uf" maxlength="2" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500" placeholder="UF" required>
         </div>
-    </header>
-    <main class="max-w-5xl mx-auto px-4">
-        <h1 class="text-3xl font-bold text-yellow-700 mb-6">Finalizar Pagamento</h1>
-        <p class="mb-8 text-gray-600">Confira seu pedido e preencha os dados abaixo para concluir sua compra.</p>
-
-        <!-- Resumo do pedido será preenchido via JavaScript -->
-        <div id="order-summary" class="bg-white shadow-lg rounded-lg p-6 mb-12"></div>
-
-        <!-- Mensagem de sucesso -->
-        <div id="payment-success" class="hidden bg-green-100 border border-green-200 text-green-700 p-4 rounded-lg mb-6"></div>
-
-        <form id="payment-form" class="bg-white shadow-lg rounded-lg p-6 mb-12">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="nome" class="block text-sm font-semibold mb-2">Nome Completo</label>
-                    <input id="nome" type="text" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Seu nome">
-                </div>
-                <div>
-                    <label for="email" class="block text-sm font-semibold mb-2">E-mail</label>
-                    <input id="email" type="email" required class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="exemplo@dominio.com">
-                </div>
-                <!-- Campos de endereço detalhados (serão preenchidos via CEP) -->
-                <div id="address-fields" class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
-                    <div>
-                        <label for="rua" class="block text-sm font-semibold mb-2">Rua</label>
-                        <input id="rua" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Logradouro">
-                    </div>
-                    <div>
-                        <label for="numero" class="block text-sm font-semibold mb-2">Número</label>
-                        <input id="numero" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Número">
-                    </div>
-                    <div>
-                        <label for="bairro" class="block text-sm font-semibold mb-2">Bairro</label>
-                        <input id="bairro" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Bairro">
-                    </div>
-                    <div>
-                        <label for="cidade" class="block text-sm font-semibold mb-2">Cidade</label>
-                        <input id="cidade" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Cidade">
-                    </div>
-                    <div>
-                        <label for="estado" class="block text-sm font-semibold mb-2">Estado</label>
-                        <input id="estado" type="text" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="UF">
-                    </div>
-        <!-- Campo de distância em km, exibido apenas quando o destino está na mesma cidade da loja -->
-        <div id="distancia-container" class="hidden">
-            <label for="distancia" class="block text-sm font-semibold mb-2">Distância (km da loja)</label>
-            <input id="distancia" type="number" min="0" step="0.1" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="0">
+        <div class="grid grid-cols-3 gap-3 md:col-span-2">
+          <input id="cep2" class="border rounded-lg px-4 py-3 w-full focus:ring-2 focus:ring-yellow-500 col-span-2" placeholder="CEP" maxlength="9" required>
+          <button id="calc-frete" type="button" class="px-4 py-3 rounded-lg bg-gray-900 text-white">Calcular frete</button>
         </div>
-                </div>
-                <div class="md:col-span-2">
-                    <label for="pagamento" class="block text-sm font-semibold mb-2">Forma de Pagamento</label>
-                    <!-- Unicamente Pix como forma de pagamento -->
-                    <select id="pagamento" class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500">
-                        <option value="pix">Pix</option>
-                    </select>
-                </div>
-                <!-- Campo de CEP para cálculo de frete -->
-                <div class="md:col-span-2">
-                    <label for="cep" class="block text-sm font-semibold mb-2">CEP</label>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <input id="cep" type="text" required class="flex-1 border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Digite seu CEP (ex.: 01001-000)">
-                        <button type="button" onclick="calcularFrete()" class="bg-yellow-500 text-gray-900 px-6 py-3 rounded-lg hover:bg-yellow-600 transition-all font-semibold">Calcular Frete</button>
-                    </div>
-                </div>
-                <!-- Informação do frete calculado -->
-                <div id="frete-info" class="hidden md:col-span-2 bg-gray-50 border border-gray-200 rounded-lg p-4">
-                    <p class="text-sm text-gray-700">Frete: <span id="frete-valor" class="font-bold text-gray-900">R$ 0,00</span></p>
-                    <p class="text-sm text-gray-700 mt-1">Prazo estimado: <span id="prazo-entrega" class="font-bold text-gray-900">&nbsp;</span></p>
-                </div>
-                <!-- Campos de troco e parcelamento removidos pois a única forma de pagamento é Pix -->
+        <div id="frete-info" class="hidden md:col-span-2 text-sm text-gray-700">Frete: <span id="frete-val" class="font-semibold">R$ 0,00</span> • Prazo: <span id="frete-days" class="font-semibold">0 dia(s)</span></div>
+      </div>
 
-                <!-- Informações para pagamento via Pix -->
-                <div id="pix-info" class="hidden md:col-span-2 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                    <p class="text-sm text-gray-700 mb-2">Para pagar via Pix, utilize a chave abaixo ou escaneie o QR&nbsp;code:</p>
-                    <div class="flex justify-center my-2">
-                        <!-- QR code gerado manualmente para representar a chave Pix. Substitua pela imagem real conforme sua chave -->
-                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWCAYAAAB8P0///5X2JqYaAAAAA3NCSVQICAjb4U/gAAAG4UlEQVR4nO2dS5LbMAyF3Tdo3v//xoZlnlWjmAGs4+v3bDscCjjapNpLmvG9kkgkQBbJm9nzOvwa/uyWwFbzPcfDYZg6h/TJzc/Ozs9GOGd9wym/+/t2/7x6+0gZrPGEz3ywIAvT5KjcBvABAD79rhChA1hYGPyEd/w6vuz8kwC3mAAw3khC+CXf3Oimk6MaD8HS5MTrLSgUmsIYDbnAfM5/gvGcTKzRFoHpAx4PoK/EVcXqEefpfaJ4sJv8O6h3BOOvAtzAcEUiv20PeQmjRnQdwLbd4qPyEzj6Z5ComYAY6Jcbl6uNV9EM940U6drsiZbs/xxITwIAT9ANXogFfAAy8pjqS7DOiuxr1Dp+1dqlpC0SJfCNWA9F9EM9qgtDqpZ+WdMqAC2pUoFfILAbF2vdTJvc1/+Q4mAt1Z4kaWkBspcs8hYhJJk/ZWtIbLYXvAfzM0V8thUgPXcTdcjtl4uYGYTGVW0GpdnAR9HqsuijYWs8ztLM+zgYgzLcA8AETvRcHaa9iHfEV9VVGFePc133SrKvJHQqM6NP8rRVBVBB9gCs4n0nvkmETmcwZN3WOWexIPpGvjXUyWf9GWIrAfS4mVtH4bfsSwGnkH0rAjLdUBAVryXcAFNsnS5BqPt79+Q7jWIVVgY8l78P0SnAcY74A5X7RD4tPL7eMAWuWEs+e3ueA0w8p3Y4mA25h6+7TTLbPXkp8kR8LN1yvNHgHWvr1pZ99TgBWyVAvYpZtBwLN3Txjd788U3CxjAl3DOqffR3PEo2t5n6XI4Aic1IQyfcGWK7sB+m7tlhlX7JYGlce1Cc6Y7xkOktnMGvxBGcZPrZyvbVvMgtz+M1jhh2IFgFaI2QAVscRTfX4m7gf6wh7q0GsGzABs8LN1sP9y07d6rKXbiKQ4A7wAYWqBfE3jJvbBGmCdVw2VzC9yE6e9W+1SIHsmDl12KhB/Nsl5uX1+6sM3FaRU9EjrLRiwkOiUGkXYGkiPG4w9giKNCiGUeA/aAe9x5Ayoap4phR3aXskGfwRDzEFY9+6hAJ5l80eTtCGcvG5gM20akLZ0jX9deBXgV/I1Ve3/ZjAwRzCj14xThvwYmgVTZvG653XC7wscJ7OmeDXmxH+C7RKmYc/BAJnNczE503fQWkRdStFhJHeHkDOg9n7w474Z7kzFllL2yIc80nqkqdTxPa84M5C9KcrDSoXcGIwc5r13Sgzuq4ufjt1P0svswHsYVYAOXkaw7UxWLzrefyLyZ7t6moPJ4JkspZsowzAyF2HTT95cvp4Q2Ac/DUGnQ0WXc8LroENVWkCwGYh4kvv1cLUOVFdpeClkIGXPrG6tydMo5hbgxAv3yEwKOKZwN7Dcc19s2EQ1XwjHX9VyUHkMP+Hdmh1vtiw3hbapytMZL4CymJF/Ab4yRQO+jF4ljzjLBlVqCWfhFEa9i7mzlkgvbF408EJgPviM0mPw5Pm56ZKgP7vz8JfJp+gdt7aPk0/yGeMHTxINaVZYc7mJNb8Dy3h6KpP8Mg+vcnR71M9zWFFhMP4RnuTlKg6yL0wD8kcPYRGA1bsFUvCbA/ciwtFbpEV1Jl0wEcU8KZkznsh4czSbi+n3pzQyH0Z1qDV9jeH5lIDjL4kSdewaNqDdDxvJRfyuxzoh7izIE8niB/mkXd0B0hDHncN+ok4YrD5UbqSqEs+P/4r9G3X9Uv7IGywsUcytLxoTBHMiFAGDc9srPBXogk/AFAD3+y8GAjbVSSumiyzKAAAAAElFTkSuQmCC" alt="QR Code Pix" class="w-32 h-32">
-                    </div>
-                    <div class="text-center font-mono text-lg text-gray-900 mb-2">CNPJ 12.345.678/0001-99</div>
-                    
-<p class="text-xs text-gray-500 text-center">Após a transferência, entraremos em contato para confirmar o pagamento.</p>
-<div class="mt-4 text-center">
-    <button id="pix-share-btn" type="button" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 hidden">
-        <i class="fab fa-whatsapp mr-2"></i>Compartilhar Comprovante
-    </button>
-</div>
-                </div>
-            </div>
-            <div class="mt-8">
-                <button type="submit" class="w-full bg-yellow-500 text-gray-900 py-3 px-6 rounded-lg hover:bg-yellow-600 transition-all font-semibold text-lg flex items-center justify-center">
-                    <i class="fas fa-check-circle mr-2"></i>
-                    Confirmar Pedido
-                </button>
-            </div>
-        </form>
-        <p class="text-gray-500 text-sm text-center">Este é um ambiente de demonstração. Nenhuma transação real será processada.</p>
-    </main>
-
-    <!-- Botões flutuantes removidos -->
-    <footer class="bg-gray-900 text-gray-400 mt-16 py-8">
-        <div class="max-w-5xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-                <h3 class="text-yellow-500 font-bold mb-4">HC Multimarcas</h3>
-                <p class="text-sm">Moda para toda a família com qualidade, estilo e preços acessíveis. Sua satisfação é nossa prioridade.</p>
-                <div class="flex space-x-3 mt-4">
-                    <a href="https://wa.me/554899143649" class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600"><i class="fab fa-whatsapp"></i></a>
-                    <a href="https://instagram.com/hc_multimarcas0" class="w-8 h-8 bg-pink-500 text-white rounded-full flex items-center justify-center hover:bg-pink-600"><i class="fab fa-instagram"></i></a>
-                    <a href="https://facebook.com/hcmultimarcas" class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700"><i class="fab fa-facebook-f"></i></a>
-                </div>
-            </div>
-            <div>
-                <h3 class="text-yellow-500 font-bold mb-4">Links Rápidos</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="index.html#inicio" class="hover:text-yellow-500">Início</a></li>
-                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Catálogo</a></li>
-                    <li><a href="index.html#ofertas" class="hover:text-yellow-500">Ofertas</a></li>
-                    <li><a href="index.html#contato" class="hover:text-yellow-500">Contato</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-yellow-500 font-bold mb-4">Categorias</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Masculino</a></li>
-                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Feminino</a></li>
-                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Infantil</a></li>
-                    <li><a href="index.html#categorias" class="hover:text-yellow-500">Acessórios</a></li>
-                </ul>
-            </div>
-            <div>
-                <h3 class="text-yellow-500 font-bold mb-4">Contato</h3>
-                <ul class="space-y-2 text-sm">
-                    <li><i class="fas fa-map-marker-alt mr-2"></i>Rua Lauro Müller, 516 - Tijucas/SC</li>
-                    <li><i class="fas fa-phone mr-2"></i>(48) 9914-3649</li>
-                    <li><i class="fas fa-envelope mr-2"></i>contato@hcmultimarcas.com</li>
-                    <li><i class="fas fa-clock mr-2"></i>Seg-Sáb: 9h às 18h</li>
-                </ul>
-            </div>
+      <div class="rounded-xl border border-gray-200 p-4">
+        <p class="text-sm font-semibold mb-2">Pagamento</p>
+        <div class="flex gap-2 mb-3">
+          <button class="px-3 py-2 rounded-lg bg-gray-900 text-white" type="button" data-paytab="pix">Pix</button>
+          <button class="px-3 py-2 rounded-lg bg-gray-100" type="button" data-paytab="card">Cartão</button>
         </div>
-        <div class="text-center text-xs text-gray-500 mt-8">&copy; 2024 HC Multimarcas. Todos os direitos reservados. Criado por <a href="https://instagram.com/_grupoagilize" target="_blank" class="text-yellow-500 hover:underline">@_grupoagilize</a></div>
-    </footer>
+        <div id="pay-pix" class="space-y-2">
+          <p class="text-sm text-gray-600">Copia e Cola:</p>
+          <div class="flex gap-2">
+            <input id="pix-code" class="border rounded-lg px-3 py-2 flex-1" readonly>
+            <button id="copy-pix" type="button" class="px-4 py-2 rounded-lg bg-gray-900 text-white">Copiar</button>
+          </div>
+        </div>
+        <div id="pay-card" class="space-y-2 hidden">
+          <input id="card-number" class="border rounded-lg px-3 py-2 w-full" placeholder="Número do cartão">
+          <div class="grid grid-cols-2 gap-2">
+            <input id="card-exp" class="border rounded-lg px-3 py-2" placeholder="MM/AA" maxlength="5">
+            <input id="card-cvv" class="border rounded-lg px-3 py-2" placeholder="CVV" maxlength="4">
+          </div>
+          <input id="card-name" class="border rounded-lg px-3 py-2 w-full" placeholder="Nome impresso no cartão">
+          <button id="pay-card-btn" type="button" class="btn-primary justify-center w-full">Pagar com Cartão</button>
+        </div>
+      </div>
 
-    <!-- Script para resumo do pedido, controle de troco e confirmação de pedido -->
-    <script>
-    // Configurações da loja: defina a cidade e o estado de origem para cálculo de frete.
-    // Se a compra for para a mesma cidade, será considerada entrega local (taxa menor).
-    // Define a cidade e o estado da loja com base no novo endereço informado pelo usuário.
-    const storeCity = 'Tijucas';
-    const storeState = 'SC';
-    document.addEventListener('DOMContentLoaded', function () {
-      const orderSummary = document.getElementById('order-summary');
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let total = 0;
-      let summaryHtml = '<h2 class="text-xl font-bold mb-4 text-yellow-700">Resumo do Pedido</h2>';
-      if (cart.length > 0) {
-        summaryHtml += '<ul class="divide-y divide-gray-200">';
-        cart.forEach(item => {
-          const itemTotal = item.preco * item.quantidade;
-          total += itemTotal;
-          summaryHtml += `<li class="flex justify-between py-2"><span>${item.nome} (x${item.quantidade})</span><span>R$ ${itemTotal.toFixed(2).replace('.', ',')}</span></li>`;
-        });
-        summaryHtml += '</ul>';
-        summaryHtml += `<div class="flex justify-between font-bold text-lg pt-4"><span>Total</span><span id="order-total">R$ ${total.toFixed(2).replace('.', ',')}</span></div>`;
-      } else {
-        summaryHtml += '<p class="text-gray-600">Seu carrinho está vazio.</p>';
-      }
-      if (orderSummary) {
-        orderSummary.innerHTML = summaryHtml;
-      }
+      <div class="flex items-center justify-between">
+        <a id="whats-link" href="#" target="_blank" class="text-sm underline text-gray-600">Enviar resumo pelo WhatsApp</a>
+        <button id="finish" type="submit" class="btn-primary"><i class="fa-solid fa-check"></i> Confirmar Pedido</button>
+      </div>
+    </form>
 
-      const pagamentoSelect = document.getElementById('pagamento');
-      // Campos removidos (troco e parcelas) não são mais necessários
-      const pixInfoContainer = document.getElementById('pix-info');
-      const pixShareBtn = document.getElementById('pix-share-btn');
+    <p class="text-center text-xs text-gray-500 mt-6">Ambiente de demonstração — nenhuma transação real será processada.</p>
+  </main>
 
-      // A única forma de pagamento é Pix; sempre mostra o QR Code e botão de compartilhamento
-      function updatePaymentFields() {
-        if (pixInfoContainer) pixInfoContainer.classList.remove('hidden');
-        if (pixShareBtn) pixShareBtn.classList.remove('hidden');
-      }
+  <div id="toasts" class="fixed bottom-4 right-4 z-[60] space-y-2"></div>
 
-      // Função simplificada: como a única forma de pagamento é Pix, apenas garante que as informações
-      // de Pix sejam exibidas. O parâmetro isSedex é ignorado, mas mantido para compatibilidade.
-      function updatePaymentOptions(isSedex) {
-        updatePaymentFields();
-      }
-      if (pagamentoSelect) {
-        pagamentoSelect.addEventListener('change', updatePaymentFields);
-        updatePaymentFields();
-      if (pixShareBtn) {
-        pixShareBtn.addEventListener('click', function() {
-          const waMsg = 'Olá, realizei o pagamento via Pix. Segue comprovante de pagamento.';
-          const phoneNumber = '554899143649';
-          const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMsg)}`;
-          window.open(url, '_blank');
-        });
-      }
-      }
+  <script>
+    const byId = (id)=> document.getElementById(id);
+    const fmt = (n)=> n.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    const toast = (msg, type='info')=>{
+      const el = document.createElement('div');
+      el.className = 'bg-white border rounded-xl px-4 py-3 text-sm shadow-md ' + (type==='error'?'border-red-200':'border-gray-200');
+      el.textContent = msg;
+      byId('toasts').appendChild(el);
+      setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .2s'; setTimeout(()=>el.remove(), 220); }, 2400);
+    };
 
-      const form = document.getElementById('payment-form');
-      const successDiv = document.getElementById('payment-success');
-      if (form) {
-        form.addEventListener('submit', function(e) {
-          e.preventDefault();
-          // Validação básica dos campos obrigatórios antes de enviar
-          const requiredFields = ['nome','email','cep','rua','numero','bairro','cidade','estado'];
-          for (const field of requiredFields) {
-            const el = document.getElementById(field);
-            if (el && !el.value.trim()) {
-              alert('Por favor, preencha o campo ' + field + '.');
-              el.focus();
-              return;
-            }
-          }
-          // Gera mensagem de pedido para WhatsApp
-          const message = generatePaymentMessage();
-          if (!message) {
-            alert('Ocorreu um erro ao gerar a mensagem de pedido.');
-            return;
-          }
-          // Abre o WhatsApp com a mensagem pré-preenchida (substitua pelo número correto da loja)
-          // Número de WhatsApp da loja atualizado para o DDD 48. Certifique-se de manter apenas dígitos.
-          const phoneNumber = '554899143649';
-          const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-          window.open(waUrl, '_blank');
-          // Exibe mensagem de sucesso na página
-          successDiv.textContent = 'Pedido enviado com sucesso! Redirecionando para o WhatsApp...';
-          successDiv.classList.remove('hidden');
-          // Limpa o carrinho e oculta formulário
-          form.classList.add('hidden');
-          // Atualiza estoque
-try {
-  const inv = JSON.parse(localStorage.getItem('inventory')) || {};
-  const purchasedCart = JSON.parse(localStorage.getItem('cart')) || [];
-  purchasedCart.forEach(item => {
-    if (inv[item.id] !== undefined) {
-      inv[item.id] = Math.max(0, inv[item.id] - item.quantidade);
+    const order = JSON.parse(localStorage.getItem('order_info')||'{}');
+    const cart = order.items || JSON.parse(localStorage.getItem('cart')||'[]');
+    let shipping = order.shipping || {price:0, days:0, cep:''};
+
+    function renderSummary(){
+      const wrap = byId('order-summary');
+      if(!cart.length){ wrap.innerHTML = '<p class="text-gray-500">Seu carrinho está vazio.</p>'; }
+      else{
+        let html = '<ul class="divide-y">';
+        let subtotal = 0;
+        cart.forEach(i=>{ subtotal += i.preco * (i.qty||i.quantidade||1); html += `<li class="py-2 flex items-center justify-between"><span>${(i.qty||i.quantidade||1)}x ${i.nome}</span><span>${fmt(i.preco)}</span></li>`; });
+        html += '</ul>';
+        wrap.innerHTML = html;
+        const total = subtotal + (shipping.price||0);
+        byId('order-total').textContent = fmt(total);
+        byId('frete-val').textContent = fmt(shipping.price||0);
+        byId('frete-days').textContent = (shipping.days||0) + ' dia(s)';
+        byId('frete-info').classList.toggle('hidden', !(shipping.price));
+        updatePix(total);
+        updateWhats(total);
+      }
     }
-  });
-  localStorage.setItem('inventory', JSON.stringify(inv));
-} catch (e) {
-  console.error('Erro ao atualizar estoque', e);
-}
-          localStorage.removeItem('cart');
-        });
-      }
 
-      // Evento de recalcular frete ao alterar a distância (quando entrega local)
-      const distanciaInput = document.getElementById('distancia');
-      if (distanciaInput) {
-        distanciaInput.addEventListener('input', function() {
-          // Recalcula o frete somente se um CEP válido já foi calculado
-          const cepEl = document.getElementById('cep');
-          if (cepEl && cepEl.value.trim().length >= 8) {
-            calcularFrete();
-          }
-        });
-      }
+    function maskCEP(v){ v=v.replace(/\D/g,''); if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5,8); return v; }
+    function estimateShipping(cep){
+      const only = cep.replace(/\D/g,'');
+      if(only.length!==8) return null;
+      const d = parseInt(only[0]);
+      if(d<=1) return {price:24.9, days:2, cep};
+      if(d<=3) return {price:29.9, days:3, cep};
+      if(d<=6) return {price:34.9, days:5, cep};
+      return {price:44.9, days:7, cep};
+    }
+
+    function updatePix(total){
+      const code = `00020126580014BR.GOV.BCB.PIX520400005303986540${String(total.toFixed(2)).replace('.','')}5802BR5915HC Multimarcas6009Sao Paulo62100506HC1234`;
+      byId('pix-code').value = code;
+    }
+
+    function updateWhats(total){
+      const items = cart.map(i=>`${(i.qty||i.quantidade||1)}x ${i.nome} (${fmt(i.preco)})`).join('%0A');
+      const txt = `Pedido HC Multimarcas:%0A${items}%0ASubtotal: ${fmt(total - (shipping.price||0))}%0AFrete: ${fmt(shipping.price||0)}%0ATotal: ${fmt(total)}%0ACEP: ${shipping.cep||''}`;
+      byId('whats-link').href = `https://wa.me/554899143649?text=${txt}`;
+    }
+
+    // Eventos
+    byId('cep2').addEventListener('input', (e)=> e.target.value = maskCEP(e.target.value));
+    byId('calc-frete').addEventListener('click', ()=>{
+      const est = estimateShipping(byId('cep2').value);
+      if(!est){ toast('CEP inválido', 'error'); return; }
+      shipping = est;
+      byId('frete-info').classList.remove('hidden');
+      byId('frete-val').textContent = fmt(est.price);
+      byId('frete-days').textContent = est.days+' dia(s)';
+      const subtotal = cart.reduce((s,i)=> s + i.preco * (i.qty||i.quantidade||1), 0);
+      byId('order-total').textContent = fmt(subtotal + est.price);
+      updatePix(subtotal + est.price);
+      updateWhats(subtotal + est.price);
+      localStorage.setItem('order_info', JSON.stringify({items:cart, shipping:est, subtotal}));
     });
 
-    /**
-     * Calcula o valor do frete com base no CEP informado. Este cálculo é apenas ilustrativo e não utiliza uma API real.
-     * Após o cálculo, exibe o valor do frete e atualiza o total do pedido.
-     */
-    function calcularFrete() {
-      const cepInput = document.getElementById('cep');
-      const freteInfo = document.getElementById('frete-info');
-      const freteValorSpan = document.getElementById('frete-valor');
-      const orderTotalEl = document.getElementById('order-total');
-      if (!cepInput || !freteInfo || !freteValorSpan || !orderTotalEl) return;
-      const cep = cepInput.value.trim();
-      if (!cep) {
-        alert('Informe seu CEP para calcular o frete.');
-        return;
-      }
-      // Validação simples de CEP (8 dígitos com ou sem hífen)
-      const cepClean = cep.replace(/[^0-9]/g, '');
-      if (cepClean.length !== 8) {
-        alert('CEP inválido. Informe 8 dígitos.');
-        return;
-      }
-      // Busca dados de endereço a partir do CEP usando a API ViaCEP.
-      // Sempre exibe os campos de endereço logo após o cálculo para permitir preenchimento manual
-      const addressFields = document.getElementById('address-fields');
-      if (addressFields) {
-        addressFields.classList.remove('hidden');
-      }
-      fetch(`https://viacep.com.br/ws/${cepClean}/json/`)
-        .then(response => response.json())
-        .then(data => {
-          if (data && !data.erro) {
-            // Preenche campos de endereço
-            document.getElementById('rua').value = data.logradouro || '';
-            document.getElementById('bairro').value = data.bairro || '';
-            document.getElementById('cidade').value = data.localidade || '';
-            document.getElementById('estado').value = data.uf || '';
-            // Calcula frete com base na cidade e no estado
-            let shippingCost = 0;
-            let prazo = '';
-            let isSedex = false;
-            const destCity = (data.localidade || '').toLowerCase();
-            const destState = data.uf || '';
-            const distanciaContainer = document.getElementById('distancia-container');
-            const distanciaInput = document.getElementById('distancia');
-            let distanciaKm = 0;
-            if (distanciaInput && distanciaInput.value.trim() !== '') {
-              distanciaKm = parseFloat(distanciaInput.value);
-              if (isNaN(distanciaKm) || distanciaKm < 0) distanciaKm = 0;
-            }
-            if (destCity && destState && destCity === storeCity.toLowerCase() && destState === storeState) {
-              // Destino na mesma cidade
-              if (distanciaKm > 20) {
-                // Distâncias superiores a 20 km utilizam Sedex (ou entrega convencional)
-                shippingCost = 20.90;
-                prazo = '5-8 dias úteis';
-                isSedex = true;
-                if (distanciaContainer) distanciaContainer.classList.add('hidden');
-              } else {
-                // Entrega local: base 5 km + adicional por km
-                if (distanciaContainer) distanciaContainer.classList.remove('hidden');
-                shippingCost = 5.90;
-                if (distanciaKm > 5) {
-                  const extraKm = distanciaKm - 5;
-                  const adicional = extraKm * 1.50;
-                  shippingCost += adicional;
-                }
-                prazo = '1-2 dias úteis';
-                isSedex = false;
-              }
-            } else {
-              // Fora da cidade
-              if (distanciaContainer) distanciaContainer.classList.add('hidden');
-              if (destState === storeState) {
-                // Mesmo estado, outra cidade
-                shippingCost = 10.90;
-                prazo = '2-4 dias úteis';
-                isSedex = false;
-              } else {
-                // Outro estado – sempre Sedex
-                shippingCost = 20.90;
-                prazo = '5-8 dias úteis';
-                isSedex = true;
-              }
-            }
-            // Chama atualização das opções de pagamento conforme frete
-            updatePaymentOptions(isSedex);
-            // Exibe o valor e prazo do frete
-            freteInfo.classList.remove('hidden');
-            freteValorSpan.textContent = 'R$ ' + shippingCost.toFixed(2).replace('.', ',');
-            const prazoEl = document.getElementById('prazo-entrega');
-            if (prazoEl) prazoEl.textContent = prazo;
-            // Atualiza o total do pedido somando o frete
-            const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
-            const currentTotal = parseFloat(totalText) || 0;
-            const newTotal = currentTotal + shippingCost;
-            orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
-          } else {
-            alert('CEP não encontrado. Preencha o endereço manualmente.');
-            // Ainda assim, mostra frete ilustrativo genérico
-            updatePaymentOptions(true);
-            freteInfo.classList.remove('hidden');
-            freteValorSpan.textContent = 'R$ 25,90';
-            const prazoEl = document.getElementById('prazo-entrega');
-            if (prazoEl) prazoEl.textContent = '5-8 dias úteis';
-            const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
-            const currentTotal = parseFloat(totalText) || 0;
-            const newTotal = currentTotal + 25.90;
-            orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
-          }
-        })
-        .catch(() => {
-          // Em caso de falha na API, mostra frete genérico
-          updatePaymentOptions(true);
-          freteInfo.classList.remove('hidden');
-          freteValorSpan.textContent = 'R$ 25,90';
-          const prazoEl = document.getElementById('prazo-entrega');
-          if (prazoEl) prazoEl.textContent = '5-8 dias úteis';
-          const totalText = orderTotalEl.textContent.replace(/[^0-9,]/g, '').replace(',', '.');
-          const currentTotal = parseFloat(totalText) || 0;
-          const newTotal = currentTotal + 25.90;
-          orderTotalEl.textContent = 'R$ ' + newTotal.toFixed(2).replace('.', ',');
+    // Tabs de pagamento
+    document.querySelectorAll('[data-paytab]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const tab = btn.dataset.paytab;
+        document.querySelectorAll('[data-paytab]').forEach(b=>{
+          const active = b.dataset.paytab===tab;
+          b.classList.toggle('bg-gray-900', active);
+          b.classList.toggle('text-white', active);
+          b.classList.toggle('bg-gray-100', !active);
         });
+        byId('pay-pix').classList.toggle('hidden', tab!=='pix');
+        byId('pay-card').classList.toggle('hidden', tab!=='card');
+      });
+    });
+
+    byId('copy-pix').addEventListener('click', ()=>{
+      navigator.clipboard.writeText(byId('pix-code').value);
+      toast('Pix copiado!');
+    });
+
+    function luhnOk(num){
+      const s = num.replace(/\D/g,''); let sum = 0; let dbl=false;
+      for(let i=s.length-1;i>=0;i--){ let d = parseInt(s[i]); if(dbl){ d*=2; if(d>9) d-=9 } sum+=d; dbl=!dbl; }
+      return (sum%10)===0 && s.length>=13;
     }
 
-    /**
-     * Gera a mensagem de pedido para enviar via WhatsApp.
-     * Inclui nome do cliente, endereço, total, pagamento e lista de produtos.
-     */
-    function generatePaymentMessage() {
-      // Dados do cliente
-      const nome = document.getElementById('nome').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const rua = document.getElementById('rua').value.trim();
-      const numero = document.getElementById('numero').value.trim();
-      const bairro = document.getElementById('bairro').value.trim();
-      const cidade = document.getElementById('cidade').value.trim();
-      const estado = document.getElementById('estado').value.trim();
-      const cep = document.getElementById('cep').value.trim();
-      // Pagamento
-      const pagamento = document.getElementById('pagamento').value;
-      // Como a única forma de pagamento é Pix, definimos o texto fixo
-      const pagamentoTexto = 'Pix';
-      // Itens do carrinho
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      let itensText = '';
-      cart.forEach(item => {
-        itensText += `\n- ${item.nome} (x${item.quantidade}) – R$ ${item.preco.toFixed(2).replace('.', ',')}`;
-      });
-      const totalText = document.getElementById('order-total').textContent.replace('R$ ', '').trim();
-      // Monta a mensagem
-      const message =
-        `Novo pedido de ${nome}!\n\n` +
-        `Dados do cliente:\n${nome} – ${email}\n` +
-        `Endereço: ${rua}, ${numero} – ${bairro}, ${cidade} - ${estado}, CEP ${cep}\n\n` +
-        `Forma de pagamento: ${pagamentoTexto}\n\n` +
-        `Itens do pedido:${itensText}\n\n` +
-        `Total com frete: R$ ${totalText}\n` +
-        `Muito obrigado!`;
-      return message;
-    }
-    </script>
+    byId('pay-card-btn')?.addEventListener('click', ()=>{
+      const num = byId('card-number').value;
+      if(!luhnOk(num)){ toast('Número de cartão inválido', 'error'); return; }
+      toast('Cartão aprovado!');
+    });
+
+    byId('payment-form').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      if(!cart.length){ toast('Carrinho vazio', 'error'); return; }
+      const nome = byId('nome').value.trim();
+      const email = byId('email').value.trim();
+      const cep = byId('cep2').value.trim();
+      if(!nome || !email || !cep){ toast('Preencha os dados obrigatórios', 'error'); return; }
+      toast('Pedido confirmado!');
+      // Limpar carrinho e voltar para a loja
+      localStorage.removeItem('cart');
+      localStorage.removeItem('order_info');
+      setTimeout(()=>{ window.location.href = 'index.html'; }, 1200);
+    });
+
+    renderSummary();
+  </script>
 </body>
 </html>

@@ -2258,6 +2258,168 @@ const existingItem = cart.find(item =>
 
     <!-- Botões flutuantes removidos -->
 
+
+  <!-- HC Toasts -->
+  <div id="hc-toasts" class="fixed bottom-4 right-4 z-[60] space-y-2"></div>
+
+  <!-- HC Cart Drawer (injetado) -->
+  <div id="hc-cart-drawer" class="fixed inset-0 z-50 hidden">
+    <div id="hc-cart-overlay" class="absolute inset-0 bg-black/40"></div>
+    <aside class="absolute right-0 top-0 h-full w-full sm:w-[420px] bg-white p-6 shadow-xl flex flex-col">
+      <div class="flex items-center justify-between">
+        <h3 class="text-xl font-bold">Seu carrinho</h3>
+        <button id="hc-close-cart" class="p-2 rounded-lg hover:bg-gray-100" aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div id="hc-cart-items" class="mt-6 flex-1 overflow-auto pr-2 space-y-4"></div>
+      <div class="border-t pt-4 mt-4 space-y-3">
+        <div class="flex items-center justify-between text-sm"><span>Subtotal</span><span id="hc-subtotal" class="font-semibold">R$ 0,00</span></div>
+        <div class="grid grid-cols-3 gap-2">
+          <input id="hc-cep" class="col-span-2 border rounded-lg px-3 py-2" placeholder="CEP" maxlength="9">
+          <button id="hc-btn-frete" class="px-3 py-2 rounded-lg bg-gray-900 text-white">Calcular</button>
+        </div>
+        <div id="hc-frete-info" class="text-sm text-gray-600 hidden"></div>
+        <a id="hc-checkout-link" href="pagamento.html" class="px-5 py-3 rounded-xl text-gray-900 font-semibold text-center bg-gradient-to-r from-yellow-400 to-orange-400 block">Finalizar compra</a>
+      </div>
+    </aside>
+  </div>
+<!-- HC CART CORE (injetado) -->
+  <script>
+  // == HC_CART_CORE ==
+  (function(){
+    const $ = (id)=> document.getElementById(id);
+    const toast = (msg, type='info')=>{
+      const box = $('hc-toasts'); if(!box) return;
+      const el = document.createElement('div');
+      el.className = 'bg-white border rounded-xl px-4 py-3 text-sm shadow-md ' + (type==='error'?'border-red-200':'border-gray-200');
+      el.textContent = msg;
+      box.appendChild(el);
+      setTimeout(()=>{ el.style.opacity='0'; el.style.transform='translateY(6px)'; el.style.transition='all .2s'; setTimeout(()=>el.remove(), 220); }, 2400);
+    };
+    const fmt = (n)=> Number(n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let shipping = JSON.parse(localStorage.getItem('order_info') || '{}').shipping || { price:0, days:0, cep:'' };
+
+    function save(){ localStorage.setItem('cart', JSON.stringify(cart)); }
+    function subtotal(){ return cart.reduce((s,i)=> s + (i.price||i.preco||0) * (i.qty||1), 0); }
+    function count(){ return cart.reduce((s,i)=> s + (i.qty||1), 0); }
+
+    function renderCart(){
+      const itemsBox = $('hc-cart-items');
+      if(!itemsBox) return;
+      $('hc-cart-count') && ($('hc-cart-count').textContent = count());
+      $('hc-subtotal') && ($('hc-subtotal').textContent = fmt(subtotal()));
+      if(cart.length===0){ itemsBox.innerHTML = '<p class="text-gray-500">Seu carrinho está vazio.</p>'; return; }
+      itemsBox.innerHTML = cart.map(i=>`
+        <div class="flex gap-3">
+          ${i.img?`<img src="${i.img}" class="w-20 h-20 object-cover rounded-lg">`:''}
+          <div class="flex-1">
+            <p class="font-semibold">${i.name||i.nome||'Produto'}</p>
+            <p class="text-sm text-gray-600">${fmt(i.price||i.preco||0)}</p>
+            <div class="flex items-center gap-2 mt-2">
+              <button class="px-3 py-1 rounded-lg bg-gray-100" data-hc-dec="${i.id}">-</button>
+              <span>${i.qty||1}</span>
+              <button class="px-3 py-1 rounded-lg bg-gray-100" data-hc-inc="${i.id}">+</button>
+              <button class="ml-auto text-red-600 text-sm" data-hc-del="${i.id}">Remover</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openCart(){ $('hc-cart-drawer')?.classList.remove('hidden'); renderCart(); persistOrderInfo(); }
+    function closeCart(){ $('hc-cart-drawer')?.classList.add('hidden'); }
+
+    function addItem({id, name, price, img}){
+      if(!id) { toast('Produto sem ID', 'error'); return; }
+      const idx = cart.findIndex(x=>x.id===id);
+      if(idx>-1) cart[idx].qty = (cart[idx].qty||1) + 1;
+      else cart.push({ id, name, price, img, qty:1 });
+      save(); renderCart(); toast('Adicionado ao carrinho');
+    }
+
+    function inc(id){ const i = cart.find(x=>x.id===id); if(i){ i.qty=(i.qty||1)+1; save(); renderCart(); } }
+    function dec(id){ const i = cart.find(x=>x.id===id); if(i){ i.qty=Math.max(1,(i.qty||1)-1); save(); renderCart(); } }
+    function delItem(id){ cart = cart.filter(x=>x.id!==id); save(); renderCart(); }
+
+    function maskCEP(v){ v=v.replace(/\\D/g,''); if(v.length>5) v=v.slice(0,5)+'-'+v.slice(5,8); return v; }
+    function estimateShipping(cep){
+      const only = cep.replace(/\\D/g,'');
+      if(only.length!==8) return null;
+      const d = parseInt(only[0]);
+      if(d<=1) return {price:24.9, days:2, cep};
+      if(d<=3) return {price:29.9, days:3, cep};
+      if(d<=6) return {price:34.9, days:5, cep};
+      return {price:44.9, days:7, cep};
+    }
+
+    function persistOrderInfo(){
+      localStorage.setItem('order_info', JSON.stringify({
+        items: cart,
+        subtotal: subtotal(),
+        shipping
+      }));
+    }
+
+    document.addEventListener('click', (e)=>{
+      const add = e.target.closest('[data-add],[data-hc-add],.add-to-cart');
+      const incB = e.target.closest('[data-hc-inc]');
+      const decB = e.target.closest('[data-hc-dec]');
+      const delB = e.target.closest('[data-hc-del]');
+      if(add){
+        // Prioriza atributos data-*
+        const el = add;
+        const id = el.dataset.id || el.dataset.add || el.dataset.hcAdd;
+        const name = el.dataset.name || el.dataset.nome || el.getAttribute('data-name');
+        const price = parseFloat(el.dataset.price || el.getAttribute('data-price') || '0');
+        // tenta encontrar img próxima
+        let img = el.dataset.img || '';
+        if(!img){
+          const card = el.closest('article, .card, .product, .produto') || document.body;
+          const pic = card.querySelector('img');
+          if(pic) img = pic.getAttribute('src')||'';
+        }
+        addItem({id, name, price, img});
+      }
+      if(incB){ inc(incB.dataset.hcInc); }
+      if(decB){ dec(decB.dataset.hcDec); }
+      if(delB){ delItem(delB.dataset.hcDel); }
+
+      if(e.target.id==='hc-open-cart') openCart();
+      if(e.target.id==='hc-close-cart' || e.target.id==='hc-cart-overlay') closeCart();
+
+      if(e.target.id==='hc-btn-frete'){
+        const cep = $('hc-cep').value;
+        const est = estimateShipping(cep);
+        if(!est){ toast('CEP inválido', 'error'); return; }
+        shipping = est;
+        $('hc-frete-info').classList.remove('hidden');
+        $('hc-frete-info').textContent = `Frete: ${fmt(est.price)} • Prazo: ${est.days} dia(s)`;
+        persistOrderInfo();
+        toast('Frete calculado');
+      }
+    });
+
+    // máscara CEP
+    document.addEventListener('input', (e)=>{
+      if(e.target.id==='hc-cep'){ e.target.value = maskCEP(e.target.value); }
+    });
+
+    // Expor pequena API global para você usar nos botões
+    window.HCCart = {
+      add: addItem,
+      open: openCart,
+      items: ()=> cart.slice(),
+      clear: ()=> { cart=[]; save(); renderCart(); persistOrderInfo(); },
+    };
+
+    // Render inicial
+    renderCart();
+  })();
+  </script>
+
 </body>
 
 </html>
